@@ -2,7 +2,7 @@
 
 Status: active
 Status-date: 2026-07-14
-Review-baseline: `e5675da5c51d4a8fbd74465abd221bbfe14fd8d8`
+Review-baseline: `7dd2629d7aab1d9166b02bb5a2b19cf180d6e382`
 Repository: `vfi64/agentic-project-kit-dpa-lab`
 
 ## Prompt
@@ -11,7 +11,7 @@ You are reviewing the Phase A foundation baseline of the private architecture la
 
 Review exactly commit:
 
-`e5675da5c51d4a8fbd74465abd221bbfe14fd8d8`
+`7dd2629d7aab1d9166b02bb5a2b19cf180d6e382`
 
 Do not review an unpinned branch tip. Do not infer current `vfi64/agentic-project-kit` behavior from memory or model knowledge.
 
