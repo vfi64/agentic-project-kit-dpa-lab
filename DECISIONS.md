@@ -17,7 +17,7 @@ Status: ACCEPTED
 
 **Consequences:** Every implementation proposal requires a fresh-main integration map. Repository-specific field and module names remain `NEEDS_MAIN_REPO_VALIDATION`.
 
-**Validation status:** VERIFIED only for the existence of the recorded architecture families at main refs `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`; exact integration points require DP1.
+**Validation status:** Recorded baseline refs are `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`; the classification and minimum evidence bar for those recorded facts are pending DPA-ADR-009 and DPA-ADR-011. Exact integration points require DP1.
 
 **Affected specifications:** DPA-000 through DPA-900.
 
@@ -162,3 +162,74 @@ Status: ACCEPTED
 **Affected specifications:** DPA-000, DPA-100, DPA-500.
 
 **Affected DP slices:** DP5.
+
+## Planned adjudication decisions
+
+The following records are decision placeholders only. They capture the decision scope exposed by the Claude review and MUST NOT be treated as accepted normative outcomes before the required reviews and consolidated adjudication are complete.
+
+### DPA-ADR-009 — Close and separate status vocabularies
+
+Status: PROPOSAL
+
+**Review origin:** Claude Fable 5 finding F-M01.
+
+**Decision question:** Shall the lab extend the repository-fact classification lattice, or keep the six epistemic classifications closed while defining separate document-status, review-progress and evidence-scope vocabularies?
+
+**Alternatives to adjudicate:**
+
+1. Extend the classification lattice with `PLANNED` and a qualified recorded-baseline status.
+2. Keep the six repository-fact classifications closed; define `planned`, `active`, `review-ready`, `stable`, progress assessments and recorded-baseline scope separately.
+3. Downgrade all recorded-baseline facts to `ASSUMPTION` despite exact refs.
+
+**Required outcome:** One closed vocabulary model, explicit ownership, valid transitions and removal of undeclared compound statuses.
+
+**Maintainer decision:** REQUIRED.
+
+**Main-repository validation:** NOT REQUIRED for the vocabulary decision.
+
+**Affected artifacts:** README, LAB_BOOTSTRAP, LAB_EXECUTION_CONTRACT, DPA-000, DPA-100, MAIN_REPOSITORY_CONTEXT, STATUS, traceability.
+
+### DPA-ADR-010 — Own one canonical invariant register
+
+Status: PROPOSAL
+
+**Review origin:** Claude Fable 5 finding F-M02.
+
+**Decision question:** Which normative artifact owns stable DPA invariant IDs, and where does the lab-only rule that decision artifacts are not production truth live?
+
+**Alternatives to adjudicate:**
+
+1. DPA-000 owns the canonical DPA invariant register; LEC references it; the lab-only rule remains governance outside the register.
+2. LEC owns the register and DPA-000 references it.
+3. Create a new standalone invariant register.
+4. Let traceability own the invariant IDs.
+
+**Required outcome:** Exactly one owner, stable one-to-one IDs, no grouped replacement IDs in traceability and no numbering drift.
+
+**Maintainer decision:** REQUIRED.
+
+**Main-repository validation:** NOT REQUIRED.
+
+**Affected artifacts:** DPA-000, LAB_EXECUTION_CONTRACT, traceability, review templates and all later DPA specifications.
+
+### DPA-ADR-011 — Set the recorded-baseline evidence bar
+
+Status: PROPOSAL
+
+**Review origin:** Claude Fable 5 finding F-M03.
+
+**Decision question:** What minimum static evidence must exist before a recorded main-repository fact may carry the classification selected under ADR-009?
+
+**Alternatives to adjudicate:**
+
+1. Minimal static records under `evidence/repo-facts/` with exact ref, subject, inspected source or method, date and mandatory revalidation note.
+2. No in-lab records; downgrade recorded baseline facts to assumptions.
+3. Rich evidence tooling or a generated evidence database.
+
+**Required outcome:** A bounded evidence rule that avoids circular self-citation and does not create a parallel evidence system.
+
+**Maintainer decision:** REQUIRED.
+
+**Main-repository validation:** NOT REQUIRED to choose the evidence bar; all facts remain subject to fresh DP1 validation.
+
+**Affected artifacts:** MAIN_REPOSITORY_CONTEXT, LAB_EXECUTION_CONTRACT §15, DPA-000 validation sections, ADR-001 and traceability.
