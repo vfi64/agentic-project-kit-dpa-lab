@@ -15,13 +15,13 @@ The recorded main-repository context remains based on administrative commit `6a9
 - `specs/dpa/DPA-000-VISION.md`: review-ready.
 - `specs/dpa/DPA-100-FOUNDATIONS.md`: review-ready.
 - `traceability/PHASE_A_TRACEABILITY.md`: initial active baseline.
-- `reviews/claude/CLAUDE_FABLE_5_PHASE_A_REVIEW_PROMPT.md`: commit-pinned review prompt created.
+- `reviews/claude/CLAUDE_FABLE_5_PHASE_A_REVIEW_PROMPT.md`: commit-pinned review prompt created for baseline `7dd2629d7aab1d9166b02bb5a2b19cf180d6e382`.
 - `DECISIONS.md`: Phase A decisions synchronized.
 - `ASSUMPTIONS.md`: repository-specific implementation dependencies remain `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Active work
 
-1. Obtain and store the Claude Fable 5 review against commit `e5675da5c51d4a8fbd74465abd221bbfe14fd8d8`.
+1. Obtain and store the Claude Fable 5 review against commit `7dd2629d7aab1d9166b02bb5a2b19cf180d6e382`.
 2. Produce equivalent commit-pinned ChatGPT and Gemini review prompts.
 3. Adjudicate review findings before changing normative meaning.
 4. Reconcile DPA-000, DPA-100, decisions and traceability after adjudication.
