@@ -6,32 +6,37 @@ Superseded-by: n/a
 
 ## Current
 
-The DPA architecture laboratory is scaffolded and its session bootstrap is now governed by:
+The DPA architecture laboratory is on branch `spec/phase-a-foundation` in Phase A — Foundation. It remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
 
-- `LAB_BOOTSTRAP.md`
-- `MAIN_REPOSITORY_CONTEXT.md`
-- `LAB_EXECUTION_CONTRACT.md`
+The recorded main-repository context remains based on administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and substantive post-L5 evidence commit `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`. No claim in the Phase A specifications upgrades that snapshot to fresh implementation evidence.
 
-The lab is in Phase A — Foundation. It remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not yet been adopted with the kit.
+## Completed internal baseline work
 
-The recorded main-repository context is based on the evidenced post-L5 state ending at administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`, with substantive post-L5 evidence in `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`.
+- `specs/dpa/DPA-000-VISION.md` is review-ready.
+- `specs/dpa/DPA-100-FOUNDATIONS.md` is review-ready.
+- `traceability/PHASE_A_TRACEABILITY.md` establishes initial motivation, invariant, decision, DP, test, gate, evidence and rollback links.
+- `DECISIONS.md` records the accepted Phase A architecture decisions with alternatives and consequences.
+- Main-repository implementation details remain explicitly `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Active work
 
-1. Complete `specs/dpa/DPA-000-VISION.md`.
-2. Create the full terminology and authority contract in `specs/dpa/DPA-100-FOUNDATIONS.md`.
-3. Establish initial traceability.
-4. Produce the first commit-ref-based Claude Fable 5 review prompt.
-5. Adjudicate reviews before changing normative meaning.
+1. Commit a ref-bound Claude Fable 5 review prompt for the Phase A baseline.
+2. Collect Claude, ChatGPT and Gemini reviews separately.
+3. Adjudicate findings before changing normative meaning.
+4. Update decisions, assumptions and traceability from accepted findings.
 
-## Next phase gate
+## Phase A exit assessment
 
-Phase A may close only when:
+| Criterion | State |
+|---|---|
+| DPA-000 and DPA-100 review-ready or stable | SATISFIED: review-ready |
+| Terminology and architecture invariants internally consistent | SATISFIED for internal baseline; external review pending |
+| Main-repository claims classified | SATISFIED |
+| Initial traceability exists | SATISFIED |
+| No hidden parallel governance system implied | SATISFIED for internal baseline |
+| First review baseline exists | PENDING external review prompt and review collection |
+| Required reviews adjudicated | NOT STARTED |
 
-- DPA-000 and DPA-100 are review-ready or stable,
-- terminology and architecture invariants are consistent,
-- decisions and assumptions are synchronized,
-- initial traceability exists,
-- no hidden parallel governance system is implied.
+Phase A is not stable and is not closed. The next legitimate work is review collection and adjudication. DPA-200 MAY be outlined only after Phase A review findings do not expose an unresolved foundational contradiction.
 
-Kit adoption of this lab remains blocked until DPA-000 through at least DPA-500 are stable.
+Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and the governance/bootstrap contracts remain consistent.
