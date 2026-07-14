@@ -1,0 +1,8 @@
+flowchart TD
+  State[Canonical State] --> Renderer[Pure Renderer]
+  Renderer --> Lifecycle[Document Lifecycle]
+  Registry[Documentation Registry] --> Lifecycle
+  Lifecycle --> Projection[Generated Projection]
+  Workflow[Workflow / PR Orchestration] --> Lifecycle
+  Projection --> Readers[Bootloader / GUI / LLM / Humans]
+  Projection --> Gates[Freshness and Lifecycle Gates]
