@@ -6,32 +6,44 @@ Superseded-by: n/a
 
 ## Current
 
-The DPA architecture laboratory is scaffolded and its session bootstrap is now governed by:
+The DPA architecture laboratory is on branch `spec/phase-a-foundation` in Phase A — Foundation. It remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
 
-- `LAB_BOOTSTRAP.md`
-- `MAIN_REPOSITORY_CONTEXT.md`
-- `LAB_EXECUTION_CONTRACT.md`
+The recorded main-repository context remains based on administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and substantive post-L5 evidence commit `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`. No claim in the Phase A specifications upgrades that snapshot to fresh implementation evidence.
 
-The lab is in Phase A — Foundation. It remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not yet been adopted with the kit.
+## Completed internal baseline work
 
-The recorded main-repository context is based on the evidenced post-L5 state ending at administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`, with substantive post-L5 evidence in `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`.
+- `specs/dpa/DPA-000-VISION.md` is review-ready.
+- `specs/dpa/DPA-100-FOUNDATIONS.md` is review-ready.
+- `traceability/PHASE_A_TRACEABILITY.md` establishes initial motivation, invariant, decision, DP, test, gate, evidence and rollback links.
+- `DECISIONS.md` records accepted Phase A architecture decisions with alternatives and consequences.
+- `reviews/claude/CLAUDE_FABLE_5_PHASE_A_REVIEW_PROMPT.md` provides a consolidated review prompt bound to baseline commit `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
+- Main-repository implementation details remain explicitly `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Active work
 
-1. Complete `specs/dpa/DPA-000-VISION.md`.
-2. Create the full terminology and authority contract in `specs/dpa/DPA-100-FOUNDATIONS.md`.
-3. Establish initial traceability.
-4. Produce the first commit-ref-based Claude Fable 5 review prompt.
-5. Adjudicate reviews before changing normative meaning.
+1. Run the Claude Fable 5 review against the exact bound baseline.
+2. Store the returned review separately under `reviews/claude/`.
+3. Create and run equivalent ref-bound ChatGPT and Gemini reviews.
+4. Consolidate and adjudicate findings before changing normative meaning.
+5. Update decisions, assumptions and traceability from accepted findings.
 
-## Next phase gate
+## Phase A exit assessment
 
-Phase A may close only when:
+| Criterion | State |
+|---|---|
+| DPA-000 and DPA-100 review-ready or stable | SATISFIED: review-ready |
+| Terminology and architecture invariants internally consistent | SATISFIED for internal baseline; external review pending |
+| Main-repository claims classified | SATISFIED |
+| Initial traceability exists | SATISFIED |
+| No hidden parallel governance system implied | SATISFIED for internal baseline |
+| Claude review prompt exists | SATISFIED |
+| ChatGPT and Gemini review prompts exist or are planned | SATISFIED: planned, not yet committed |
+| Required reviews adjudicated | BLOCKED on external review collection |
 
-- DPA-000 and DPA-100 are review-ready or stable,
-- terminology and architecture invariants are consistent,
-- decisions and assumptions are synchronized,
-- initial traceability exists,
-- no hidden parallel governance system is implied.
+## Stop reason
 
-Kit adoption of this lab remains blocked until DPA-000 through at least DPA-500 are stable.
+Phase A cannot legitimately become stable or close until the required model reviews are collected and adjudicated. Continuing into normative DPA-200 work before that adjudication could propagate an unresolved foundational defect and would violate the review workflow.
+
+This is a bounded phase dependency, not a request for a routine maintainer decision. The next action is external review execution using the committed prompt.
+
+Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and the governance/bootstrap contracts remain consistent.
