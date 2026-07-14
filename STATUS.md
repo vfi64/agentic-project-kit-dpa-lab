@@ -6,55 +6,71 @@ Superseded-by: n/a
 
 ## Current
 
-The DPA architecture laboratory is in Phase A — Foundation. The active review branch `review/claude-phase-a-adjudication` is based exactly on reviewed baseline `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
+The DPA architecture laboratory remains in Phase A — Foundation. It is non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
 
-The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
+The active review-planning branch is `review/claude-phase-a-adjudication`. The Claude Fable 5 review is bound to exact reviewed ref `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
 
-The recorded main-repository context remains based on administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and substantive post-L5 evidence commit `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`. These recorded-baseline classifications are under adjudication following Claude finding F-M03 and remain subject to later exact-ref validation before implementation.
+The recorded main-repository context remains based on administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and substantive post-L5 evidence commit `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`. The classification and minimum static evidence bar for that recorded baseline are unresolved review findings; no new implementation verification is claimed.
 
-## Completed internal baseline work
+## Completed Phase A baseline work
 
-- `specs/dpa/DPA-000-VISION.md` is review-ready.
-- `specs/dpa/DPA-100-FOUNDATIONS.md` is review-ready.
-- `traceability/PHASE_A_TRACEABILITY.md` establishes initial motivation, invariant, decision, DP, test, gate, evidence and rollback links.
-- `DECISIONS.md` records the accepted Phase A architecture decisions with alternatives and consequences.
-- Main-repository implementation details remain explicitly `NEEDS_MAIN_REPO_VALIDATION`.
-- The complete Claude Fable 5 review is stored under `reviews/claude/` and bound to exact reviewed ref `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
-- `reviews/consolidated/PHASE_A_ADJUDICATION_INTAKE.md` records the non-normative adjudication queue.
+- `specs/dpa/DPA-000-VISION.md` is review-ready at the reviewed baseline.
+- `specs/dpa/DPA-100-FOUNDATIONS.md` is review-ready at the reviewed baseline.
+- Initial motivation, invariant, decision, DP, test, gate, evidence and rollback traceability exists.
+- Accepted architecture decisions DPA-ADR-001 through DPA-ADR-008 are recorded.
+- Main-repository implementation details remain `NEEDS_MAIN_REPO_VALIDATION`.
 
-## Review result
+## Claude review integration
 
-Claude Fable 5 returned `ACCEPT_WITH_CHANGES`:
-
-- no blocking finding;
-- no foundational contradiction;
-- no hidden parallel system;
-- no new runtime authority;
-- three major classification or ownership findings;
-- seven minor findings;
-- Phase A may proceed to adjudication but is not stable.
+- Complete Claude Fable 5 review committed under `reviews/claude/`. — COMPLETE
+- Non-normative adjudication intake committed under `reviews/consolidated/`. — COMPLETE
+- Claude findings integrated into `ROADMAP.md`. — COMPLETE
+- Complete review backlog committed as `planning/PHASE_A_REVIEW_BACKLOG.md`. — COMPLETE
+- Proposed decision scopes DPA-ADR-009 through DPA-ADR-011 recorded without accepting outcomes. — COMPLETE
+- Traceability extended with review origin, decision links, later-spec obligations, tests, evidence and rollback. — COMPLETE
+- Normative DPA meaning changed from the Claude review. — NO
 
 ## Active work
 
-1. Resolve the maintainer choices required by F-M01, F-M02 and F-M03.
-2. Collect independent ChatGPT and Gemini reviews separately.
-3. Consolidate and adjudicate findings before changing normative meaning.
-4. Update decisions, assumptions, specifications and traceability only from accepted adjudication outcomes.
+1. Establish one exact common review baseline for the remaining Phase A reviews.
+2. Produce and commit a ChatGPT Phase A review separately.
+3. Collect and commit a Gemini Phase A review separately.
+4. Create a consolidated finding-by-finding adjudication record.
+5. Obtain maintainer decisions for:
+   - DPA-ADR-009 — status/classification model,
+   - DPA-ADR-010 — canonical invariant-register ownership,
+   - DPA-ADR-011 — recorded-baseline evidence bar.
+6. Apply accepted normative changes only after adjudication.
+7. Create minimal static repo-fact records only if ADR-011 accepts that evidence bar.
+8. Regenerate traceability and reassess Phase A stability.
 
-## Phase A exit assessment
+## Review-derived blockers to Phase A stability
+
+- F-M01 status vocabulary closure is unresolved.
+- F-M02 invariant-register ownership is unresolved.
+- F-M03 recorded-baseline evidence classification is unresolved.
+- ChatGPT and Gemini review inputs are missing.
+- Consolidated adjudication is not complete.
+- Accepted normative corrections have not been applied.
+
+None of these findings is a foundational architecture contradiction. They block stability, not continued review and adjudication work.
+
+## Phase A exit tracking
+
+This table is a tracking view. Exit-criteria ownership itself is subject to finding F-m01.
 
 | Criterion | State |
 |---|---|
-| DPA-000 and DPA-100 review-ready or stable | SATISFIED: review-ready |
-| Terminology internally coherent | SATISFIED_WITH_CHANGES: F-M01, F-m04, F-m05, F-m06 open |
-| Architecture invariants internally coherent | SATISFIED_WITH_CHANGES: F-M02 open |
-| Main-repository claims correctly classified | SATISFIED_WITH_CHANGES: F-M03 open |
-| Initial traceability exists | SATISFIED_WITH_CHANGES: regeneration required after F-M02 |
-| No hidden parallel governance system implied | SATISFIED |
-| Claude review input exists | SATISFIED |
-| ChatGPT and Gemini review inputs exist | PENDING |
-| Required reviews adjudicated | NOT STARTED |
+| DPA-000 and DPA-100 review-ready | SATISFIED WITH CHANGES |
+| No hidden parallel system implied | SATISFIED |
+| No new runtime authority implied | SATISFIED |
+| Initial traceability exists | SATISFIED WITH CHANGES |
+| Claude review collected | SATISFIED |
+| Claude findings fully integrated into planning | SATISFIED |
+| ChatGPT review collected | NOT SATISFIED |
+| Gemini review collected | NOT SATISFIED |
+| Required maintainer decisions recorded | NOT SATISFIED |
+| Consolidated adjudication complete | NOT SATISFIED |
+| Accepted normative changes applied | NOT SATISFIED |
 
-Phase A is not stable and is not closed. No normative DPA file has been changed from the Claude review.
-
-Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and the governance/bootstrap contracts remain consistent.
+Phase A is not stable and is not closed. DPA-200 may be outlined only after the foundational status and invariant-ownership decisions no longer remain unresolved. Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and governance/bootstrap contracts are consistent.
