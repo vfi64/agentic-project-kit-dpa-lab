@@ -15,15 +15,17 @@ The recorded main-repository context remains based on administrative commit `6a9
 - `specs/dpa/DPA-000-VISION.md` is review-ready.
 - `specs/dpa/DPA-100-FOUNDATIONS.md` is review-ready.
 - `traceability/PHASE_A_TRACEABILITY.md` establishes initial motivation, invariant, decision, DP, test, gate, evidence and rollback links.
-- `DECISIONS.md` records the accepted Phase A architecture decisions with alternatives and consequences.
+- `DECISIONS.md` records accepted Phase A architecture decisions with alternatives and consequences.
+- `reviews/claude/CLAUDE_FABLE_5_PHASE_A_REVIEW_PROMPT.md` provides a consolidated review prompt bound to baseline commit `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
 - Main-repository implementation details remain explicitly `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Active work
 
-1. Commit a ref-bound Claude Fable 5 review prompt for the Phase A baseline.
-2. Collect Claude, ChatGPT and Gemini reviews separately.
-3. Adjudicate findings before changing normative meaning.
-4. Update decisions, assumptions and traceability from accepted findings.
+1. Run the Claude Fable 5 review against the exact bound baseline.
+2. Store the returned review separately under `reviews/claude/`.
+3. Create and run equivalent ref-bound ChatGPT and Gemini reviews.
+4. Consolidate and adjudicate findings before changing normative meaning.
+5. Update decisions, assumptions and traceability from accepted findings.
 
 ## Phase A exit assessment
 
@@ -34,9 +36,14 @@ The recorded main-repository context remains based on administrative commit `6a9
 | Main-repository claims classified | SATISFIED |
 | Initial traceability exists | SATISFIED |
 | No hidden parallel governance system implied | SATISFIED for internal baseline |
-| First review baseline exists | PENDING external review prompt and review collection |
-| Required reviews adjudicated | NOT STARTED |
+| Claude review prompt exists | SATISFIED |
+| ChatGPT and Gemini review prompts exist or are planned | SATISFIED: planned, not yet committed |
+| Required reviews adjudicated | BLOCKED on external review collection |
 
-Phase A is not stable and is not closed. The next legitimate work is review collection and adjudication. DPA-200 MAY be outlined only after Phase A review findings do not expose an unresolved foundational contradiction.
+## Stop reason
+
+Phase A cannot legitimately become stable or close until the required model reviews are collected and adjudicated. Continuing into normative DPA-200 work before that adjudication could propagate an unresolved foundational defect and would violate the review workflow.
+
+This is a bounded phase dependency, not a request for a routine maintainer decision. The next action is external review execution using the committed prompt.
 
 Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and the governance/bootstrap contracts remain consistent.
