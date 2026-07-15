@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> Resolved
+    Resolved --> Validated: registry, authority, target and renderer checks pass
+    Resolved --> Abandoned: resolution or validation fails
+    Validated --> Computed: renderer returns valid payload
+    Computed --> PlanCaptured: immutable plan and identity captured
+    Computed --> Abandoned: output violates target semantics
+    PlanCaptured --> Abandoned: any captured guard drifts
+    PlanCaptured --> Locked: preflight passes and workspace lock acquired
+    Locked --> Abandoned: under-lock revalidation fails
+    Locked --> WrittenUnverified: atomic write and byte verification succeed
+    Locked --> Abandoned: write or verification fails
+    WrittenUnverified --> Accepted: DPA-500 gate set succeeds
+    WrittenUnverified --> Abandoned: gate set rejects refresh instance
+    Accepted --> [*]
+    Abandoned --> [*]
