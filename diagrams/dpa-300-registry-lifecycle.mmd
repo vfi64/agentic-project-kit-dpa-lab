@@ -1,0 +1,28 @@
+flowchart LR
+    CS[Canonical State]
+    REG[Existing Documentation Registry]
+    PC[Projection Contract]
+    LC[Existing Document Lifecycle]
+    R[Static Renderer]
+    PLAN[Immutable Mutation Plan]
+    LOCK[Existing Workspace Mutation Lock]
+    TARGET[Registered Target or Region]
+    VERIFY[Post-write Verification]
+    EVID[Bounded Evidence]
+    GATE[DPA-500 Gates]
+
+    CS -->|declared sources| LC
+    REG -->|validated entry| PC
+    PC --> LC
+    LC -->|validated inputs| R
+    R -->|text or bytes only| LC
+    LC --> PLAN
+    PLAN -->|preflight and revalidate| LOCK
+    LOCK -->|lifecycle-owned atomic write| TARGET
+    TARGET --> VERIFY
+    VERIFY --> EVID
+    VERIFY -->|written-unverified| GATE
+    GATE -->|accepted only after gate success| TARGET
+
+    EVID -. no runtime authority .-> CS
+    R -. no writes, locks or acceptance .-> TARGET
