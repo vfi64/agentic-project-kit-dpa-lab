@@ -3,94 +3,110 @@
 Status: active
 
 Status-date: 2026-07-15
+
 Superseded-by: n/a
 
 ## Current
 
-Phase A — Foundation is closed on `main` at commit `a1b81beaf8f8a065d8a869d15bbf39d0e6459aae`.
+Phase A is closed on `main`.
 
 Phase B — Core document-management integration is active on branch `spec/dpa-300-registry-lifecycle`.
 
-The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit`, contains no production kit code and has not been adopted with the kit.
+The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200 and its matrix are `review-ready`; DPA-ADR-013 through DPA-ADR-015 are accepted.
+DPA-200 and its matrix are `review-ready`.
 
 ## DP1 Discovery
 
-DP1 Discovery is complete against:
+DP1 Discovery is complete for the explicitly inspected scope at:
 
 `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-DISC-001 through DISC-010, synchronized `ASSUMPTIONS.md`, synchronized `MAIN_REPOSITORY_CONTEXT.md` and the DP1 Probe backlog are present.
+DISC-001 through DISC-010 and DISC-003b are committed.
 
-No main-repository mutation occurred and no production document form was selected.
+DISC-003b established:
 
-## DPA-300 baseline
+- `transfer chat-switch-complete` does not write `CURRENT_HANDOFF.md` in the inspected code at that ref;
+- `transfer admin-refresh-pr` through `_refresh_operational_handoff_docs()` is an observed writer path;
+- global writer-set completeness is not claimed and must be revalidated at Probe time.
 
-The first evidence-based DPA-300 baseline now contains:
+No main-repository mutation occurred and no production form was selected.
 
-- `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
-- `traceability/DPA-300_TRACEABILITY.md`;
-- `diagrams/dpa-300-registry-lifecycle.mmd`;
-- `diagrams/dpa-300-command-integration.mmd`;
-- `diagrams/dpa-300-plan-state.mmd`;
-- `reviews/consolidated/DPA-300_PRE_REVIEW_AUDIT.md`.
+## DPA-300 review
 
-DPA-300 defines:
+Primary review baseline:
 
-1. an optional declarative projection contract in the existing registry;
-2. fail-loud registry validation;
-3. Resolve → Inspect → Validate → Render → Plan → Preflight → Lock → Revalidate → Write → Verify → Record → Release;
-4. deterministic plan identity and stale-plan invalidation;
-5. existing workspace-lock use;
-6. lifecycle-only atomic target and partition writes;
-7. exact preservation of non-projected bytes;
-8. post-write verification before acceptance;
-9. direct-write detection by expected-output recomputation;
-10. bounded non-authoritative evidence;
-11. adaptation of existing mutating commands rather than creation of a parallel DPA command.
+`6682485e3809d42bb17a90b62582b15e4d8fd467`
 
-## Confirmed command integration obligation
+Primary architecture review:
 
-Exact-ref Discovery identified:
+`ACCEPT_WITH_CHANGES`
 
-`agentic-kit transfer admin-refresh-pr`
-→ `transfer_repo_actions._refresh_operational_handoff_docs()`
+Secondary technical verification:
 
-as the active handoff mutation path at the validation ref.
+`ACCEPT_WITH_CHANGES`
 
-DPA-300 requires this existing path to be adapted through the registry and lifecycle if `CURRENT_HANDOFF.md` is later selected as a projection target. It prohibits a parallel DPA-only writer and requires governed bounded replacement instead of append accumulation.
+No blocker, hidden parallel subsystem, new runtime authority, false implementation claim or production-form preselection was found.
 
-This requirement remains conditional and does not select a full, hybrid or managed-head production form.
+## Accepted DPA-300 decisions
 
-## Internal audit
+- DPA-ADR-016 — lifecycle-owned acceptance state and interrupted-refresh recovery;
+- DPA-ADR-017 — parent-entry partition contract.
 
-`reviews/consolidated/DPA-300_PRE_REVIEW_AUDIT.md` result:
+Maintainer dispositions:
 
-`PASS_WITH_REVIEW_QUESTIONS`
+1. acceptance state is Workspace-resolved `.agentic/` lifecycle state, not evidence, canonical state, registry authority or target metadata;
+2. crashed-after-Write bytes may be re-verified only against an exactly recovered still-valid plan, otherwise they are regenerated;
+3. one partition contract lives on the parent registry entry;
+4. DISC-003b is executed now rather than left as an ownerless gap;
+5. DPA-100 owns the closed drift vocabulary and `partition drift` replaces `boundary drift`.
 
-No foundational contradiction, hidden parallel system, new runtime authority or false implementation claim was found.
+## Applied adjudication changes
 
-The audit records seven explicit reviewer questions concerning render/plan ordering, plan payload strength, lock reentrancy, evidence failure, direct-write fingerprints, command-contract preservation and partition fingerprints.
+Completed:
+
+- folded consumer trust states and the expanded drift vocabulary into `DPA-100-FOUNDATIONS.md`;
+- retired the temporary DPA-100 amendment as a normative source;
+- added lifecycle state, acceptance state, interrupted refresh and partition contract terminology;
+- revised DPA-300 for parent partition representation, acceptance state, multi-class drift detection and crash recovery;
+- corrected `written-unverified` timing;
+- prohibited nested projection mutation while retaining bounded outer orchestration reentrancy;
+- added payload, preserved-region and complete-target fingerprints;
+- updated command integration to `an observed writer path` and incorporated DISC-003b;
+- regenerated DPA-300 traceability and diagrams;
+- expanded PROBE-001 and PROBE-002;
+- removed the duplicate DPA-300 stub and added a canonical file map;
+- synchronized assumptions and main-repository context.
+
+DPA-300 remains `draft` until independent post-adjudication verification passes.
 
 ## Next governed step
 
-1. create a Claude primary architecture review prompt bound to one immutable DPA-300 baseline commit;
-2. obtain Claude's read-only review;
-3. commit the review under `reviews/claude/`;
-4. perform secondary technical verification;
-5. adjudicate accepted findings before normative changes;
-6. promote DPA-300 to `review-ready` only after corrections and post-adjudication verification.
+Run an independent post-adjudication verification against one immutable commit containing:
 
-DP1 Probe and Assessment remain deferred until the governing specifications are reviewable.
+- DPA-100 consolidation;
+- DPA-300 adjudicated contract;
+- ADR-016 and ADR-017;
+- DISC-003b and synchronized evidence language;
+- DPA-300 traceability and diagrams;
+- updated Probe backlog;
+- primary review, secondary verification and consolidated adjudication record.
 
-## Phase B restrictions
+The verifier must not be the session that applied the changes.
 
-- No production kit code in the lab.
+If verification passes:
+
+1. promote DPA-300 to `review-ready`;
+2. update ROADMAP and STATUS;
+3. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002;
+4. do not execute Probe until the review-ready gate is committed.
+
+## Restrictions
+
+- No production code in the lab.
 - No `.agentic/` initialization or simulated adoption.
 - No production-form selection from Discovery evidence.
-- No DPA-300 rule may bypass DPA-200 authority, ownership or trust-state contracts.
-- No Probe may execute before its governing contract is reviewable.
+- No Probe before its governing contract is reviewable.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue. DPA-300 is a complete draft suitable for primary architecture review; it is not yet `review-ready`.
+Phase B may continue. The current gate is independent post-adjudication verification.
