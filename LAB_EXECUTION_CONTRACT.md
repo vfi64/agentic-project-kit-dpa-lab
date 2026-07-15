@@ -1,120 +1,69 @@
 # DPA Lab Execution Contract
 
 Status: active
-Status-date: 2026-07-14
+Status-date: 2026-07-15
 Superseded-by: n/a
 
 ## 1. Purpose
 
 This contract defines how work in `vfi64/agentic-project-kit-dpa-lab` must be planned, reviewed, committed, consolidated and transferred back to `vfi64/agentic-project-kit`.
 
-The lab is a governed architecture workspace. It is not a scratchpad, not a prompt archive and not a second implementation repository.
+The lab is a governed architecture workspace. It is not a scratchpad, prompt archive, production repository or second runtime authority.
 
 ## 2. Primary objective
 
 Produce a complete, coherent, reviewable and implementation-ready Document Projection Architecture that extends the existing document-management architecture of `agentic-project-kit`.
 
-The final lab output must include:
-
-- normative DPA specifications DPA-000 through DPA-900,
-- accepted architecture decisions,
-- explicit assumptions and validation requirements,
-- diagrams,
-- traceability from goals to contracts, DP1–DP5, tests and gates,
-- a main-repository validation checklist,
-- a controlled import plan,
-- a final implementation contract for DP1–DP5.
+The final lab output must include DPA-000 through DPA-900, accepted decisions, assumptions and validation requirements, diagrams, complete traceability, the main-repository validation checklist, controlled import plan and DP1–DP5 implementation contract.
 
 ## 3. Non-goals
 
 The lab must not:
 
-- contain production kit code,
-- act as a runtime dependency,
-- replace the main repository's Direction, registry, lifecycle or evidence,
-- fabricate repository facts,
-- record model consensus as implementation evidence,
-- create live `.agentic/` state before the agreed adoption phase,
-- import private repository state or secrets,
-- execute P5c or other maintainer-gated work,
-- silently expand DPA into a general template or plugin framework.
+- contain production kit code;
+- act as a runtime dependency;
+- replace or duplicate Direction, registry, lifecycle, freshness, evidence, Workspace, workflow or gate authority;
+- fabricate repository facts, test results or gate evidence;
+- record model consensus as implementation evidence;
+- create live `.agentic/` state before governed lab adoption;
+- import private state or secrets;
+- execute maintainer-gated main-repository work;
+- silently expand DPA into a general plugin framework.
 
 ## 4. Language and style
 
 - Chat communication: German, concise, direct and evidence-based.
-- Normative specifications: English.
-- Machine-readable artifacts: English.
-- Diagram labels: English unless a compelling review reason exists.
-- Normative words `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT` and `MAY` shall be used consistently.
-- Avoid vague terms such as `current`, `latest`, `safe` or `substantive` unless their authority and derivation are defined.
+- Normative specifications, diagrams and machine-readable artifacts: English.
+- Normative keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT` and `MAY` shall be used consistently.
+- Ambiguous terms require the qualifications defined in DPA-100.
 
 ## 5. Required session bootstrap
 
-Every new session must follow `LAB_BOOTSTRAP.md` and read all mandatory files before work.
+Every session must follow `LAB_BOOTSTRAP.md`, complete the mandatory read order and report exact lab ref, phase, task, normative inputs, unresolved decisions, main-repository evidence used and proceed/stop status before work.
 
-After reading, the session must state:
+Chat memory is never authoritative.
 
-- exact lab repository/ref,
-- active phase,
-- current task,
-- normative inputs,
-- unresolved decisions,
-- main-repository evidence used,
-- whether work is unblocked.
+## 6. Vocabulary ownership
 
-No session may start from chat memory alone.
+DPA-100 is the normative owner of:
 
-## 6. Status vocabulary
+- repository-fact and architecture classifications;
+- document statuses;
+- progress statuses;
+- access outcomes;
+- authority, document, renderer, lifecycle, workflow, evidence and validation terms.
 
-Use the following meanings:
+These dimensions MUST NOT be combined into undeclared compound statuses.
 
-### VERIFIED
+## 7. Architecture invariant ownership
 
-Supported by an exact repository ref and reproducible evidence.
+DPA-000 §7 is the sole normative owner of the canonical invariant register `DPA-INV-001` through `DPA-INV-017`.
 
-### ASSUMPTION
+This contract and all derived artifacts MUST reference those IDs and MUST NOT duplicate, regroup, renumber or redefine them.
 
-A working belief not yet validated against the relevant authoritative source.
+Lab decision artifacts are planning authority and evidence of adjudication, not production runtime authority. This is a lab-governance rule, not an additional DPA invariant.
 
-### NORMATIVE
-
-A rule or requirement adopted by the lab governance.
-
-### PROPOSAL
-
-A candidate design not yet accepted.
-
-### REJECTED
-
-A considered alternative that has been explicitly declined, with rationale.
-
-### NEEDS_MAIN_REPO_VALIDATION
-
-A repository-specific claim or decision that cannot become normative implementation guidance until checked against a fresh main repository.
-
-## 7. Architecture invariants
-
-The following constraints are binding across the complete DPA series:
-
-1. Canonical state never owns rendering logic.
-2. Renderers never own write logic.
-3. Renderers return text or bytes only.
-4. The document lifecycle validates projection contracts, plans changes, acquires the mutation lock and performs writes.
-5. Workflow orchestration serializes across branches and pull requests.
-6. The documentation registry describes contracts; it does not name arbitrary executable imports.
-7. Renderer identifiers resolve through static, reviewed code.
-8. A renderer reads declared canonical sources and computes exactly one registered target.
-9. A renderer never triggers another renderer.
-10. Evidence is never runtime authority.
-11. Lab decision artifacts are planning evidence, not production truth.
-12. The final runtime projection contract belongs only in the main repository's existing registry/lifecycle system.
-13. No parallel registry, lifecycle, freshness, evidence, workspace or gate subsystem may be introduced.
-14. Time-based findings never become hard failures merely because wall-clock time elapsed.
-15. Append-only historical prose is never automatically merged during drift recovery.
-16. Dry-run is the default for mutations.
-17. All production paths must eventually resolve through the main repository's Workspace abstraction.
-
-Any normative document that contradicts an invariant is invalid until reconciled.
+Any normative artifact that contradicts a canonical invariant is invalid until reconciled through an accepted decision.
 
 ## 8. Specification order and dependencies
 
@@ -131,7 +80,7 @@ The normative series is developed in this order:
 9. `DPA-800-DP1-DP5.md`
 10. `DPA-900-FUTURE.md`
 
-A later document may be drafted early, but it cannot become stable while contradicting or bypassing an earlier contract.
+A later document may be outlined early but cannot become stable while contradicting or bypassing an earlier contract.
 
 ## 9. Phase model
 
@@ -139,295 +88,187 @@ A later document may be drafted early, but it cannot become stable while contrad
 
 Scope:
 
-- DPA-000,
-- DPA-100,
-- glossary,
-- architectural invariants,
-- initial traceability,
-- first review baseline.
+- DPA-000 and DPA-100;
+- canonical invariant register and glossary;
+- initial traceability;
+- primary architecture review;
+- secondary technical verification;
+- maintainer adjudication;
+- consolidated review record.
 
 Exit criteria:
 
-- terminology is internally coherent,
-- no hidden parallel system is implied,
-- main-repository claims are classified,
-- Claude, ChatGPT and Gemini review prompts exist or are planned,
-- accepted decisions are recorded.
+- DPA-000 and DPA-100 are review-ready or stable;
+- terminology and invariant references are internally coherent;
+- no hidden parallel subsystem or new runtime authority is implied;
+- repository-specific claims use the correct classification and evidence scope;
+- initial traceability exists one-to-one for canonical invariants;
+- primary architecture review and secondary technical verification are complete;
+- maintainer adjudication is complete;
+- accepted decisions and normative changes are synchronized;
+- no unresolved Phase A blocker remains hidden in prose.
 
 ### Phase B — Core document-management integration
 
-Scope:
+Scope: DPA-200 through DPA-500.
 
-- DPA-200,
-- DPA-300,
-- DPA-400,
-- DPA-500.
-
-Exit criteria:
-
-- document types and authority are defined,
-- optional registry extension is specified,
-- renderer boundary is specified,
-- lifecycle/freshness/gate integration is specified,
-- backwards compatibility and fail-loud behavior are defined,
-- no second registry or audit is required.
+Exit criteria include complete document forms, registry extension, renderer boundary, lifecycle/freshness/gate integration, backwards compatibility, fail-loud behavior and exclusive reuse of existing systems.
 
 ### Phase C — Operational completion
 
-Scope:
+Scope: DPA-600 through DPA-900.
 
-- DPA-600,
-- DPA-700,
-- DPA-800,
-- DPA-900.
-
-Exit criteria:
-
-- Git/PR concurrency contract is complete,
-- migration and rollback are complete,
-- DP1–DP5 is implementation-ready,
-- future work is clearly out of scope,
-- traceability is complete.
+Exit criteria include complete Git/PR concurrency, migration, rollback, DP1–DP5 implementation contract, future-scope boundary and full traceability.
 
 ### Phase D — Lab adoption by the kit
 
 Preconditions:
 
-- DPA-000 through DPA-500 are stable,
-- governance and bootstrap are stable,
-- adoption will not contaminate the main repository or create circular authority,
-- current kit behavior has been freshly inspected.
-
-The lab may then be adopted as an external repository test. Adoption must remain reversible and must not make lab state authoritative for the main repository.
+- DPA-000 through DPA-500 stable;
+- bootstrap and governance stable;
+- validation against an exact main-repository validation ref;
+- reversible adoption without circular runtime authority.
 
 ### Phase E — Main-repository validation and implementation
 
-Scope:
+Execute DP1 against a validation ref, correct assumptions, update DPA when evidence requires it, implement DP2–DP5 in the main repository and import only approved artifacts.
 
-- execute DP1 against fresh main,
-- correct assumptions,
-- update DPA when evidence requires it,
-- implement DP2–DP5 in the main repository,
-- import only approved normative artifacts.
+## 10. Review governance
 
-## 10. Review workflow
+Review quality is governed by roles, not named products:
 
-Reviews are stored separately under:
+1. Primary architecture review.
+2. Secondary technical verification.
+3. Maintainer adjudication.
+4. Consolidated review record.
 
-- `reviews/chatgpt/`
-- `reviews/claude/`
-- `reviews/gemini/`
-- `reviews/consolidated/`
+A reviewer may be a model or human. A qualifying review must record:
 
-Each model review must record:
-
-- reviewed commit/ref,
-- reviewed files,
-- model/version when known,
-- accepted findings,
-- rejected findings,
-- unresolved findings,
-- repository facts requiring validation,
+- exact reviewed ref;
+- reviewed files;
+- reviewer/model and version when known;
+- access method and access outcome;
+- method and prior exposure relevant to independence;
+- findings, strengths, limitations and repository facts requiring validation;
 - proposed normative changes.
 
-A review is not normative.
+`access-blocked` is not an architecture verdict and does not satisfy a review role.
 
-The consolidation process is:
+Storage directories MAY retain reviewer names, including `reviews/claude/`, `reviews/chatgpt/` and `reviews/gemini/`, but no named product is required when the governed roles are satisfied.
 
-1. collect review,
-2. classify each finding,
-3. verify internal consistency,
-4. identify main-repository dependencies,
-5. record accepted/rejected decisions,
-6. update normative documents,
-7. update traceability,
-8. commit with a summary of incorporated findings.
+A review is non-normative. No reviewer may change normative meaning directly.
 
-No model may write directly into normative meaning without adjudication.
+The consolidation sequence is:
+
+1. collect qualifying review and verification inputs;
+2. normalize finding identities and evidence;
+3. identify agreements, disagreements and main-repository dependencies;
+4. obtain maintainer decisions;
+5. record accepted, modified and rejected findings;
+6. update decisions and normative artifacts;
+7. regenerate traceability;
+8. reassess phase exit criteria.
 
 ## 11. Decision process
 
-Architecture decisions are recorded in `DECISIONS.md` or later dedicated ADR files.
+Architecture decisions are recorded in `DECISIONS.md` or dedicated ADR files.
 
-Every accepted decision must include:
+Every accepted decision must include identifier, status, context, decision, alternatives, rationale, consequences, validation status, affected DPA documents and affected DP slices.
 
-- identifier,
-- status,
-- context,
-- decision,
-- alternatives considered,
-- rationale,
-- consequences,
-- validation status,
-- affected DPA documents,
-- affected future DP slices.
-
-Decisions requiring main-repository facts remain provisional or `NEEDS_MAIN_REPO_VALIDATION` until evidence exists.
+A decision requiring unavailable main-repository facts remains `PROPOSAL`, `ASSUMPTION` or `NEEDS_MAIN_REPO_VALIDATION` as appropriate.
 
 ## 12. Traceability contract
 
-The lab must maintain traceability among:
+The lab must maintain traceability among motivation, canonical invariant ID, normative requirement, decision, candidate main-repository dependency, DP1–DP5 work, tests, gates, evidence and rollback.
 
-- motivation/problem statements,
-- architecture invariants,
-- normative requirements,
-- decisions,
-- candidate main-repository modules,
-- DP1–DP5 work items,
-- required tests,
-- required gates,
-- evidence and rollback requirements.
+Traceability must distinguish normative requirement, planned implementation, verified implementation, recorded-baseline evidence and future extension.
 
-Traceability must distinguish:
-
-- normative requirement,
-- planned implementation,
-- verified implementation,
-- future extension.
-
-No table may label planned implementation as completed.
+Each canonical invariant appears exactly once in the invariant table. Traceability is a derived view and never owns normative invariant meaning.
 
 ## 13. Commit and branch rules
 
-Before kit adoption, the lab may use simple GitHub branches and PRs.
-
-Recommended branch families:
-
-- `spec/dpa-000-vision`
-- `spec/dpa-100-foundations`
-- `spec/dpa-registry-lifecycle`
-- `spec/dpa-concurrency`
-- `review/claude-*`
-- `review/chatgpt-*`
-- `review/gemini-*`
-- `consolidation/dpa-*`
+Before kit adoption, the lab may use ordinary GitHub branches and PRs.
 
 Each coherent change should:
 
-- update only relevant files,
-- avoid mixed unrelated edits,
-- update `STATUS.md` when the active phase or next action changes,
-- update `DECISIONS.md` when a decision changes,
-- update `ASSUMPTIONS.md` when a repository claim changes classification,
-- include review context in the commit or PR description.
-
-A commit message must describe the architectural change, not merely say `update docs`.
+- update only relevant files;
+- avoid unrelated edits;
+- update `STATUS.md` when phase, task or blockers change;
+- update `DECISIONS.md` when a decision changes;
+- update `ASSUMPTIONS.md` and `MAIN_REPOSITORY_CONTEXT.md` when fact classification changes;
+- record review or adjudication context in the commit message.
 
 ## 14. Completion semantics
 
-A document is not complete merely because prose exists.
+Document statuses are defined by DPA-100.
 
-### Draft
+A document is not stable merely because prose exists. Stability requires required reviews and adjudication, synchronized decisions and traceability, no known contradiction and no hidden blocker for the document scope.
 
-- structure exists,
-- major concepts identified,
-- unresolved issues visible.
-
-### Review-ready
-
-- terminology consistent,
-- alternatives recorded,
-- traceability started,
-- repository assumptions classified.
-
-### Stable
-
-- required reviews adjudicated,
-- no known contradiction with earlier stable DPA contracts,
-- decisions recorded,
-- traceability complete for its scope,
-- no unresolved blocker hidden in prose.
-
-### Adopted
-
-- validated against a fresh main repository,
-- accepted into the main repository through governed PRs,
-- runtime contracts live only in the main repository.
-
-The lab itself never upgrades an implementation to `verified complete` without main-repository evidence.
+The lab never upgrades production implementation to verified completion without exact main-repository evidence.
 
 ## 15. Main-repository fact handling
 
 When a specification needs a repository fact:
 
-1. add or locate an assumption ID,
-2. identify the exact required evidence,
-3. fetch/inspect an exact ref when possible,
-4. store a concise evidence record under `evidence/repo-facts/`,
-5. update `ASSUMPTIONS.md`,
-6. update `MAIN_REPOSITORY_CONTEXT.md` if the fact changes subsequent work.
+1. add or locate an assumption or fact identifier;
+2. identify the required validation ref and evidence;
+3. inspect exact sources when access exists;
+4. store a minimal static record under `evidence/repo-facts/` when claiming `VERIFIED_AT_RECORDED_BASELINE`;
+5. update `ASSUMPTIONS.md`;
+6. update `MAIN_REPOSITORY_CONTEXT.md` when subsequent work depends on the result.
 
-Model agreement is not evidence.
+A minimal static record must conform to DPA-ADR-011. The lab must not create a parallel evidence database or service. Model agreement is not evidence.
 
 ## 16. DP1–DP5 relationship
 
-The lab prepares the normative specification. The main repository later executes:
+The lab specifies; the main repository later executes:
 
-- DP1: proof-of-architecture and evidence against fresh main,
-- DP2: first production projection and existing-system integration,
-- DP3: controlled rollout to additional handoff/bootstrap documents,
-- DP4: status authority discovery and conditional migration,
+- DP1: proof-of-architecture and evidence against an exact validation ref;
+- DP2: first production projection and existing-system integration;
+- DP3: controlled rollout to additional handoff/bootstrap documents;
+- DP4: status-authority discovery and conditional migration;
 - DP5: staged strict adoption in the existing lifecycle gate.
 
-DP1 must decide document form from evidence. The lab must not predeclare Fall A, B or C as a verified outcome.
+DP1 determines document form from evidence. The lab must not predeclare a candidate migration form as verified.
 
 ## 17. Required DP1 decision hierarchy
 
-The implementation plan shall preserve this preference:
-
-1. Full projection only when complete content is already reconstructable from existing canonical sources.
+1. Full projection only when complete content is reconstructable from existing canonical sources.
 2. Split current projection and historical evidence when historical prose is not canonical.
-3. Managed head plus append history only as a justified exception with complete workflow serialization.
+3. Managed head plus append history only as a justified exception with explicit region ownership and complete workflow serialization.
+4. No migration when authority, consumers, readers, writers or rollback cannot be established.
 
-No new canonical history database or log may be introduced merely to make a migration convenient.
+No new canonical history store may be introduced merely to make migration convenient.
 
 ## 18. Concurrency contract
 
-The normative DPA must distinguish:
+The normative DPA must distinguish local mutation locking, base/source/target/contract drift, branch concurrency, pull-request concurrency and workflow serialization.
 
-- local mutation locking,
-- repository/branch drift,
-- pull-request concurrency,
-- workflow serialization.
+A production refresh must capture and verify base SHA, target-region or full-target fingerprint, declared source fingerprints, renderer and contract identity and reproducibility against the validation ref.
 
-A production refresh must eventually capture and verify:
-
-- base SHA,
-- target-region hash or full-target hash,
-- declared source hashes,
-- reproducibility against fresh `origin/main`.
-
-On drift:
-
-- block,
-- regenerate from fresh main,
-- do not auto-merge historical prose,
-- do not treat local locking as cross-PR serialization.
+On drift: block, regenerate from the validation ref, do not auto-merge historical prose and do not treat local locking as cross-PR serialization.
 
 ## 19. Stop conditions
 
 Stop and produce a bounded diagnosis when:
 
-- required evidence is unavailable,
-- normative documents conflict,
-- the work would create a parallel governance subsystem,
-- a new runtime truth source is being introduced without accepted authority,
-- an implementation claim is requested in the lab,
-- production code would be added to the lab,
-- a review cannot be adjudicated because a maintainer decision is required,
+- required evidence is unavailable;
+- normative documents conflict;
+- the work would create a parallel governance or runtime subsystem;
+- a new runtime authority is introduced without an accepted decision;
+- an implementation claim is requested from lab evidence;
+- production code or live `.agentic/` state would enter the lab;
+- a review cannot be adjudicated because a maintainer decision is missing;
 - the current task depends on an unresolved earlier DPA contract.
 
 ## 20. Current work order
 
-The next session shall:
+After DPA-ADR-009 through DPA-ADR-012 are accepted:
 
-1. complete bootstrap reading,
-2. inspect the current lab structure,
-3. expand DPA-000 into a complete vision and principle contract,
-4. create DPA-100 with normative terminology,
-5. create initial traceability artifacts,
-6. create a Claude Fable 5 review prompt,
-7. commit work in coherent reviewable units,
-8. update `STATUS.md` and decisions as appropriate.
-
-Continue without routine questions. Ask only when a genuine maintainer decision or stop condition applies.
+1. synchronize DPA-000, DPA-100 and this contract;
+2. create minimal recorded-baseline evidence records;
+3. regenerate Phase A traceability one invariant per row;
+4. align governance wording, status and planning artifacts;
+5. create a consolidated adjudication record;
+6. reassess Phase A stability;
+7. outline DPA-200 only after no foundational decision remains unresolved.
