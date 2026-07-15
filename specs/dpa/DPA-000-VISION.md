@@ -1,7 +1,7 @@
 # DPA-000 — Vision and Architectural Principles
 
 Status: review-ready
-Status-date: 2026-07-14
+Status-date: 2026-07-15
 Superseded-by: n/a
 
 ## 1. Purpose
@@ -10,7 +10,7 @@ This specification defines the vision, scope, architectural boundaries and gover
 
 The DPA extends the existing document-management architecture of `vfi64/agentic-project-kit`. It does not establish a second registry, lifecycle, freshness, evidence, workspace, workflow or gate system.
 
-Repository-specific implementation statements in this document are classified as `NEEDS_MAIN_REPO_VALIDATION` unless they cite an exact main-repository ref and reproducible evidence.
+Repository-specific implementation statements in this document are classified as `NEEDS_MAIN_REPO_VALIDATION` unless they cite an exact main-repository ref and the minimum evidence required by DPA-ADR-011.
 
 ## 2. Problem statement
 
@@ -68,7 +68,7 @@ The existing documentation registry owns the declarative projection contract aft
 
 ### 6.3 Renderer
 
-A renderer reads only its declared inputs and computes exactly one registered target as text or bytes. It MUST be deterministic for identical declared inputs and relevant versioned configuration. It MUST NOT write, lock, mutate, invoke another renderer or invent domain state.
+A renderer reads only declared canonical sources and contract-declared configuration and computes exactly one registered target as text or bytes. It MUST be deterministic for identical declared inputs. It MUST NOT write, lock, mutate, invoke another renderer or invent domain state.
 
 ### 6.4 Document lifecycle
 
@@ -76,7 +76,7 @@ The existing document lifecycle validates contracts, resolves declared inputs, p
 
 ### 6.5 Workflow orchestration
 
-Workflow orchestration serializes branch- and pull-request-level refresh activity, verifies base and source assumptions against fresh repository state, and prevents stale plans from being committed. It MUST NOT define document semantics.
+Workflow orchestration serializes branch- and pull-request-level refresh activity, verifies base and source assumptions against the validation ref, and prevents stale plans from being committed. It MUST NOT define document semantics.
 
 ### 6.6 Evidence
 
@@ -84,27 +84,31 @@ Evidence records what was inspected, planned, rendered, validated or written. Ev
 
 ### 6.7 Consumer
 
-A consumer reads a registered target. Consumers SHOULD NOT need to understand renderer internals, but their read order and assumptions MUST be included in migration analysis where stale-leading-content risk exists.
+A consumer reads a registered target. Consumers SHOULD NOT need to understand renderer internals, but their read order, validation assumptions and trust boundary MUST be included in document-model and gate analysis.
 
-## 7. Binding architectural invariants
+## 7. Canonical DPA invariant register
 
-1. Canonical state MUST NOT own rendering logic.
-2. Renderers MUST NOT own write logic.
-3. Renderers MUST return text or bytes only.
-4. The document lifecycle MUST validate, plan, lock and write projection targets.
-5. Workflow orchestration MUST serialize refresh activity across branches and pull requests.
-6. The registry MUST describe reviewed contracts, not arbitrary plugins.
-7. Renderer identifiers MUST resolve through static, reviewed code.
-8. One renderer invocation MUST compute exactly one registered target.
-9. A renderer MUST NOT trigger another renderer.
-10. Evidence MUST NOT be runtime authority.
-11. Runtime projection contracts MUST live only in the main repository's existing registry and lifecycle system.
-12. The DPA MUST NOT introduce a parallel registry, lifecycle, freshness, evidence, workspace or gate subsystem.
-13. Time-based findings MUST NOT become hard failures solely because time elapsed.
-14. Historical prose MUST NOT be automatically merged during drift recovery.
-15. Mutation commands MUST default to dry-run.
-16. Production paths MUST resolve through the main repository's existing Workspace abstraction after validated implementation.
-17. Repository-specific field names, module names and current behaviors MUST remain `NEEDS_MAIN_REPO_VALIDATION` until verified against an exact fresh ref.
+This section is the sole normative owner of DPA invariant identities and meanings. Other artifacts MUST reference these IDs and MUST NOT redefine, regroup or renumber them.
+
+- **DPA-INV-001 — Canonical-state purity:** Canonical state MUST NOT own rendering logic.
+- **DPA-INV-002 — Renderer write prohibition:** Renderers MUST NOT own write logic.
+- **DPA-INV-003 — Renderer output boundary:** Renderers MUST return text or bytes only.
+- **DPA-INV-004 — Lifecycle mutation ownership:** The document lifecycle MUST validate, plan, lock and write projection targets.
+- **DPA-INV-005 — Cross-ref serialization:** Workflow orchestration MUST serialize refresh activity across branches and pull requests.
+- **DPA-INV-006 — Declarative registry boundary:** The registry MUST describe reviewed contracts, not arbitrary plugins.
+- **DPA-INV-007 — Static renderer resolution:** Renderer identifiers MUST resolve through static, reviewed code.
+- **DPA-INV-008 — Single-target rendering:** One renderer invocation MUST compute exactly one registered target.
+- **DPA-INV-009 — No renderer chaining:** A renderer MUST NOT trigger another renderer.
+- **DPA-INV-010 — Evidence boundary:** Evidence MUST NOT be runtime authority.
+- **DPA-INV-011 — Runtime-contract ownership:** Runtime projection contracts MUST live only in the main repository's existing registry and lifecycle system.
+- **DPA-INV-012 — No parallel subsystem:** The DPA MUST NOT introduce a parallel registry, lifecycle, freshness, evidence, workspace or gate subsystem.
+- **DPA-INV-013 — Time is not validity:** Time-based findings MUST NOT become hard failures solely because time elapsed.
+- **DPA-INV-014 — No historical-prose auto-merge:** Historical prose MUST NOT be automatically merged during drift recovery.
+- **DPA-INV-015 — Dry-run default:** Mutation commands MUST default to dry-run.
+- **DPA-INV-016 — Workspace path ownership:** Production paths MUST resolve through the main repository's existing Workspace abstraction after validated implementation.
+- **DPA-INV-017 — Exact-evidence boundary:** Repository-specific field names, module names and current behaviors MUST remain `NEEDS_MAIN_REPO_VALIDATION` until verified against an exact validation ref with the required evidence.
+
+Changing an invariant's meaning requires an accepted decision and synchronized updates to this section and its traceability row.
 
 ## 8. Authority model
 
@@ -133,13 +137,13 @@ A conforming projection refresh SHALL conceptually perform these stages:
 9. revalidate stale-plan guards;
 10. write atomically through the existing lifecycle;
 11. emit evidence without promoting evidence to authority;
-12. verify reproducibility against the required repository state.
+12. verify reproducibility against the required validation ref.
 
-Exact commands, schemas and module boundaries are `NEEDS_MAIN_REPO_VALIDATION` until DP1 inspects a fresh main repository.
+Exact commands, schemas and module boundaries are `NEEDS_MAIN_REPO_VALIDATION` until DP1 inspects a validation ref.
 
 ## 10. Freshness and failure principles
 
-Projection freshness is derivational, not merely chronological. A target is fresh when it is reproducible from the declared sources, renderer identity and relevant versioned configuration under the governing contract.
+Projection freshness is derivational, not merely chronological. A target is fresh when it is reproducible from the declared sources, renderer identity and contract-declared configuration under the governing contract.
 
 The DPA MUST fail loudly for unknown renderer identifiers, invalid contracts, missing required sources, non-deterministic output, stale mutation plans and prohibited authority relationships.
 
@@ -155,9 +159,9 @@ A production workflow MUST therefore capture and verify at least:
 - declared source fingerprints;
 - target-region or full-target fingerprint;
 - renderer and contract identity;
-- reproducibility against fresh `origin/main` before final integration.
+- reproducibility against the validation ref before final integration.
 
-On drift, the workflow MUST block and regenerate from fresh authoritative state. It MUST NOT auto-merge historical prose.
+On drift, the workflow MUST block and regenerate from authoritative state at the validation ref. It MUST NOT auto-merge historical prose.
 
 ## 12. Migration principles
 
@@ -197,13 +201,13 @@ Later specifications MUST conform to this document and the lab execution contrac
 
 ## 16. Repository evidence classification
 
-### VERIFIED at recorded baseline
+### VERIFIED_AT_RECORDED_BASELINE
 
-At main-repository refs `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`, the lab context records an existing integrated document-management stack and completed post-L5 lifecycle evidence. The reproduction source is `MAIN_REPOSITORY_CONTEXT.md`; fresh implementation work MUST revalidate these facts.
+The lab records main-repository refs `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d` for the integrated document-management capability family. This classification remains valid only while the minimal static records required by DPA-ADR-011 exist under `evidence/repo-facts/`. It never removes the requirement to revalidate implementation-relevant facts against the DP1 validation ref.
 
 ### NEEDS_MAIN_REPO_VALIDATION
 
-Exact registry fields, module names, renderer integration points, lifecycle finding types, source authority, reader/writer graphs, workflow checks and candidate migration targets require DP1 inspection against a fresh `origin/main`.
+Exact registry fields, module names, renderer integration points, lifecycle finding types, source authority, reader/writer graphs, workflow checks and candidate migration targets require DP1 inspection against its exact validation ref.
 
 ## 17. Success criteria
 
