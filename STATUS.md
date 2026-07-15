@@ -8,90 +8,72 @@ Superseded-by: n/a
 
 The DPA architecture laboratory remains in Phase A — Foundation. It is non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
 
-The active review-planning branch is `review/claude-phase-a-adjudication`.
+The active branch is `review/claude-phase-a-adjudication`.
 
-The primary Claude architecture review is bound to exact architecture baseline `1a73ec435a09d0367cb7e9f123241d9f61550b0f`.
+The primary architecture review is bound to architecture baseline `1a73ec435a09d0367cb7e9f123241d9f61550b0f`. The ChatGPT Technical Verification Audit verifies that baseline and the later planning integration state. Gemini access attempts are `access-blocked`, not reviews and not architecture verdicts.
 
-The ChatGPT Technical Verification Audit verifies that architecture baseline and inspects the later review-integration state `1bf72d1313335b6acfe5af960dd7315f42a7756a`. It is explicitly not represented as a blind independent first review.
+## Completed review and adjudication work
 
-The recorded main-repository context remains based on administrative commit `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` and substantive post-L5 evidence commit `5d4ea12d2f87393bdffdfbc53d79bc79d8670f1d`. No new implementation verification is claimed.
+- DPA-000 and DPA-100 review-ready baseline. — complete
+- Claude primary architecture review. — complete
+- ChatGPT secondary technical verification. — complete
+- Review findings integrated into planning. — complete
+- Maintainer adjudication recorded in `reviews/consolidated/PHASE_A_ADJUDICATION.md`. — complete
+- DPA-ADR-009 through DPA-ADR-012 accepted. — complete
+- DPA-000 canonical invariant register established. — complete
+- DPA-100 closed vocabulary model and foundational terminology updated. — complete
+- LAB_EXECUTION_CONTRACT phase, review and evidence governance synchronized. — complete
+- Minimal baseline evidence records created under `evidence/repo-facts/`. — complete
+- Phase A traceability regenerated one invariant per row. — complete
 
-## Completed Phase A review inputs
+## Accepted Phase A decisions
 
-- DPA-000 and DPA-100 review-ready baseline exists. — COMPLETE
-- Claude Fable 5 primary architecture review committed. — COMPLETE
-- Claude review result: `ACCEPT_WITH_CHANGES`.
-- ChatGPT Technical Verification Audit committed. — COMPLETE
-- ChatGPT TVA result: `ACCEPT_WITH_CHANGES`.
-- Complete findings integrated into roadmap, backlog and traceability planning. — COMPLETE
-- Proposed decision scopes ADR-009 through ADR-011 recorded without accepting outcomes. — COMPLETE
-- Normative DPA meaning changed from review findings. — NO
+- DPA-ADR-009 — separate repository classifications, document status, progress status and access outcome.
+- DPA-ADR-010 — DPA-000 owns `DPA-INV-001` through `DPA-INV-017`.
+- DPA-ADR-011 — recorded-baseline verification requires minimal static evidence records.
+- DPA-ADR-012 — reviews are governed by roles and evidence quality, not named products.
 
-## Gemini access outcome
+## Architecture assessment
 
-Two Gemini attempts could not inspect the repository because the Gemini environment had no usable HTTP file-retrieval capability.
+- Foundational contradiction: none found.
+- Hidden parallel subsystem: none found.
+- New runtime authority: none found.
+- Consolidated verdict: `ACCEPT_WITH_CHANGES`.
 
-These outcomes are classified as `ACCESS_BLOCKED`, not architecture reviews and not `REJECT` verdicts on the DPA.
+## Remaining Phase A work
 
-Gemini is no longer required for Phase A. The proposed review-governance correction replaces named-model requirements with evidence-qualified review roles.
+1. Align remaining governance/bootstrap wording with the accepted vocabulary and review roles.
+2. Align or explicitly mark `diagrams/architecture.mmd` as a simplified non-normative view.
+3. Mark backlog items with final adjudicated progress.
+4. Run one final exact-ref consistency review across bootstrap, governance, DPA-000, DPA-100, decisions, traceability and evidence records.
+5. Decide whether DPA-000 and DPA-100 may advance from `review-ready` to `stable`.
+6. Outline DPA-200 only after the final consistency review finds no foundational contradiction.
 
-## Verified review conclusions
+## Remaining blockers to Phase A stability
 
-- No foundational architecture contradiction was found.
-- No hidden parallel registry, lifecycle, freshness, evidence, Workspace or gate system was found.
-- No new runtime authority was found.
-- F-M01 status namespace closure is valid and requires ADR-009.
-- F-M02 invariant-register ownership is valid and requires ADR-010.
-- F-M03 missing baseline evidence records is valid as a major governance/evidence defect and requires ADR-011.
-- Review governance must be role-based rather than vendor-bound.
+- Remaining governance/bootstrap wording cleanup is pending.
+- Standalone diagram disposition is pending.
+- Backlog closure synchronization is pending.
+- Final post-adjudication consistency review is pending.
 
-## Active work
-
-1. Create a consolidated finding-by-finding adjudication record from:
-   - Claude primary architecture review;
-   - ChatGPT Technical Verification Audit;
-   - maintainer decisions.
-2. Obtain maintainer decisions for:
-   - ADR-009 — status and classification namespaces;
-   - ADR-010 — canonical invariant-register ownership;
-   - ADR-011 — recorded-baseline evidence bar;
-   - role-based review governance.
-3. Apply accepted normative changes only after adjudication.
-4. Create minimal static repo-fact records only if ADR-011 accepts that evidence bar.
-5. Regenerate traceability and align or demote the standalone architecture diagram.
-6. Reassess Phase A stability at one exact resulting ref.
-
-## Blockers to Phase A stability
-
-- ADR-009 is unresolved.
-- ADR-010 is unresolved.
-- ADR-011 is unresolved.
-- Role-based review governance is not yet accepted normatively.
-- Consolidated maintainer adjudication is not complete.
-- Accepted normative corrections have not been applied.
-- Minimal baseline evidence records do not yet exist.
-- Final post-correction consistency review has not run.
-
-None of these is a foundational architecture contradiction. They block stability, not adjudication.
+These are bounded consistency tasks, not architecture contradictions.
 
 ## Phase A exit tracking
 
-This table is a tracking view. Normative exit-criteria ownership remains part of finding F-m01.
+The normative owner is `LAB_EXECUTION_CONTRACT.md` §9.
 
-| Criterion | State |
+| Criterion | Progress |
 |---|---|
-| DPA-000 and DPA-100 review-ready | SATISFIED WITH CHANGES |
-| No hidden parallel system implied | SATISFIED |
-| No new runtime authority implied | SATISFIED |
-| Initial traceability exists | SATISFIED WITH CHANGES |
-| Primary architecture review collected | SATISFIED — Claude |
-| Secondary technical verification collected | SATISFIED — ChatGPT TVA |
-| Gemini review collected | NOT REQUIRED — ACCESS_BLOCKED |
-| Review findings integrated into planning | SATISFIED |
-| Required maintainer decisions accepted | NOT SATISFIED |
-| Consolidated adjudication complete | NOT SATISFIED |
-| Accepted normative changes applied | NOT SATISFIED |
-| Minimal baseline evidence records complete | NOT SATISFIED |
-| Final consistency review complete | NOT SATISFIED |
+| DPA-000 and DPA-100 review-ready | complete |
+| Terminology and invariant references internally coherent | complete for core normative owners |
+| No hidden parallel subsystem or new runtime authority | complete |
+| Repository claims use correct classification and evidence scope | complete for recorded baseline |
+| Initial one-to-one traceability | complete |
+| Primary architecture review | complete |
+| Secondary technical verification | complete |
+| Maintainer adjudication | complete |
+| Accepted decisions and core normative changes synchronized | complete |
+| Remaining governance/diagram/backlog cleanup | partial |
+| Final consistency review | pending |
 
-Phase A is not stable and is not closed. DPA-200 may be outlined only after the foundational status, invariant-ownership and evidence-bar decisions no longer remain unresolved. Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and governance/bootstrap contracts are consistent.
+Phase A is not yet `stable` and is not closed. Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and governance/bootstrap contracts are consistent.
