@@ -12,6 +12,8 @@ Fact family: `DISC-003`
 
 Related assumptions: A-002, A-003, A-005
 
+Related follow-up: `DP1-DISC-003B-CURRENT-HANDOFF-TRIGGER-6A9DA7D.md`
+
 ## Factual question
 
 Which code and workflow paths write or regenerate the handoff and bootstrap candidate artifacts, and what ownership or boundary behavior is observable?
@@ -48,7 +50,7 @@ Which code and workflow paths write or regenerate the handoff and bootstrap cand
 
 1. `transfer chat-switch-complete` calls `write_successor_handoff_package` and writes the latest successor package plus the canonical prompt projections `NEXT_CHAT_BOOTSTRAP.md`, `START_NEW_CHAT_PROMPT.md` and `CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md`. It reads `CURRENT_HANDOFF.md` as a long-term source but does not write that file.
 2. `prepare-successor-handoff` is a deprecated compatibility alias for the same package-generation path.
-3. The mutating command path for `CURRENT_HANDOFF.md` is `transfer admin-refresh-pr`. It reaches `_refresh_operational_handoff_docs(after_pr)` while constructing an administrative post-merge handoff refresh.
+3. An observed mutating command path for `CURRENT_HANDOFF.md` is `transfer admin-refresh-pr`. It reaches `_refresh_operational_handoff_docs(after_pr)` while constructing an administrative post-merge handoff refresh. Global writer-set completeness is not claimed.
 4. `_refresh_operational_handoff_docs` updates `.agentic/handoff_state.yaml` and `.agentic/operational_handoff_state.yaml`, refreshes package projections, writes a post-PR successor prompt, and edits `STATUS.md`, `CURRENT_HANDOFF.md` and `START_NEW_CHAT_PROMPT.md`.
 5. For `CURRENT_HANDOFF.md`, the function does not call `replace_generated_operational_handoff_block`. Instead it removes at most one prior section matching `Operational documentation refresh state after PR #...` and appends a new Markdown section at the end of the complete document.
 6. The implemented regex only matches the current standardized refresh-section shape. Older historical sections with different headings or wording remain in place. This explains why accumulated historical content can remain at the start of `CURRENT_HANDOFF.md` even after a governed refresh.
@@ -58,9 +60,11 @@ Which code and workflow paths write or regenerate the handoff and bootstrap cand
 10. `render_handoff_prompt` and `render_current_operational_handoff_state` are renderers: they return text or line tuples. Repository writes occur in separate writer/orchestration functions.
 11. No existing documentation-lifecycle API mediates the `CURRENT_HANDOFF.md` mutation in `_refresh_operational_handoff_docs`; the function writes the file directly with `Path.write_text`.
 
+DISC-003b independently confirmed items 1–4 at the same validation ref and rejected the proposition that `transfer chat-switch-complete` writes `CURRENT_HANDOFF.md` at that ref. It also requires writer inventory to be repeated at the later Probe validation ref.
+
 ## Command adaptation obligation
 
-The existing command cannot remain unchanged under the proposed DPA architecture.
+The observed command cannot remain unchanged under the proposed DPA architecture if its target becomes a registered projection target.
 
 The later DPA-300/DP1 Probe contract MUST evaluate and specify a migration of the `transfer admin-refresh-pr` / `_refresh_operational_handoff_docs` path so that:
 
@@ -73,13 +77,13 @@ The later DPA-300/DP1 Probe contract MUST evaluate and specify a migration of th
 - direct writes outside the lifecycle boundary become detectable;
 - compatibility with existing manual or historical content is decided from DP1 evidence rather than assumed.
 
-This obligation does not select managed-head, hybrid or another production form. It records that the current command path is an implementation surface that must be adapted if `CURRENT_HANDOFF.md` is selected for migration.
+This obligation does not select managed-head, hybrid or another production form. It records that the observed command path is an implementation surface that must be adapted if `CURRENT_HANDOFF.md` is selected for migration.
 
 ## Ownership observations
 
 - `.agentic/operational_handoff_state.yaml` is the observed input consumed by the operational handoff projection renderer.
 - `NEXT_CHAT_BOOTSTRAP.md` has a whole-file generated writer and byte-for-byte validation path.
-- `CURRENT_HANDOFF.md` already contains a marked generated block and has a safe replacement primitive, but the active administrative refresh writer bypasses that primitive and appends a refresh section to the full document.
+- `CURRENT_HANDOFF.md` already contains a marked generated block and has a safe replacement primitive, but the observed administrative refresh writer bypasses that primitive and appends a refresh section to the full document.
 - The remaining historical and curated bytes have no complete machine-readable ownership policy in the inspected command path.
 
 ## Limitations
@@ -91,7 +95,8 @@ This obligation does not select managed-head, hybrid or another production form.
 
 ## Later Probe or Assessment obligations
 
-- Probe the proposed registry and lifecycle contract against this exact command surface.
+- Repeat the writer inventory at the exact Probe validation ref.
+- Probe the proposed registry and lifecycle contract against every then-observed command surface.
 - Verify whether the existing bounded replacement primitive can be retained behind the lifecycle boundary or must be refactored.
 - Determine whether all writes to candidate targets can be routed through the existing lifecycle and Workspace APIs.
 - Test missing/duplicate/misordered-marker failure, stale-plan rejection, direct-write detection and rollback.
