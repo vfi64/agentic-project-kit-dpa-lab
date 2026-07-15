@@ -1,6 +1,7 @@
 # Status
 
 Status: active
+
 Status-date: 2026-07-15
 Superseded-by: n/a
 
@@ -8,7 +9,7 @@ Superseded-by: n/a
 
 Phase A — Foundation is closed on `main` at commit `a1b81beaf8f8a065d8a869d15bbf39d0e6459aae`.
 
-Phase B — Core document-management integration is active on branch `spec/dpa-200-document-model`.
+Phase B — Core document-management integration is active on branch `discovery/dp1-main-repository`.
 
 The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit`, contains no production kit code and has not been adopted with the kit.
 
@@ -23,14 +24,14 @@ Review baseline:
 - Maintainer adjudication: complete.
 - Post-adjudication verification: `PASS`.
 
-DPA-200 and its matrix are now `review-ready`.
+DPA-200 and its matrix are `review-ready`.
 
 ## Accepted DPA-200 decisions
 
 - DPA-ADR-013 — unique document-form classifier and lifecycle-owned partition bytes.
 - DPA-ADR-014 — closed consumer trust-state model.
 
-The consolidated model now provides:
+The consolidated model provides:
 
 1. one primary form per document;
 2. split projection only for multiple independently registered target identities;
@@ -43,16 +44,6 @@ The consolidated model now provides:
 9. one normative invalid-state catalog;
 10. DM-011 target-semantics completeness;
 11. `no migration` as the fail-safe outcome.
-
-Synchronized artifacts:
-
-- `specs/dpa/DPA-200-DOCUMENT-MODEL.md`;
-- `specs/dpa/DPA-200-DOCUMENT-FORM-MATRIX.md`;
-- `specs/dpa/DPA-100-CONSUMER-TRUST-STATE-AMENDMENT.md`;
-- `diagrams/dpa-200-region-ownership.mmd`;
-- `diagrams/dpa-200-trust-states.mmd`;
-- `traceability/DPA-200_TRACEABILITY.md`;
-- `reviews/consolidated/DPA-200_POST_ADJUDICATION_VERIFICATION.md`.
 
 ## Accepted sequencing decision
 
@@ -73,32 +64,91 @@ Discovery:
 - is strictly read-only;
 - uses one exact validation ref;
 - records facts rather than suitability judgments;
-- may verify or falsify assumptions;
+- may verify or falsify assumptions only after committed records exist;
 - performs no mutation, migration, adoption, conformance judgment, form selection or architecture decision.
 
-## Governance synchronization
+## Active DP1 Discovery
 
-Completed:
+Target repository:
 
-- dedicated accepted ADR-015;
-- `LAB_EXECUTION_CONTRACT.md` synchronized;
-- `ROADMAP.md` changed to evidence-first sequencing;
-- DP1 Discovery contract created;
-- Discovery factual questions separated from later Probe and Assessment questions.
+`vfi64/agentic-project-kit`
+
+Validation ref:
+
+`6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
+
+Completed records:
+
+- DISC-001 — registry representation;
+- DISC-002 — candidate reader graph;
+- DISC-003 — candidate writer graph;
+- DISC-004 — authority inputs;
+- DISC-006 — lifecycle mutation path;
+- DISC-007 — Workspace and path APIs.
+
+Pending records:
+
+- DISC-005 — lifecycle findings;
+- DISC-008 — locking and concurrency;
+- DISC-009 — gates and CI;
+- DISC-010 — history and rollback inputs.
+
+No main-repository mutation has occurred.
+
+## Confirmed CURRENT_HANDOFF command-path finding
+
+Exact-ref Discovery identified the active mutation path as:
+
+`agentic-kit transfer admin-refresh-pr`
+→ `transfer_repo_actions._refresh_operational_handoff_docs()`
+
+The observed implementation updates handoff state and generated artifacts, but for `CURRENT_HANDOFF.md` it removes only one narrowly matched prior refresh section and appends a new historical refresh section. It does not route that target through the existing bounded `replace_generated_operational_handoff_block()` primitive.
+
+This is now an explicit planning obligation in `ROADMAP.md` and an exact Probe item in `integration/DP1_PROBE_BACKLOG.md`.
+
+Required later result:
+
+- DPA-300 defines lifecycle-owned bounded mutation;
+- DPA-400 defines renderer payload purity;
+- DPA-500 defines marker/drift findings and gates;
+- DPA-600 preserves stale-plan and competing-PR protection;
+- DPA-700 defines outside-region preservation and rollback;
+- DP1 Probe demonstrates replacement rather than append behavior without preselecting a production form.
+
+Primary evidence:
+
+`evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`
 
 ## Next governed step
 
-Execute DP1 Discovery against a newly fetched exact `origin/main` validation ref of `vfi64/agentic-project-kit`.
+Complete the remaining read-only Discovery packages:
 
-Required outputs:
+1. DISC-005 and DISC-009 — lifecycle findings, gates and CI;
+2. DISC-008 and DISC-010 — locking, concurrency, history and rollback.
 
-- DISC-001 through DISC-010 bounded fact records;
-- updated `ASSUMPTIONS.md`;
-- updated `MAIN_REPOSITORY_CONTEXT.md` only where later design depends on new facts;
-- explicit DP1 Probe backlog for compatibility and sufficiency questions;
-- confirmation that no main-repository mutation occurred.
+Then:
 
-Then draft DPA-300 from the observed evidence. DP1 Probe and Assessment remain deferred until a reviewable contract exists.
+1. review all ten records for exact-ref scope and limitations;
+2. synchronize `ASSUMPTIONS.md` only where committed evidence supports reclassification;
+3. update `MAIN_REPOSITORY_CONTEXT.md` only for facts needed by later design;
+4. finalize `integration/DP1_PROBE_BACKLOG.md`;
+5. create the first evidence-based DPA-300 draft and traceability baseline;
+6. bind a Claude primary architecture review prompt to that exact DPA-300 commit.
+
+DP1 Probe and Assessment remain deferred until the DPA-300 contract is reviewable.
+
+## Claude review timing
+
+Claude is not required for individual raw Discovery records. The next primary Claude review is required when all of the following exist at one immutable lab commit:
+
+- DISC-001 through DISC-010 records;
+- synchronized `ASSUMPTIONS.md`;
+- synchronized `MAIN_REPOSITORY_CONTEXT.md`;
+- finalized `integration/DP1_PROBE_BACKLOG.md`;
+- a reviewable DPA-300 draft;
+- DPA-300 traceability and diagrams sufficient to audit registry, lifecycle, writer ownership, command integration and Probe coverage.
+
+Claude must specifically verify that the proposed DPA-300 contract accounts for the observed `transfer admin-refresh-pr` / `CURRENT_HANDOFF.md` writer path and does not merely specify a parallel replacement command.
 
 ## Validation boundary
 
@@ -116,4 +166,4 @@ No production candidate has been assigned a form.
 - No Discovery conclusion may make an architecture decision.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue. DPA-200 is review-ready; early DP1 Discovery is authorized.
+Phase B may continue. DPA-200 is review-ready; early DP1 Discovery is active and governed.
