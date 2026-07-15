@@ -16,9 +16,9 @@ No repository-specific statement is `VERIFIED` until validated against an exact 
 | DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | draft under post-review adjudication |
 | DPA-400 | `DPA-400-RENDERER-CONTRACT.md` | planned |
 | DPA-500 | `DPA-500-FRESHNESS-AND-GATES.md` | planned |
-| DPA-600 | `DPA-600-CONCURRENCY-AND-WORKFLOW.md` | planned |
-| DPA-700 | `DPA-700-MIGRATION-AND-ROLLBACK.md` | planned |
-| DPA-800 | `DPA-800-DP1-DP5-IMPLEMENTATION.md` | planned |
-| DPA-900 | `DPA-900-FUTURE-EVOLUTION.md` | planned |
+| DPA-600 | `DPA-600-CONCURRENCY.md` | planned |
+| DPA-700 | `DPA-700-MIGRATION.md` | planned |
+| DPA-800 | `DPA-800-DP1-DP5.md` | planned |
+| DPA-900 | `DPA-900-FUTURE.md` | planned |
 
 A DPA number MUST have exactly one canonical normative file. Amendments and historical pointers MUST identify their owner and MUST NOT remain competing normative homes.
