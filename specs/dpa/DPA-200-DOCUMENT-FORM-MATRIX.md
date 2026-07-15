@@ -143,7 +143,7 @@ The following matrix checks derive from DPA-200 §12:
 | Registry, partition and contract validation | DPA-300 |
 | Lifecycle planning, locking, writing and direct-write detection | DPA-300 |
 | Renderer payload-only and one-target behavior | DPA-400 |
-| Trust gates, boundary drift and acceptance invalidation | DPA-500 |
+| Trust gates, partition drift and acceptance invalidation | DPA-500 |
 | Cross-ref serialization | DPA-600 |
 | Migration, history and rollback | DPA-700 |
 | DP1 Discovery, Probe, Assessment and form decision | DPA-800 |
