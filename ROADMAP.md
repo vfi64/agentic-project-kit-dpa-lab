@@ -1,90 +1,115 @@
 # Roadmap
 
 Status: active
-Status-date: 2026-07-14
+Status-date: 2026-07-15
 
 ## Specification sequence
 
-1. DPA-000 — Vision and architectural principles
-2. DPA-100 — Foundations and terminology
-3. DPA-200 — Document model
-4. DPA-300 — Registry and lifecycle integration
-5. DPA-400 — Renderer contract
-6. DPA-500 — Freshness and gates
-7. DPA-600 — Concurrency and workflow serialization
-8. DPA-700 — Migration and rollback
-9. DPA-800 — DP1–DP5 implementation specification
-10. DPA-900 — Future evolution
-11. Main-repository validation
-12. Lab adoption with agentic-project-kit
-13. Controlled import into `vfi64/agentic-project-kit`
+1. DPA-000 — Vision and architectural principles — stable
+2. DPA-100 — Foundations and terminology — stable
+3. DPA-200 — Document model — draft under post-review consolidation
+4. DPA-300 — Registry and lifecycle integration — planned
+5. DPA-400 — Renderer contract — planned
+6. DPA-500 — Freshness and gates — planned
+7. DPA-600 — Concurrency and workflow serialization — planned
+8. DPA-700 — Migration and rollback — planned
+9. DPA-800 — DP1–DP5 implementation specification — planned
+10. DPA-900 — Future evolution — planned
+11. Lab adoption with `agentic-project-kit`
+12. Controlled import into `vfi64/agentic-project-kit`
 
-## Phase A adjudication work order
+The normative specification order is unchanged.
 
-The Claude Fable 5 review at reviewed ref `1a73ec435a09d0367cb7e9f123241d9f61550b0f` is a non-normative review input. The following work order governs its integration. No item becomes normative before adjudication.
+## Evidence-first sequencing exception
 
-1. Record the complete Claude review under `reviews/claude/`. — COMPLETE
-2. Record every finding and deferred obligation in `planning/PHASE_A_REVIEW_BACKLOG.md`. — COMPLETE
-3. Collect separate ChatGPT and Gemini Phase A reviews against an exact common baseline. — PLANNED
-4. Adjudicate F-M01 and record the accepted classification/status model as DPA-ADR-009. — PLANNED; MAINTAINER DECISION REQUIRED
-5. Adjudicate F-M02 and record canonical invariant-register ownership as DPA-ADR-010. — PLANNED; MAINTAINER DECISION REQUIRED
-6. Adjudicate F-M03 and record the recorded-baseline evidence bar as DPA-ADR-011 or an explicit part of ADR-009. — PLANNED; MAINTAINER DECISION REQUIRED
-7. Adjudicate the minor terminology, phase-gate, traceability and diagram findings. — PLANNED
-8. Apply accepted normative changes only after the consolidated adjudication record exists. — BLOCKED BY STEPS 3–7
-9. Create only minimal static baseline evidence records; do not introduce lab evidence tooling or a second evidence system. — PLANNED
-10. Regenerate Phase A traceability against the accepted invariant IDs and status model. — PLANNED
-11. Reassess Phase A exit criteria from their declared single owner and update `STATUS.md`. — PLANNED
+DPA-ADR-015 keeps DP1 as one formal slice with three internal stages:
 
-## Review-derived specification obligations
+1. Discovery
+2. Probe
+3. Assessment
 
-These items are planning obligations, not accepted normative requirements until adjudicated.
+Only Discovery is moved earlier.
 
-### DPA-200 — Document model
+The governed sequence is:
 
-- Define `registered region`, including boundary representation, ownership and drift semantics.
-- Define `target semantics`, including full replacement, region replacement, encoding and normalization responsibilities.
-- Define consumer assumptions for projection output that exists before validation and merge gates complete.
-- Assign ownership rules for historical regions in hybrid or managed-head documents.
+1. Complete DPA-200 adjudication and post-adjudication verification.
+2. Promote DPA-200 to `review-ready` when its exit criteria pass.
+3. Execute read-only DP1 Discovery under `integration/DP1_DISCOVERY_CONTRACT.md` against one exact main-repository validation ref.
+4. Synchronize `ASSUMPTIONS.md`, `MAIN_REPOSITORY_CONTEXT.md` and bounded records under `evidence/repo-facts/`.
+5. Draft DPA-300 from observed evidence rather than unchecked repository assumptions.
+6. Execute DP1 Probe after a reviewable DPA-300 contract exists.
+7. Complete DP1 Assessment after Discovery and Probe evidence are available.
+8. Continue DPA-400 and DPA-500 with the validated repository context.
 
-### DPA-300 — Registry and lifecycle integration
+Early Discovery does not constitute lab adoption, implementation or migration.
 
-- Specify missing-canonical-source validation and fail-loud behavior.
-- Specify detection and findings for lifecycle bypass and direct target writes.
-- Specify partial-write and interrupted-mutation recovery obligations.
-- Preserve the existing lifecycle as the sole projection writer.
+## DPA-200 completion work
 
-### DPA-400 — Renderer contract
+Current required order:
 
-- Define contract-declared versioned configuration as an explicit renderer input channel.
-- Reconcile declared sources, canonical sources and contract-declared configuration.
-- Specify undeclared-input, side-effect, recursion and static-resolution negative tests.
+1. Consolidate DPA-ADR-013 and DPA-ADR-014 into the DPA-200 owner text.
+2. Synchronize the document-form matrix.
+3. Regenerate region-ownership and trust-state diagrams.
+4. Add DM-011 and re-key taxonomy, invalidity and trust-transition traceability.
+5. Run bounded post-adjudication verification.
+6. Promote DPA-200 and its matrix to `review-ready` only after verification passes.
 
-### DPA-500 — Freshness and gates
+## DP1 Discovery scope
 
-- Define the gate placement that prevents unvalidated projection output from being treated as accepted repository state.
-- Map structural, source, target, base and contract drift into existing findings and staged gate behavior.
-- Preserve the rule that time alone cannot hard-fail.
+Discovery asks factual Ist-state questions only:
 
-### DPA-600 — Concurrency and workflow serialization
+- registry loaders, schema and validation paths;
+- candidate reader and writer graphs;
+- observed authority inputs;
+- finding types, severities, producers and consumers;
+- lifecycle planning, locking, writing and evidence paths;
+- Workspace and path-resolution APIs;
+- locking and workflow inventory;
+- gates and CI mapping;
+- history and rollback inputs.
 
-- State explicitly that DP2 local lifecycle integration does not authorize multi-PR refresh before workflow serialization exists.
-- Specify stale-base, competing-PR and regeneration behavior.
+Discovery MUST NOT answer whether an observed mechanism is sufficient for DPA. Suitability and compatibility belong to Probe.
 
-### DPA-700 — Migration and rollback
+## Review-derived later-spec obligations
 
-- Require rollback inputs to be recoverable from Git history or another already-authoritative source.
-- Specify write ownership for retained historical regions.
-- Preserve the prohibition on automatic historical-prose merging.
+### DPA-300
 
-### DPA-800 — DP1–DP5 implementation specification
+- Registry representation and fail-loud validation.
+- Lifecycle planning, locking, atomic write and direct-write detection.
+- Boundary-partition validation and crash recovery.
 
-- Include exact-ref evidence-record obligations.
-- Carry all `NEEDS_MAIN_REPO_VALIDATION` items into DP1 entry and exit criteria.
-- Distinguish recorded baseline context from fresh implementation validation.
+### DPA-400
 
-## Prohibitions during adjudication
+- Static renderer resolution.
+- Declared sources and contract-declared configuration.
+- Purity, no boundary-byte output and one-target behavior.
 
-- Do not modify normative DPA meaning from a single model review.
-- Do not mark Phase A stable before required reviews are collected and adjudicated.
-- Do not create production kit code in the lab.
-- Do not create a richer evidence store, generator or parallel governance system.
+### DPA-500
+
+- Trust-state gates and acceptance transitions.
+- Drift findings and staged enforcement.
+- No time-only hard failure.
+
+### DPA-600
+
+- Base, source, target and contract drift guards.
+- Cross-branch and cross-PR serialization.
+
+### DPA-700
+
+- Migration choice and no-migration outcome.
+- Historical-region ownership and recoverable rollback.
+- No automatic historical-prose merge.
+
+### DPA-800
+
+- DP1 Discovery, Probe and Assessment as internal stages of one slice.
+- Exact-ref evidence obligations and DP1 exit criteria.
+
+## Prohibitions
+
+- No production code or main-repository mutation in the lab.
+- No `.agentic/` initialization before adoption.
+- No production-form selection from candidate labels or model opinion.
+- No architecture decision derived automatically from Discovery evidence.
+- No parallel evidence system or maintained main-repository mirror.
