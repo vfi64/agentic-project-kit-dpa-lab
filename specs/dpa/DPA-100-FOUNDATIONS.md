@@ -1,6 +1,6 @@
 # DPA-100 — Foundations and Terminology
 
-Status: review-ready
+Status: stable
 Status-date: 2026-07-15
 Superseded-by: n/a
 
@@ -316,19 +316,19 @@ A **secondary technical verification** checks the architecture and primary findi
 
 ### 10.3 Maintainer adjudication
 
-**Maintainer adjudication** accepts, modifies or rejects review findings and records resulting decisions before normative meaning changes.
+**Maintainer adjudication** accepts, modifies or rejects review findings and records normative decisions.
 
 ### 10.4 Consolidated review
 
-A **consolidated review** records the relationship among primary review, secondary verification, maintainer adjudication and resulting normative changes.
+A **consolidated review** records primary review, secondary verification and maintainer dispositions. It remains non-normative until accepted decisions and specification changes are committed.
 
-### 10.5 Qualifying review
+### 10.5 Review result
 
-A **qualifying review** identifies an exact ref, reviewed files, reviewer or model, method, findings, limitations and access outcome. Named products are not normative review roles.
+A completed review uses one architecture verdict from the governing review contract. Access failure, incomplete input and execution status are not review results.
 
 ## 11. DP1–DP5 terms
 
-- **DP1**: proof-of-architecture and evidence against an exact validation ref;
+- **DP1**: proof-of-architecture and evidence against a validation ref;
 - **DP2**: first production projection integrated into the existing system;
 - **DP3**: controlled rollout to additional handoff or bootstrap documents;
 - **DP4**: status-authority discovery and conditional migration;
@@ -341,14 +341,14 @@ DP1–DP5 are planned implementation slices until exact main-repository evidence
 1. A projection target MUST NOT be treated as an independent canonical source for the facts it renders.
 2. Evidence MUST NOT be read as runtime state by production behavior.
 3. Registry contracts MUST be declarative and statically resolved.
-4. Renderers MUST read declared canonical sources and contract-declared configuration only for semantic output.
+4. Renderers MUST read declared sources and contract-declared configuration only for output.
 5. The lifecycle MUST be the sole writer of projection targets.
 6. Workflow orchestration MUST own cross-ref serialization, not renderer code.
 7. Manual and projected regions MUST have explicit ownership.
 8. A repository-specific claim without exact evidence MUST remain `NEEDS_MAIN_REPO_VALIDATION` or `ASSUMPTION`.
-9. Review findings MUST NOT change normative meaning without maintainer adjudication.
+9. Review findings MUST NOT change normative meaning without adjudication.
 10. A planned DP slice MUST NOT be represented as completed implementation.
-11. An `access-blocked` output MUST NOT be treated as an architecture review verdict.
+11. Unvalidated rendered bytes MUST NOT be represented as accepted repository state.
 
 ## 13. Ambiguous terms prohibited in normative use
 
@@ -361,8 +361,7 @@ The following words require qualification and SHOULD NOT appear alone in normati
 - `fresh` — use the derivational definition in this document;
 - `history` — distinguish canonical history, evidence and prose;
 - `state` — identify owner and scope;
-- `source` — distinguish declared source, evidence source and repository location;
-- `adoption` — distinguish lab adoption from contract adoption or controlled import.
+- `source` — distinguish declared source, evidence source and repository location.
 
 ## 14. Foundational relationship model
 
@@ -371,13 +370,14 @@ flowchart LR
     CS[Canonical State] -->|declared source| R[Static Renderer]
     CFG[Contract-declared Configuration] --> R
     REG[Existing Documentation Registry] -->|projection contract| LC[Existing Document Lifecycle]
-    REG -->|renderer identifier and sources| R
+    REG -->|renderer identifier, sources and target semantics| R
     R -->|text or bytes only| LC
     LC -->|validated atomic write| T[Registered Projection Target]
     WF[Workflow Orchestration] -->|cross-ref serialization and stale-plan guards| LC
     LC -->|findings and records| E[Evidence]
     E -. no runtime authority .-> CS
-    T -->|after validation boundary| C[Consumers]
+    T --> CTB[Consumer Trust Boundary]
+    CTB --> C[Consumers]
 ```
 
 ## 15. Main-repository validation boundary
@@ -385,7 +385,6 @@ flowchart LR
 The following terms are normative abstractions, while their concrete implementation remains `NEEDS_MAIN_REPO_VALIDATION`:
 
 - registry projection field names;
-- region-registration compatibility;
 - lifecycle module and command names;
 - finding identifiers and severity mapping;
 - Workspace methods and path fields;
@@ -398,11 +397,10 @@ The following terms are normative abstractions, while their concrete implementat
 
 A DPA specification conforms to DPA-100 when it:
 
-1. uses authority terms and the four vocabulary dimensions consistently;
+1. uses authority terms consistently;
 2. does not promote evidence or projections to canonical state implicitly;
 3. distinguishes local locking from cross-ref serialization;
-4. classifies repository-specific claims against an exact evidence scope;
-5. distinguishes planned, verified, baseline-verified and adopted states;
+4. classifies repository-specific claims;
+5. distinguishes planned, verified and adopted states;
 6. uses renderer, lifecycle and registry boundaries defined here;
-7. references canonical invariants by their DPA-000 IDs;
-8. records any intentional terminology change through an accepted decision.
+7. records any intentional terminology change through an accepted decision.
