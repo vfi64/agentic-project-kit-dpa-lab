@@ -265,7 +265,7 @@ The decision matrix and traceability are derived mappings of this catalog and MU
 
 - DPA-300: registry validation, partition validation, lifecycle transitions, direct-write detection, atomic write and crash recovery.
 - DPA-400: declared inputs, static resolution, payload-only output and partition-byte rejection.
-- DPA-500: boundary drift, trust-state gates, explicit acceptance invalidation and hybrid document acceptance.
+- DPA-500: partition drift, trust-state gates, explicit acceptance invalidation and hybrid document acceptance.
 - DPA-600: stale-attempt, base and cross-ref serialization behavior.
 - DPA-700: partition-preserving migration, historical ownership and rollback.
 - DPA-800: DP1 Discovery, Probe and Assessment evidence and form-selection output.
