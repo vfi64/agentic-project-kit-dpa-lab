@@ -9,7 +9,7 @@ Status-date: 2026-07-15
 1. DPA-000 — Vision and architectural principles — stable
 2. DPA-100 — Foundations and terminology — stable
 3. DPA-200 — Document model — review-ready
-4. DPA-300 — Registry and lifecycle integration — planned
+4. DPA-300 — Registry and lifecycle integration — draft under primary review preparation
 5. DPA-400 — Renderer contract — planned
 6. DPA-500 — Freshness and gates — planned
 7. DPA-600 — Concurrency and workflow serialization — planned
@@ -33,43 +33,35 @@ Only Discovery is moved earlier.
 
 The governed sequence is:
 
-1. Complete DPA-200 adjudication and post-adjudication verification.
-2. Promote DPA-200 to `review-ready` when its exit criteria pass.
-3. Execute read-only DP1 Discovery under `integration/DP1_DISCOVERY_CONTRACT.md` against one exact main-repository validation ref.
-4. Synchronize `ASSUMPTIONS.md`, `MAIN_REPOSITORY_CONTEXT.md` and bounded records under `evidence/repo-facts/`.
-5. Draft DPA-300 from observed evidence rather than unchecked repository assumptions.
-6. Execute DP1 Probe after a reviewable DPA-300 contract exists.
-7. Complete DP1 Assessment after Discovery and Probe evidence are available.
-8. Continue DPA-400 and DPA-500 with the validated repository context.
+1. Complete DPA-200 adjudication and post-adjudication verification — complete.
+2. Promote DPA-200 to `review-ready` — complete.
+3. Execute read-only DP1 Discovery against one exact main-repository validation ref — complete.
+4. Synchronize assumptions, main-repository context and bounded records — complete.
+5. Draft DPA-300 from observed evidence — complete draft; primary review pending.
+6. Execute bounded DPA-300-owned Probe questions only after DPA-300 becomes reviewable.
+7. Continue DPA-400 and DPA-500 with the validated repository context.
+8. Complete the remaining DP1 Probe and Assessment stages under DPA-800 governance.
 
 Early Discovery does not constitute lab adoption, implementation or migration.
 
-## DPA-200 completion work
+## DPA-300 active work
 
-Completed:
+The first DPA-300 baseline contains:
 
-1. Consolidated DPA-ADR-013 and DPA-ADR-014 into the DPA-200 owner text.
-2. Synchronized the document-form matrix.
-3. Regenerated region-ownership and trust-state diagrams.
-4. Added DM-011 and re-keyed taxonomy, invalidity and trust-transition traceability.
-5. Completed bounded post-adjudication verification.
-6. Promoted DPA-200 and its matrix to `review-ready`.
+- the normative registry/lifecycle integration contract;
+- RL-001 through RL-020 traceability;
+- registry/lifecycle, command-integration and plan-state diagrams;
+- an internal invariant, ADR, evidence and failure-mode audit.
 
-## DP1 Discovery scope
+The immediate sequence is:
 
-Discovery asks factual Ist-state questions only:
-
-- registry loaders, schema and validation paths;
-- candidate reader and writer graphs;
-- observed authority inputs;
-- finding types, severities, producers and consumers;
-- lifecycle planning, locking, writing and evidence paths;
-- Workspace and path-resolution APIs;
-- locking and workflow inventory;
-- gates and CI mapping;
-- history and rollback inputs.
-
-Discovery MUST NOT answer whether an observed mechanism is sufficient for DPA. Suitability and compatibility belong to Probe.
+1. bind a Claude primary architecture review to the immutable baseline commit;
+2. store the read-only review under `reviews/claude/`;
+3. perform independent secondary technical verification;
+4. adjudicate findings before changing normative text;
+5. apply accepted corrections and synchronize derived artifacts;
+6. run post-adjudication verification;
+7. promote DPA-300 to `review-ready` only when its exit criteria pass.
 
 ## Confirmed candidate-command obligation
 
@@ -78,30 +70,21 @@ Exact-ref Discovery at `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6
 `agentic-kit transfer admin-refresh-pr`
 → `transfer_repo_actions._refresh_operational_handoff_docs()`
 
-The observed path updates `.agentic/handoff_state.yaml`, `.agentic/operational_handoff_state.yaml`, `STATUS.md`, `CURRENT_HANDOFF.md`, `START_NEW_CHAT_PROMPT.md` and successor-package projections.
+The observed implementation appends refresh prose instead of routing `CURRENT_HANDOFF.md` through the existing bounded replacement primitive.
 
-For `CURRENT_HANDOFF.md`, the observed implementation removes only one narrowly matched prior refresh section and appends a new historical refresh section. It does not use the existing bounded `replace_generated_operational_handoff_block()` primitive for that target.
+Governed obligations:
 
-This finding creates the following governed obligations:
+- **DPA-300:** registry/lifecycle-owned plan, validation, lock, complete-file replacement, verification, evidence and direct-write detection.
+- **DPA-400:** pure renderer payload and no partition-byte ownership.
+- **DPA-500:** marker, drift, direct-write and acceptance findings and gates.
+- **DPA-600:** stale-base and competing-PR serialization.
+- **DPA-700:** preservation and rollback without historical-prose merging.
+- **DP1 Probe:** demonstrate governed bounded replacement in the existing command path.
+- **DP1 Assessment:** decide whether `CURRENT_HANDOFF.md` is eligible for any production migration form.
 
-- **DPA-300:** define the lifecycle-owned mutation contract for the marked operational handoff region, including plan, lock, validation, replacement, atomic write, post-write validation, evidence and direct-write detection.
-- **DPA-400:** require renderer output to contain region payload only and exclude partition markers or unrelated historical prose.
-- **DPA-500:** define findings and gate consequences for missing, duplicate, misordered or drifted markers and for stale generated content.
-- **DPA-600:** preserve stale-base and competing-PR protection for administrative handoff refreshes.
-- **DPA-700:** define preservation and rollback of bytes outside the governed region without automatic historical-prose merging.
-- **DP1 Probe:** demonstrate that the proposed contract can replace the append-based `CURRENT_HANDOFF.md` mutation with governed bounded replacement while preserving non-target bytes and failing loud on malformed boundaries.
-- **DP1 Assessment:** decide whether `CURRENT_HANDOFF.md` is eligible for any production migration form. Discovery evidence alone MUST NOT select the form.
-
-Primary evidence: `evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`.
+No production form is selected by this obligation.
 
 ## Review-derived later-spec obligations
-
-### DPA-300
-
-- Registry representation and fail-loud validation.
-- Lifecycle planning, locking, atomic write and direct-write detection.
-- Boundary-partition validation and crash recovery.
-- Governed replacement contract for the marked operational handoff region in the observed `transfer admin-refresh-pr` path.
 
 ### DPA-400
 
@@ -139,3 +122,5 @@ Primary evidence: `evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`.
 - No production-form selection from candidate labels or model opinion.
 - No architecture decision derived automatically from Discovery evidence.
 - No parallel evidence system or maintained main-repository mirror.
+- No Probe execution before the governing specification is reviewable.
+- No review prose becomes normative without adjudication.
