@@ -6,74 +6,67 @@ Superseded-by: n/a
 
 ## Current
 
-The DPA architecture laboratory remains in Phase A — Foundation. It is non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit.
+Phase A — Foundation is closed at the head of `review/claude-phase-a-adjudication`.
 
-The active branch is `review/claude-phase-a-adjudication`.
+The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit` and has not been adopted with the kit. Phase B — Core document-management integration is authorized to begin with DPA-200 planning after the Phase A branch is fast-forwarded to `main`.
 
-The primary architecture review is bound to architecture baseline `1a73ec435a09d0367cb7e9f123241d9f61550b0f`. The ChatGPT Technical Verification Audit verifies that baseline and the later planning integration state. Gemini access attempts are `access-blocked`, not reviews and not architecture verdicts.
+## Completed Phase A work
 
-## Completed review and adjudication work
+- DPA-000 and DPA-100 foundation contracts are complete for Phase A scope.
+- Claude primary architecture review is complete.
+- ChatGPT secondary technical verification is complete.
+- Maintainer adjudication is complete.
+- DPA-ADR-009 through DPA-ADR-012 are accepted.
+- DPA-000 owns canonical invariants `DPA-INV-001` through `DPA-INV-017`.
+- DPA-100 owns the closed vocabulary and foundational terminology model.
+- `LAB_EXECUTION_CONTRACT.md` owns phase criteria and role-based review governance.
+- Minimal recorded-baseline evidence exists under `evidence/repo-facts/`.
+- Phase A traceability is one-to-one and decision-linked.
+- Bootstrap, governance, README and diagram wording are synchronized.
+- The Phase A backlog is adjudicated and closed or deferred to named later specifications.
 
-- DPA-000 and DPA-100 review-ready baseline. — complete
-- Claude primary architecture review. — complete
-- ChatGPT secondary technical verification. — complete
-- Review findings integrated into planning. — complete
-- Maintainer adjudication recorded in `reviews/consolidated/PHASE_A_ADJUDICATION.md`. — complete
-- DPA-ADR-009 through DPA-ADR-012 accepted. — complete
-- DPA-000 canonical invariant register established. — complete
-- DPA-100 closed vocabulary model and foundational terminology updated. — complete
-- LAB_EXECUTION_CONTRACT phase, review and evidence governance synchronized. — complete
-- Minimal baseline evidence records created under `evidence/repo-facts/`. — complete
-- Phase A traceability regenerated one invariant per row. — complete
-
-## Accepted Phase A decisions
-
-- DPA-ADR-009 — separate repository classifications, document status, progress status and access outcome.
-- DPA-ADR-010 — DPA-000 owns `DPA-INV-001` through `DPA-INV-017`.
-- DPA-ADR-011 — recorded-baseline verification requires minimal static evidence records.
-- DPA-ADR-012 — reviews are governed by roles and evidence quality, not named products.
-
-## Architecture assessment
+## Phase A assessment
 
 - Foundational contradiction: none found.
 - Hidden parallel subsystem: none found.
 - New runtime authority: none found.
-- Consolidated verdict: `ACCEPT_WITH_CHANGES`.
+- Primary review verdict: `ACCEPT_WITH_CHANGES`.
+- Secondary verification verdict: `ACCEPT_WITH_CHANGES`.
+- Accepted changes applied: complete.
+- Final consistency assessment: pass for Phase A scope.
 
-## Remaining Phase A work
+## Phase B entry
 
-1. Align remaining governance/bootstrap wording with the accepted vocabulary and review roles.
-2. Align or explicitly mark `diagrams/architecture.mmd` as a simplified non-normative view.
-3. Mark backlog items with final adjudicated progress.
-4. Run one final exact-ref consistency review across bootstrap, governance, DPA-000, DPA-100, decisions, traceability and evidence records.
-5. Decide whether DPA-000 and DPA-100 may advance from `review-ready` to `stable`.
-6. Outline DPA-200 only after the final consistency review finds no foundational contradiction.
+The next normative owner is `specs/dpa/DPA-200-DOCUMENT-MODEL.md`.
 
-## Remaining blockers to Phase A stability
+DPA-200 planning must define at minimum:
 
-- Remaining governance/bootstrap wording cleanup is pending.
-- Standalone diagram disposition is pending.
-- Backlog closure synchronization is pending.
-- Final post-adjudication consistency review is pending.
+1. document forms: manual, full projection, split projection, managed-head projection and hybrid document;
+2. target identity and target semantics;
+3. registered-region boundaries, ownership and normalization;
+4. canonical-source, configuration and historical-region relationships;
+5. consumer trust boundary and accepted-state semantics;
+6. authority and write ownership for every region;
+7. compatibility behavior for documents without projection contracts;
+8. migration-analysis inputs required before a document form is selected;
+9. failure obligations delegated to DPA-300, DPA-500 and DPA-700;
+10. traceability to `DPA-INV-*`, ADRs, DP1–DP5, tests, evidence and rollback.
 
-These are bounded consistency tasks, not architecture contradictions.
+Repository-specific schema fields, modules, candidate documents and implementation behavior remain `NEEDS_MAIN_REPO_VALIDATION` until DP1 inspects an exact validation ref.
 
-## Phase A exit tracking
+## Active work
 
-The normative owner is `LAB_EXECUTION_CONTRACT.md` §9.
+1. Fast-forward the completed Phase A branch to `main`.
+2. Create a fresh Phase B branch from the resulting `main`.
+3. Replace the DPA-200 stub with a bounded document-model plan and reviewable initial draft.
+4. Update ROADMAP, traceability and status when DPA-200 reaches its first review baseline.
 
-| Criterion | Progress |
-|---|---|
-| DPA-000 and DPA-100 review-ready | complete |
-| Terminology and invariant references internally coherent | complete for core normative owners |
-| No hidden parallel subsystem or new runtime authority | complete |
-| Repository claims use correct classification and evidence scope | complete for recorded baseline |
-| Initial one-to-one traceability | complete |
-| Primary architecture review | complete |
-| Secondary technical verification | complete |
-| Maintainer adjudication | complete |
-| Accepted decisions and core normative changes synchronized | complete |
-| Remaining governance/diagram/backlog cleanup | partial |
-| Final consistency review | pending |
+## Phase B restrictions
 
-Phase A is not yet `stable` and is not closed. Kit adoption remains blocked until DPA-000 through at least DPA-500 are stable and governance/bootstrap contracts are consistent.
+- No production kit code in the lab.
+- No `.agentic/` initialization or simulated adoption.
+- No registry-field or module-name claims without exact main-repository evidence.
+- No preselection of a migration form for a production document before DP1.
+- No DPA-300 implementation detail may bypass the DPA-200 authority model.
+
+Phase A is closed. Phase B may proceed after `main` receives this state.
