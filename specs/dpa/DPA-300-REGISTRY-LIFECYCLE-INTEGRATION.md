@@ -4,25 +4,25 @@ Status: draft
 
 Status-date: 2026-07-15
 
-Authority: normative DPA specification, subject to review and adjudication
+Authority: normative DPA specification, subject to post-adjudication verification
 
 ## 1. Purpose
 
-This specification defines how document projection contracts integrate with the existing documentation registry and document lifecycle of `vfi64/agentic-project-kit`.
+This specification defines how document projection and partition contracts integrate with the existing documentation registry and document lifecycle of `vfi64/agentic-project-kit`.
 
-DPA-300 does not create a second registry, lifecycle, evidence service, workspace abstraction, command family or gate architecture. It defines the contract by which the existing mechanisms are extended after implementation validation.
+DPA-300 does not create a second registry, lifecycle, evidence service, Workspace abstraction, command family, state authority or gate architecture. It defines the contract by which the existing mechanisms are extended after implementation validation.
 
-All concrete main-repository module names, field names and command mappings remain `NEEDS_MAIN_REPO_VALIDATION` until a DP1 Probe is executed against an exact validation ref.
+Concrete main-repository module names, serialized fields, paths and command mappings remain `NEEDS_MAIN_REPO_VALIDATION` until the corresponding DP1 Probe is executed against an exact validation ref.
 
 ## 2. Normative dependencies
 
 DPA-300 depends on:
 
 - DPA-000 for architectural invariants;
-- DPA-100 for authority, terminology, freshness and trust-state vocabulary;
-- DPA-200 for document forms, registered targets, registered regions, partition ownership and target semantics;
-- DPA-ADR-001 through DPA-ADR-015;
-- DP1 Discovery records DISC-001 through DISC-010 at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
+- DPA-100 for authority, lifecycle-state, trust-state, drift and fingerprint vocabulary;
+- DPA-200 for document forms, registered targets, regions, partition ownership and target semantics;
+- DPA-ADR-001 through DPA-ADR-017;
+- DP1 Discovery records DISC-001 through DISC-010 and DISC-003b at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
 
 Discovery evidence informs this contract but is not normative authority.
 
@@ -30,48 +30,43 @@ Discovery evidence informs this contract but is not normative authority.
 
 DPA-300 owns:
 
-1. projection-contract representation in the existing documentation registry;
-2. registry validation and static contract loading;
-3. lifecycle planning for projection refreshes;
-4. mutation-plan identity and stale-plan invalidation;
+1. projection-contract and partition-contract representation in the existing registry;
+2. static contract loading and fail-loud validation;
+3. lifecycle refresh planning;
+4. immutable plan identity and stale-plan invalidation;
 5. local mutation-lock requirements;
 6. lifecycle-owned target and partition writes;
-7. post-write verification;
-8. direct-write detection boundaries;
-9. evidence emission after validation and mutation;
-10. integration obligations for existing commands that mutate candidate documents.
+7. interrupted-refresh detection and recovery;
+8. post-write verification;
+9. acceptance-state persistence and direct-write classification;
+10. bounded evidence emission;
+11. integration obligations for existing candidate-document writers.
 
-DPA-300 does not own:
-
-- renderer implementation and purity details, owned by DPA-400;
-- finding severity and gate policy, owned by DPA-500;
-- cross-branch and cross-PR serialization, owned by DPA-600;
-- migration selection and rollback policy, owned by DPA-700;
-- concrete implementation sequencing, owned by DPA-800.
+DPA-300 does not own renderer implementation details, gate severity policy, cross-ref serialization, migration selection or concrete implementation sequencing. Those belong respectively to DPA-400, DPA-500, DPA-600, DPA-700 and DPA-800.
 
 ## 4. Integration principle
 
-The existing documentation registry MUST remain the sole registry authority for projection contracts.
+The existing documentation registry MUST remain the sole registry authority for projection and partition contracts.
 
-The existing document lifecycle MUST remain the sole writer of registered projection targets and lifecycle-owned partition bytes.
+The existing document lifecycle MUST remain the sole writer of registered projection targets, lifecycle-owned partition bytes and projection lifecycle state.
 
-Workflow orchestration MAY request, schedule or serialize a refresh, but MUST NOT write projection targets directly.
+Workflow orchestration MAY request, schedule or serialize a refresh, but MUST NOT write projection targets or assign trust states directly.
 
-Renderers MUST NOT write files, acquire locks, update registry state, emit acceptance decisions or invoke other renderers.
+Renderers MUST NOT write files, acquire locks, update registry or lifecycle state, emit acceptance decisions or invoke another renderer.
 
-## 5. Registry projection contract
+## 5. Registry contracts
 
-### 5.1 Optional extension
+### 5.1 Optional projection extension
 
-A projection contract MUST be represented as an optional extension of an existing registered-document entry.
+A projection contract MUST be an optional extension of an existing registered-document entry.
 
-Manual documents without a projection contract MUST remain valid and retain their existing behavior.
+Manual documents without a projection contract MUST remain valid and retain existing behavior.
 
-Unknown, malformed or partially declared projection metadata MUST fail loud. It MUST NOT silently downgrade a registered projection to manual-document behavior.
+Unknown, malformed or partially declared projection metadata MUST fail loud and MUST NOT silently downgrade to manual behavior.
 
-The exact serialized field name remains `NEEDS_MAIN_REPO_VALIDATION` until PROBE-001. The semantic object is named `ProjectionContract` in this specification.
+The exact serialized field names remain `NEEDS_MAIN_REPO_VALIDATION` until PROBE-001. The semantic object is `ProjectionContract`.
 
-### 5.2 Required fields
+### 5.2 ProjectionContract required fields
 
 A `ProjectionContract` MUST declare:
 
@@ -81,402 +76,384 @@ A `ProjectionContract` MUST declare:
 - renderer identifier;
 - ordered declared canonical sources;
 - contract-declared representation configuration, if any;
-- target semantics;
+- complete DPA-200 target semantics;
 - lifecycle policy identifier;
 - freshness policy identifier;
 - fingerprint algorithm and input-domain version;
 - evidence policy identifier;
 - compatibility or migration version.
 
-A region target MUST additionally declare:
+A region projection MUST additionally declare:
 
 - parent document identity;
 - region identity;
-- partition-contract identity;
-- boundary representation;
-- region write owner;
-- malformed-boundary behavior.
+- parent partition-contract identity;
+- region payload target semantics.
 
-### 5.3 Static and declarative form
+A projected region MUST NOT independently configure partition-byte ownership, boundary representation, malformed-boundary behavior or a non-lifecycle write owner.
 
-Projection metadata MUST be declarative.
+### 5.3 Parent PartitionContract
 
-It MUST NOT contain:
+A parent registered-document entry containing registered regions MUST declare exactly one `PartitionContract`.
 
-- executable import paths;
-- arbitrary plugin references;
-- shell fragments;
-- dynamic expressions;
-- unreviewed file globs as semantic sources;
-- runtime fallback commands.
+The `PartitionContract` MUST declare:
+
+- partition schema version and identity;
+- parent document identity;
+- complete ordered region identities;
+- one owner class for every region;
+- projected, manual and historical region classification;
+- adjacency and ordering constraints;
+- boundary representation for every boundary or one document-wide rule;
+- separator ownership where separators exist;
+- encoding and normalization rules affecting partition bytes;
+- missing, duplicate, overlapping, reordered and malformed-boundary behavior;
+- partition fingerprint algorithm and input-domain version.
+
+The partition contract MUST explain ownership of every target byte.
+
+### 5.4 Static and declarative form
+
+Projection and partition metadata MUST be declarative. They MUST NOT contain executable import paths, arbitrary plugin references, shell fragments, dynamic expressions, unreviewed semantic globs or runtime fallback commands.
 
 Renderer identifiers MUST resolve through the static reviewed mapping defined by DPA-400.
 
-### 5.4 Contract identity
+### 5.5 Contract identity
 
-Every effective projection contract MUST have a deterministic contract fingerprint.
+Every effective projection and partition contract MUST have a deterministic fingerprint covering every field that can change source selection, renderer resolution, semantic output, target representation, partitioning, ownership, validation, write behavior or interpretation by evidence and gates.
 
-The contract fingerprint MUST cover every registry field that can change:
-
-- source selection;
-- renderer resolution;
-- semantic output;
-- target byte representation;
-- ownership;
-- validation;
-- write behavior;
-- evidence or gate interpretation.
-
-A registry edit that changes any covered input MUST invalidate every previously captured mutation plan.
+A covered registry change MUST invalidate every previously captured mutation plan and accepted-state comparison that depends on the changed contract.
 
 ## 6. Contract loading and validation
 
-The lifecycle MUST load a projection contract only through the existing registry loader and validator path.
-
-Validation MUST complete before renderer invocation or mutation planning.
+The lifecycle MUST load contracts only through the existing registry loader and validator path. Validation MUST complete before renderer invocation or mutation planning and MUST be side-effect free.
 
 Validation MUST reject at least:
 
 - missing required fields;
-- unknown contract schema versions;
+- unknown contract or partition schema versions;
+- unknown fingerprint algorithms or input-domain versions;
 - unknown renderer identifiers;
-- ambiguous target identity;
-- duplicate target identity;
-- overlapping registered regions;
-- unowned target bytes;
-- multiple write owners for one byte range;
-- region targets without one partition contract;
+- ambiguous or duplicate target identity;
+- region targets without exactly one valid parent partition contract;
+- dangling or inconsistent partition references;
+- regions absent from the parent's ordered region list;
+- overlapping regions or unexplained bytes;
+- multiple owners for one byte range;
+- independently configurable projected-region boundary ownership;
 - undeclared canonical sources;
-- evidence or generated output declared as canonical input without separate canonical authority;
-- target semantics missing any DPA-200 required element;
-- unsupported document-form combinations;
-- a lifecycle policy that permits renderer writes;
+- evidence, lifecycle state, generated output or historical prose used as canonical input without separate accepted authority;
+- incomplete target semantics;
+- unsupported form combinations;
+- renderer-write permission;
 - silent fallback to manual behavior.
-
-Registry validation MUST be side-effect free.
 
 ## 7. Lifecycle operation model
 
 A projection refresh MUST follow this ordered lifecycle:
 
-1. **Resolve** — load Workspace, registry entry, effective projection contract and target identity.
-2. **Inspect** — read declared sources, target bytes, partition metadata and relevant repository state.
-3. **Validate** — validate registry, authority, target form, boundaries and renderer resolution prerequisites.
-4. **Render** — obtain text or bytes from exactly one renderer invocation for exactly one registered target.
-5. **Plan** — construct an immutable mutation plan without writing the target.
-6. **Preflight** — recheck all plan preconditions before lock acquisition.
-7. **Lock** — acquire the existing workspace mutation lock for the bounded local mutation.
-8. **Revalidate** — recompute plan guards under the lock.
-9. **Write** — perform one lifecycle-owned atomic target mutation.
-10. **Verify** — reread the target and verify exact planned bytes, boundaries and fingerprints.
-11. **Record** — emit bounded evidence and findings.
-12. **Release** — release the local mutation lock.
+1. **Recover** — detect and dispose of an interrupted prior refresh for the same target.
+2. **Resolve** — load Workspace, registry entry, effective contracts, acceptance state and target identity.
+3. **Inspect** — read declared sources, target bytes, partition bytes and relevant repository state.
+4. **Validate** — validate registry, authority, form, partition and renderer prerequisites.
+5. **Render** — invoke exactly one renderer once for exactly one registered target payload.
+6. **Plan** — capture an immutable mutation plan without writing.
+7. **Preflight** — recheck all guards before lock acquisition.
+8. **Lock** — acquire the existing Workspace mutation lock.
+9. **Revalidate** — recompute every plan guard under the lock without a second render when captured semantic inputs remain identical.
+10. **Write** — perform one lifecycle-owned atomic complete-target replacement.
+11. **Verify** — reread and verify exact planned bytes, partition and fingerprints.
+12. **Record** — persist lifecycle state and emit bounded evidence and findings.
+13. **Release** — release the local lock.
 
-A failure before `Write` MUST leave the target unchanged.
+A failure before Write MUST leave target bytes unchanged.
 
-A failure after `Write` MUST produce an explicit incomplete-mutation or post-write-verification finding and MUST NOT mark the output `accepted`.
+A successful Write immediately places the refresh output in `written-unverified`.
+
+Verification or state/evidence failure after Write MUST emit explicit findings and MUST NOT produce `accepted`.
 
 ## 8. Mutation plan contract
 
-### 8.1 Required plan fields
+### 8.1 Required fields
 
 A mutation plan MUST include:
 
-- plan schema version;
+- plan schema version and deterministic plan identity;
 - exact repository base SHA;
 - registry-entry identity;
-- contract fingerprint;
+- projection-contract fingerprint;
+- partition-contract fingerprint where applicable;
 - renderer identifier and renderer-version fingerprint;
 - ordered source identities and source fingerprints;
 - target identity;
-- observed pre-mutation target fingerprint;
-- partition fingerprint for region targets;
-- planned output fingerprint;
-- planned complete target bytes or exact bounded replacement payload;
+- observed pre-mutation complete-target fingerprint;
+- expected complete-target fingerprint;
+- planned payload fingerprint;
+- planned complete target bytes or exact payload plus deterministic reconstruction inputs;
+- preserved-region fingerprint for hybrid targets;
 - target semantics version;
 - write mode;
 - required lock scope;
+- creator command context;
 - creation timestamp as evidence only;
-- plan creator identity or command context;
 - explicit dry-run status.
+
+For region targets, payload, preserved-region, partition and expected complete-target fingerprints are all mandatory and distinct.
 
 Time MUST NOT determine plan validity by itself.
 
-### 8.2 Dry-run default
+### 8.2 Dry-run and execution binding
 
 Planning MUST default to dry-run.
 
-A mutation command MUST require an explicit execution signal and an exact plan identity or equivalent deterministic recomputation guard.
-
-A generic `--execute` flag without plan binding is insufficient for projection mutation.
+Mutation requires an explicit execution signal and exact plan identity or an equivalent deterministic recomputation guard. A generic `--execute` without plan binding is insufficient.
 
 ### 8.3 Plan identity
 
-The plan identity MUST be a deterministic fingerprint over all semantic and mutation preconditions.
-
-The plan identity MUST change when any of the following changes:
-
-- base SHA;
-- contract;
-- renderer identity or version;
-- declared source content;
-- target content;
-- partition metadata;
-- target semantics;
-- planned output.
+The plan identity MUST cover every semantic and mutation precondition. It MUST change on base, contract, partition, renderer, source, target, ownership, target-semantics or output change.
 
 ## 9. Stale-plan invalidation
 
-A plan MUST be rejected before write when any captured guard differs from current state.
+A plan MUST be rejected before Write when any captured guard differs from current state.
 
-At minimum, rejection MUST occur for:
+The lifecycle MUST classify the mismatches using the DPA-100 drift vocabulary: base, source, target, contract, renderer, partition and ownership drift. Multiple classes MAY be reported together.
 
-- base drift;
-- source drift;
-- target drift;
-- contract drift;
-- renderer drift;
-- partition drift;
-- ownership drift.
+The lifecycle MUST NOT merge current target changes into generated output or reconstruct historical/manual bytes from a stale target. Regeneration from declared canonical sources is the only generated-content recovery path.
 
-The lifecycle MUST NOT automatically merge current target changes into generated output.
-
-Historical or manual bytes MUST NOT be reconstructed from a stale target during plan recovery.
-
-Regeneration from declared authoritative sources is the only permitted generated-content recovery path.
-
-## 10. Lock and write contract
+## 10. Lock, nested mutation and atomic write
 
 ### 10.1 Local lock
 
-Every projection mutation MUST acquire the existing workspace mutation lock.
+Every projection mutation MUST acquire the existing Workspace mutation lock. It protects only the local workspace and MUST NOT be represented as branch or PR serialization.
 
-The lock protects local workspace mutation only. It MUST NOT be represented as cross-branch or cross-PR serialization.
+A projection refresh MUST NOT initiate another projection refresh or acquire the lock for a second projection mutation while holding it.
 
-Nested lifecycle calls MAY rely on the existing same-process reentrancy behavior only where the complete call graph has one top-level mutation owner and deterministic release behavior.
+Existing same-process reentrancy MAY be used only by outer orchestration wrapping exactly one projection refresh with deterministic release.
 
 ### 10.2 Sole writer
 
 The lifecycle MUST be the sole writer of:
 
 - full projection targets;
-- projected regions;
-- lifecycle-owned partition bytes;
-- generated target metadata stored with the target.
+- projected regions through complete-parent replacement;
+- partition bytes;
+- acceptance-state records;
+- generated target metadata governed by the contract.
 
-A renderer, workflow coordinator, evidence writer, manual editor or migration helper MUST NOT write those bytes directly.
+Renderers, workflow coordinators, evidence writers, manual editors and migration helpers MUST NOT write those bytes or state directly.
 
 ### 10.3 Atomicity
 
-The write operation MUST be atomic at the target-file boundary or MUST provide an equivalent crash-safe replacement contract proven by Probe evidence.
+The write MUST atomically replace the complete target file or provide an equivalent crash-safe replacement proven by Probe evidence.
 
-For a region target, the lifecycle MUST construct and atomically replace the complete parent document. In-place partial writes are prohibited.
+In-place partial region writes are prohibited. The target MUST expose either complete prior bytes or complete planned replacement bytes.
 
-The rendered payload MUST NOT include lifecycle-owned boundary bytes unless a later accepted contract explicitly changes DPA-ADR-013.
+Renderer payload MUST exclude lifecycle-owned partition bytes.
 
-### 10.4 Pre-write preservation
+### 10.4 Preserved bytes
 
-For hybrid documents, bytes outside the governed projected region MUST be copied from the validated pre-mutation target without semantic interpretation.
-
-Their fingerprint MUST be captured in the plan and revalidated under lock.
+For hybrid targets, bytes outside the projected region MUST be copied from the validated pre-mutation target without semantic interpretation. Their fingerprint MUST be in the plan and revalidated under lock.
 
 The lifecycle MUST fail rather than guess when boundaries cannot be resolved exactly.
 
 ## 11. Post-write verification
 
-After write and before any acceptance transition, the lifecycle MUST:
+After Write and before any acceptance transition, the lifecycle MUST:
 
 - reread the complete target;
-- verify the complete target fingerprint;
-- verify the projected region payload;
-- verify exactly one ordered boundary pair for each registered region;
+- verify the expected complete-target fingerprint;
+- verify the projected payload fingerprint;
+- verify partition fingerprint and ordered boundaries;
 - verify byte identity of preserved regions;
-- verify terminal newline and normalization semantics;
-- verify that the effective contract and source fingerprints still match the plan;
+- verify encoding, normalization and terminal newline semantics;
+- verify contract, renderer and source guards still match the plan;
 - emit a deterministic verification result.
 
-A successful write moves bytes only to `written-unverified` until the complete required DPA-500 gate set accepts them.
+Verification success retains `written-unverified` until DPA-500 accepts the complete required gate set. Verification failure transitions the refresh instance to `abandoned` and emits a finding. The lifecycle MUST NOT assign `accepted`.
 
-The lifecycle MUST NOT directly assign `accepted`.
+## 12. Acceptance state and direct-write detection
 
-## 12. Direct-write detection
+### 12.1 Persisted acceptance-state record
 
-The system MUST be able to distinguish lifecycle-owned writes from out-of-band target changes.
+For every accepted target or region, the lifecycle MUST persist one Workspace-resolved acceptance-state record under `.agentic/` lifecycle state after validated implementation.
 
-The minimum contract is:
+The record is lifecycle state, not evidence, registry authority, canonical source state or renderer input.
 
-1. the lifecycle records the accepted contract, source, target and output fingerprints;
-2. later inspection recomputes the expected projection;
-3. a target mismatch not explained by a currently valid lifecycle plan is target drift;
-4. boundary mutation outside a valid lifecycle plan is partition drift;
-5. out-of-band changes MUST produce findings and MUST NOT be silently normalized.
+It MUST include:
 
-DPA-300 does not require an operating-system file watcher. Detection MAY occur at command preflight, audit, gate or refresh time.
+- target and region identity;
+- accepted plan identity;
+- projection- and partition-contract fingerprints;
+- renderer identity and version fingerprint;
+- ordered accepted source fingerprints;
+- accepted base or precondition identity;
+- accepted payload and complete-target fingerprints;
+- partition and preserved-region fingerprints where applicable;
+- acceptance event identity and evidence-only timestamp.
 
-Evidence of a previous lifecycle write MUST NOT itself authorize a later write.
+The exact path and serialized schema remain `NEEDS_MAIN_REPO_VALIDATION` for PROBE-002.
 
-## 13. Evidence emission
+### 12.2 Drift classification
+
+Later inspection MUST compare current state independently with the acceptance-state record:
+
+- changed declared sources produce source drift;
+- target bytes differing from accepted complete-target bytes produce target drift;
+- changed partition contract or partition bytes produce partition drift;
+- changed contract, renderer, base or ownership produce their corresponding class;
+- simultaneous differences produce simultaneous findings.
+
+Recomputation MAY be a secondary integrity check but MUST NOT replace persisted comparison or use evidence as runtime state.
+
+Out-of-band changes MUST produce findings and MUST NOT be silently normalized.
+
+Detection MAY occur at refresh, preflight, audit or gate time; an OS watcher is not required.
+
+## 13. Interrupted-refresh recovery
+
+Before a new plan or mutation for a target, the lifecycle MUST detect an interrupted prior instance, including:
+
+- a stale lock associated with a prior refresh;
+- a persisted plan without matching completed verification/state sequence;
+- target bytes matching a planned-but-unverified output;
+- lifecycle state indicating Write occurred without completed Record and Release.
+
+The detecting lifecycle operation MUST transition the interrupted instance to `abandoned`, emit a finding and record stale-lock takeover and recovery disposition before proceeding.
+
+Written bytes MAY be re-verified against the recovered plan only when the exact plan is available and every captured base, source, target, contract, renderer, partition, ownership and output guard still matches.
+
+If any guard differs or the plan cannot be recovered exactly, the generated content MUST be regenerated. Interrupted bytes MUST NOT be silently accepted, merged with historical prose or treated as authority.
+
+Orphaned plan/state cleanup MUST preserve enough bounded evidence to explain the disposition but MUST NOT create a new history store.
+
+## 14. Evidence emission
 
 Lifecycle evidence MUST be bounded, reproducible and non-authoritative.
 
-A mutation evidence record SHOULD include:
+A mutation evidence record MUST include:
 
 - repository and base SHA;
-- registry identity and contract fingerprint;
-- plan identity;
+- registry, contract and plan identities;
 - renderer identity;
-- source fingerprints;
-- target pre- and post-fingerprints;
-- partition fingerprints;
-- lock acquisition and release result;
-- write result;
-- post-write verification result;
+- source, target, output and partition fingerprints;
+- lock and recovery result;
+- Write and Verify result;
+- lifecycle-state update result;
 - produced findings;
-- command context;
-- limitations.
+- command context and limitations.
 
-Evidence MUST NOT become a semantic renderer input or canonical source.
+Additional context MAY be recorded.
 
-Evidence-writing failure after a successful verified target write MUST be reported explicitly. It MUST NOT be concealed as a complete lifecycle success.
+Evidence MUST NOT become a renderer input, canonical source or acceptance-state substitute.
 
-## 14. Existing command integration
+Evidence-writing failure after verified Write MUST remain `written-unverified`, emit a finding and block DPA-500 acceptance.
 
-Existing commands that write candidate documents MUST be routed through the lifecycle contract when their target becomes a registered projection target.
+## 15. Existing command integration
 
-At the recorded validation ref, Discovery identified:
+Every existing command that writes a candidate target MUST be routed through this lifecycle if that target becomes a registered projection target.
+
+Discovery verified **an observed writer path** at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`:
 
 `agentic-kit transfer admin-refresh-pr`
 
-through the observed implementation path:
+→ `transfer_repo_actions._refresh_operational_handoff_docs()`
 
-`transfer_repo_actions._refresh_operational_handoff_docs()`
+DISC-003b verified that the inspected `transfer chat-switch-complete` path does not write `CURRENT_HANDOFF.md` at that ref. Global writer-set completeness remains a Probe-time revalidation obligation.
 
-This is a `VERIFIED` observation only at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
+If `CURRENT_HANDOFF.md` is later selected as a projection target, every then-known writer MUST be adapted rather than supplemented by a parallel DPA-only command.
 
-If `CURRENT_HANDOFF.md` is later selected as a projection target, the existing command MUST be adapted rather than replaced by a parallel DPA-only refresh command.
+The adapted behavior MUST update declared canonical state before rendering, use registry and lifecycle contracts, execute a plan-bound atomic replacement, preserve validated outside-region bytes, retain branch/PR orchestration, fail loud on malformed partition state and emit verification, lifecycle state and evidence.
 
-The adapted path MUST:
+DPA-300 constrains governed write behavior, not permanent CLI naming. User-facing commands MAY evolve through the main repository's command-deprecation governance.
 
-- update declared canonical state before rendering;
-- call the existing registry and lifecycle integration;
-- use a lifecycle mutation plan;
-- replace the governed region rather than append another current-state block;
-- preserve validated bytes outside the region;
-- retain existing branch/PR orchestration and handoff-package behavior;
-- fail loud on malformed boundaries;
-- emit post-write verification and evidence.
+This clause does not select a production document form.
 
-This requirement does not select a production document form. Form eligibility remains a later DP1 Assessment decision.
+## 16. Trust-state integration
 
-## 15. Trust-state integration
-
-DPA-300 owns lifecycle transitions among:
-
-- `computed`;
-- `plan-captured`;
-- `written-unverified`;
-- `abandoned`.
-
-DPA-500 owns the gate transition to `accepted`.
-
-Required transition rules:
+DPA-300 owns transitions among `computed`, `plan-captured`, `written-unverified` and `abandoned`. DPA-500 alone owns transition to `accepted`.
 
 - successful renderer completion MAY produce `computed`;
 - successful immutable plan capture MAY produce `plan-captured`;
-- successful atomic write and byte verification MAY produce `written-unverified`;
-- failed validation, invalidated plan or rejected mutation MUST produce `abandoned` for that refresh instance;
-- no renderer, command wrapper or workflow coordinator may assign `accepted`.
+- successful atomic Write MUST produce `written-unverified`;
+- failed validation, invalid plan, failed verification, rejected mutation or detected interrupted instance MUST produce `abandoned` for that instance;
+- no renderer, wrapper or workflow coordinator may assign `accepted`.
 
-Drift of previously accepted bytes starts a new refresh instance; it does not rewrite historical trust-state evidence.
+A new refresh instance starts at `computed` without rewriting the historical fact that prior bytes were accepted for their former scope.
 
-## 16. Failure behavior
+## 17. Failure behavior
 
-The lifecycle MUST fail loud and preserve the target when:
+The lifecycle MUST fail loud and preserve pre-Write target bytes when registry validation, source resolution, renderer resolution, target identity, partition resolution, plan validity, lock acquisition, preserved-byte validation, output semantics or atomic replacement fails.
 
-- registry validation fails;
-- renderer resolution fails;
-- a canonical source is missing;
-- target identity is ambiguous;
-- boundaries are missing, duplicated, overlapping or reordered;
-- the plan is stale;
-- the workspace lock cannot be acquired;
-- preserved bytes changed after planning;
-- output violates target semantics;
-- atomic replacement cannot be established;
-- post-write verification fails.
+After Write, failure MUST follow §§11–14 and cannot be represented as complete success.
 
-A warning-only lifecycle signal MUST NOT authorize mutation.
+Warnings never authorize mutation. Mutation requires an explicit valid plan-bound execution path regardless of warning severity.
 
 No temporal signal may cause a hard failure solely because time elapsed.
 
-## 17. Compatibility requirements
+## 18. Compatibility requirements
 
-Implementation MUST preserve:
+Implementation MUST preserve manual registry entries and workflows, existing registry/parser authority, Workspace path resolution, local lock semantics, governed command behavior and existing branch/PR orchestration unless a later accepted specification changes the relevant contract.
 
-- validity and behavior of registry entries without projection contracts;
-- existing manual-document workflows;
-- existing registry ownership and parser authority;
-- existing Workspace path resolution;
-- existing local mutation-lock semantics;
-- existing command entry points where they remain user-facing contracts;
-- existing branch and PR orchestration unless a later accepted DPA-600 decision replaces it.
+Compatibility MUST be demonstrated by Probe evidence, not inferred from this specification.
 
-Compatibility MUST be demonstrated by DP1 Probe evidence. It MUST NOT be inferred from this specification.
-
-## 18. Repository-validation obligations
+## 19. Repository-validation obligations
 
 The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
-- the serialized registry extension shape;
-- unknown-field compatibility behavior of the actual parser;
-- exact lifecycle class and command integration points;
-- atomic-write implementation;
-- complete direct-write detection path;
-- projection finding identifiers;
-- required-check mapping;
-- whether region targets are representable in the existing registry;
-- whether `CURRENT_HANDOFF.md` is eligible for any projection form.
+- serialized projection and partition shapes;
+- parser unknown-field behavior;
+- exact lifecycle integration points;
+- acceptance-state path and schema;
+- interrupted-instance detection mechanics;
+- atomic replacement implementation;
+- complete writer inventory at the Probe ref;
+- finding identifiers and required-check mapping;
+- region representability;
+- production-form eligibility of any candidate.
 
-## 19. Planned DP1 Probes
+## 20. Planned DP1 Probes
 
 DPA-300 requires:
 
-- PROBE-001 — registry projection-schema compatibility;
-- PROBE-002 — `CURRENT_HANDOFF.md` governed bounded replacement, limited to DPA-300-owned aspects until DPA-400 through DPA-700 exist;
-- PROBE-003 — lifecycle finding compatibility, jointly with DPA-500;
-- PROBE-005 — local lock and orchestration compatibility, jointly with DPA-600.
+- PROBE-001 — registry projection/partition schema compatibility;
+- PROBE-002 — lifecycle state, recovery and governed bounded replacement for every then-known `CURRENT_HANDOFF.md` writer, limited to available specification ownership;
+- PROBE-003 — lifecycle finding compatibility with DPA-500;
+- PROBE-005 — lock and orchestration compatibility with DPA-600.
 
-A Probe MAY falsify an implementation mapping without invalidating the architecture. A falsified mapping MUST return the specification or implementation plan to adjudication.
+A Probe MAY falsify an implementation mapping without invalidating the architecture. Falsified mappings return the specification or implementation plan to adjudication.
 
-## 20. Conformance requirements
+## 21. Conformance requirements
 
-A conforming DPA-300 implementation MUST demonstrate:
+A conforming implementation MUST demonstrate:
 
-1. backward-compatible registry loading for manual documents;
-2. fail-loud projection-contract validation;
+1. backward-compatible manual registry loading;
+2. fail-loud projection and partition validation;
 3. deterministic plan identity;
-4. dry-run by default;
-5. stale-plan rejection for every captured guard;
-6. existing workspace-lock use;
-7. sole lifecycle ownership of target and partition writes;
-8. atomic complete-file replacement;
-9. exact preservation of non-projected bytes;
-10. post-write byte verification;
-11. direct-write drift detection;
-12. non-authoritative evidence emission;
-13. no direct transition to `accepted`;
-14. integration of existing mutating command paths rather than creation of a parallel subsystem.
+4. dry-run by default and exact plan binding;
+5. stale-plan rejection for every guard;
+6. Workspace-resolved lifecycle state and paths;
+7. existing local lock use without nested projection mutation;
+8. sole lifecycle ownership;
+9. atomic complete-file replacement;
+10. exact preservation of non-projected bytes;
+11. correct `written-unverified` timing;
+12. post-write verification;
+13. persisted acceptance state and correct multi-class drift detection;
+14. interrupted-refresh recovery;
+15. non-authoritative evidence;
+16. no direct transition to `accepted`;
+17. integration of existing writers without a parallel subsystem.
 
-## 21. Exit criteria
+## 22. Exit criteria
 
 DPA-300 may advance to `review-ready` only when:
 
-- this contract is complete and internally consistent;
-- every requirement is traceable to invariants, evidence, tests, Probe obligations and rollback consequences;
-- registry, lifecycle and command-flow diagrams are synchronized;
-- an internal pre-review audit reports no known contradiction with stable DPA-000, DPA-100 or review-ready DPA-200;
+- this contract, DPA-100 and DPA-200 are internally consistent;
+- every requirement is traceable to invariants, decisions, evidence, tests, Probes and rollback consequences;
+- registry, lifecycle, command, execution/trust and recovery diagrams are synchronized;
+- Discovery completion claims reflect DISC-003b;
 - all repository-specific claims remain exact-ref bounded;
 - no production form or implementation success is claimed;
-- a qualifying primary architecture review prompt is bound to one immutable commit.
+- independent post-adjudication verification passes.
 
-DPA-300 may advance to `stable` only after qualifying review, maintainer adjudication, required corrections and post-adjudication verification.
+DPA-300 may advance to `stable` only after qualifying review, maintainer adjudication, required corrections and any later stability review required by governance.
