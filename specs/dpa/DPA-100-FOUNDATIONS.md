@@ -1,7 +1,7 @@
 # DPA-100 — Foundations and Terminology
 
 Status: review-ready
-Status-date: 2026-07-14
+Status-date: 2026-07-15
 Superseded-by: n/a
 
 ## 1. Purpose
@@ -10,20 +10,45 @@ This specification defines the normative vocabulary, authority classes, state cl
 
 DPA documents MUST use these terms consistently. A later specification MAY refine a term for its own scope but MUST NOT change its meaning without an accepted decision and corresponding update to this document.
 
-## 2. Normative language
+## 2. Closed vocabulary model
 
-`MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT` and `MAY` are normative requirement keywords.
+DPA-ADR-009 separates four dimensions that MUST NOT be combined into compound statuses.
 
-Repository-fact classifications are distinct from requirement keywords:
+### 2.1 Repository-fact and architecture classifications
 
-- `VERIFIED`: supported by an exact repository ref and reproducible evidence;
+- `VERIFIED`: supported by an exact repository ref and reproducible evidence sufficient for the claim at the time of use;
+- `VERIFIED_AT_RECORDED_BASELINE`: supported by an exact historical ref and a minimal static evidence record conforming to DPA-ADR-011; revalidation remains mandatory before later implementation;
 - `ASSUMPTION`: a working belief not yet validated against the relevant authority;
-- `NORMATIVE`: an adopted architecture rule;
+- `NORMATIVE`: an adopted architecture or governance rule;
 - `PROPOSAL`: a candidate design not yet accepted;
 - `REJECTED`: an explicitly declined alternative with rationale;
-- `NEEDS_MAIN_REPO_VALIDATION`: a repository-specific claim that cannot guide implementation until checked against fresh authoritative state.
+- `NEEDS_MAIN_REPO_VALIDATION`: a repository-specific claim that cannot guide implementation until checked against an exact validation ref.
 
-Model agreement MUST NOT be classified as `VERIFIED`.
+Model agreement MUST NOT be classified as `VERIFIED` or `VERIFIED_AT_RECORDED_BASELINE`.
+
+### 2.2 Document status
+
+- `planned`: a named stub or future document whose reviewable content does not yet exist;
+- `draft`: structure and unresolved concepts exist, but formal review readiness is not claimed;
+- `review-ready`: terminology, alternatives, assumptions and initial traceability are sufficient for formal review;
+- `stable`: required reviews and decisions are adjudicated and no known contradiction remains for the document scope;
+- `adopted`: the contract has been validated and accepted into the main repository;
+- `active`: a living governance, status, planning or operational document that is maintained continuously rather than progressing through the specification lifecycle.
+
+### 2.3 Progress status
+
+- `pending`: not yet started or awaiting a prerequisite;
+- `partial`: started but incomplete;
+- `complete`: completed for the explicitly stated scope;
+- `blocked`: cannot proceed because a named prerequisite or stop condition is unresolved;
+- `not-required`: deliberately excluded because the governing requirement is satisfied by another valid path.
+
+### 2.4 Access outcome
+
+- `accessible`: required sources were actually read;
+- `access-blocked`: required sources could not be read.
+
+An access outcome is not an architecture verdict.
 
 ## 3. Repository roles
 
@@ -35,13 +60,13 @@ The **main repository** is `vfi64/agentic-project-kit`. It is the only authority
 
 The **lab repository** is `vfi64/agentic-project-kit-dpa-lab`. It is authoritative only for its own planning history, accepted architecture decisions and normative DPA specifications before controlled import. It is not a runtime dependency and not an authority for current main-repository behavior.
 
-### 3.3 Adoption
+### 3.3 Lab adoption
 
-**Adoption** is the governed act of operating the lab with the kit after DPA-000 through at least DPA-500 and the lab governance contracts are stable. Adoption MUST remain reversible and MUST NOT make the lab authoritative for main-repository runtime state.
+**Lab adoption** is the governed act of operating the lab with the kit after DPA-000 through at least DPA-500 and the lab governance contracts are stable. Lab adoption MUST remain reversible and MUST NOT make the lab authoritative for main-repository runtime state.
 
 ### 3.4 Controlled import
 
-**Controlled import** is the selective transfer of approved normative artifacts or translated runtime contracts into the main repository after fresh validation. The lab MUST NOT be imported wholesale.
+**Controlled import** is the selective transfer of approved normative artifacts or translated runtime contracts into the main repository after validation against a validation ref. The lab MUST NOT be imported wholesale.
 
 ## 4. Authority terms
 
@@ -55,9 +80,9 @@ The **lab repository** is `vfi64/agentic-project-kit-dpa-lab`. It is authoritati
 
 Canonical state MUST NOT contain rendering logic merely because a projection consumes it.
 
-### 4.3 Source of truth
+### 4.3 Runtime authority wording
 
-**Source of truth** is an informal phrase and SHOULD be avoided in normative text. Specifications MUST instead name the exact authority type, scope and repository location.
+The informal phrases **source of truth** and **runtime truth source** SHOULD be avoided in normative text. Specifications MUST instead name the exact authority type, scope and repository location.
 
 ### 4.4 Projection authority
 
@@ -81,13 +106,19 @@ A **historical record** preserves prior context or prose. It may have evidentiar
 
 A **registered document** is a target governed by the existing main-repository documentation registry.
 
-### 5.2 Projection target
+### 5.2 Registered region
 
-A **projection target** is a registered document, or a precisely defined registered region of a document, whose expected bytes are computed from a projection contract.
+A **registered region** is a precisely bounded portion of a registered document whose boundary representation, write ownership, normalization and drift semantics are declared by contract. Whether the current main-repository registry supports region-level registration is `NEEDS_MAIN_REPO_VALIDATION`.
 
-Whether region-level targets are compatible with the real registry is `NEEDS_MAIN_REPO_VALIDATION`.
+### 5.3 Projection target
 
-### 5.3 Projection contract
+A **projection target** is a registered document or registered region whose expected bytes are computed from a projection contract.
+
+### 5.4 Target semantics
+
+**Target semantics** define how renderer output maps to the target, including full replacement or region replacement, encoding, line-ending and normalization rules, boundary handling and prohibited append behavior. DPA-200 owns the complete target-semantics model.
+
+### 5.5 Projection contract
 
 A **projection contract** is the declarative registry-owned definition that binds:
 
@@ -95,38 +126,43 @@ A **projection contract** is the declarative registry-owned definition that bind
 - one renderer identifier;
 - declared canonical sources;
 - target semantics;
+- contract-declared configuration;
 - relevant lifecycle and freshness policy;
 - version or compatibility information required for deterministic reproduction.
 
 A projection contract MUST NOT contain an arbitrary executable import path.
 
-### 5.4 Declared source
+### 5.6 Declared source and canonical source
 
-A **declared source** is a canonical input named by the projection contract. A renderer MUST NOT depend on undeclared repository content for semantic output.
+A **declared source** is a canonical input named by the projection contract. A **canonical source** is a declared source that belongs to canonical state for the facts consumed by the renderer. Evidence and historical prose MUST NOT be declared as semantic sources unless an independent accepted authority decision first makes them canonical state.
 
-Incidental process inputs such as locale or line-ending policy MUST be fixed by contract or implementation environment when they affect output.
+A renderer MUST NOT depend on undeclared repository content for semantic output.
 
-### 5.5 Projection
+### 5.7 Contract-declared configuration
 
-A **projection** is the deterministic text or bytes computed for one projection target from its declared sources, renderer and relevant versioned configuration.
+**Contract-declared configuration** is versioned, non-canonical renderer input explicitly named by the projection contract when it affects output, such as normalization, locale or line-ending policy. It MUST be fingerprinted when relevant and MUST NOT become a hidden semantic source.
 
-### 5.6 Full projection
+### 5.8 Projection
+
+A **projection** is the deterministic text or bytes computed for one projection target from declared canonical sources, renderer identity and contract-declared configuration.
+
+### 5.9 Full projection
 
 A **full projection** computes the complete target content from canonical sources.
 
-### 5.7 Split projection
+### 5.10 Split projection
 
 A **split projection** separates a current deterministic projection from historical evidence or prose that is not canonical.
 
-### 5.8 Managed-head projection
+### 5.11 Managed-head projection
 
-A **managed-head projection** computes only a designated leading region while preserving an append-only historical region. It is an exceptional form and requires complete workflow serialization and explicit migration justification.
+A **managed-head projection** computes only a designated leading registered region while preserving an append-only historical region. It is an exceptional form and requires complete workflow serialization, explicit write ownership and migration justification.
 
-### 5.9 Manual document
+### 5.12 Manual document
 
 A **manual document** is a registered document without a projection contract. Existing lifecycle behavior MUST remain unchanged for manual documents.
 
-### 5.10 Hybrid document
+### 5.13 Hybrid document
 
 A **hybrid document** combines projected and manually maintained regions. Hybrid form MUST NOT be assumed safe; it requires explicit boundaries, ownership and drift semantics in DPA-200 and DPA-700.
 
@@ -134,7 +170,7 @@ A **hybrid document** combines projected and manually maintained regions. Hybrid
 
 ### 6.1 Renderer
 
-A **renderer** is statically reviewed code that accepts resolved declared inputs and returns exactly one target as text or bytes.
+A **renderer** is statically reviewed code that accepts resolved declared sources and contract-declared configuration and returns exactly one target as text or bytes.
 
 A renderer MUST be mutation-free with respect to the repository. It MUST NOT write, lock, commit, invoke workflows, trigger another renderer or invent canonical facts.
 
@@ -166,11 +202,15 @@ The **Workspace** is the existing main-repository path-resolution abstraction. P
 
 A **gate** is an existing governed pass, warning or failure decision used by the main repository. DPA findings MUST integrate with existing gate architecture rather than create a parallel gate suite.
 
+### 6.8 Consumer trust boundary
+
+The **consumer trust boundary** is the point at which a generated target may be treated as accepted repository state. Rendered bytes before required lifecycle validation and gate completion MUST NOT be represented as accepted state. DPA-200 and DPA-500 own the complete consumer and gate contract.
+
 ## 7. State and reproducibility terms
 
 ### 7.1 Deterministic
 
-A renderer is **deterministic** when identical declared sources, renderer identity and relevant versioned configuration produce identical target bytes.
+A renderer is **deterministic** when identical declared sources, renderer identity and contract-declared configuration produce identical target bytes.
 
 ### 7.2 Reproducible
 
@@ -182,33 +222,37 @@ A projection target is **fresh** when it is reproducible from the currently auth
 
 Freshness is derivational. It is not established by modification time alone.
 
-### 7.4 Drift
+### 7.4 Validation ref
+
+A **validation ref** is the exact fetched main-repository commit against which repository-specific claims, compatibility and implementation behavior are inspected. The phrase `fresh main` MUST be replaced by an exact validation-ref requirement in normative text.
+
+### 7.5 Drift
 
 **Drift** is a mismatch among the authoritative source state, projection contract, renderer identity, planned target fingerprint or actual target bytes.
 
 DPA-500 and DPA-600 define drift classes and gate consequences.
 
-### 7.5 Source drift
+### 7.6 Source drift
 
 **Source drift** occurs when a declared source changes after a plan or render fingerprint was captured.
 
-### 7.6 Target drift
+### 7.7 Target drift
 
 **Target drift** occurs when the target changes after a plan or expected fingerprint was captured.
 
-### 7.7 Base drift
+### 7.8 Base drift
 
 **Base drift** occurs when the repository base ref used to produce a plan no longer matches the required integration base.
 
-### 7.8 Contract drift
+### 7.9 Contract drift
 
 **Contract drift** occurs when the registry projection contract or renderer identity changes relative to the captured plan.
 
-### 7.9 Temporal signal
+### 7.10 Temporal signal
 
 A **temporal signal** is a time-derived warning or review input. Time passage alone MUST NOT produce a hard failure.
 
-### 7.10 Fingerprint
+### 7.11 Fingerprint
 
 A **fingerprint** is a reproducible digest over defined bytes and normalization rules. Every fingerprint contract MUST state its input domain and algorithm.
 
@@ -258,37 +302,33 @@ A **refresh workflow** resolves a projection contract, computes expected output,
 
 ### 9.5 Regeneration
 
-**Regeneration** recomputes the target from fresh authoritative sources. On drift, regeneration is preferred over textual merge.
+**Regeneration** recomputes the target from authoritative sources at the validation ref. On drift, regeneration is preferred over textual merge.
 
 ## 10. Review and completion terms
 
-### 10.1 Individual review
+### 10.1 Primary architecture review
 
-An **individual review** is a non-normative analysis produced by one model or reviewer against an exact commit/ref.
+A **primary architecture review** is a non-normative, exact-ref review of architecture coherence, boundaries, terminology, decisions and risks.
 
-### 10.2 Consolidated review
+### 10.2 Secondary technical verification
 
-A **consolidated review** classifies and adjudicates individual findings. It remains non-normative until accepted decisions and normative specifications are updated.
+A **secondary technical verification** checks the architecture and primary findings against exact repository content. It need not be a blind independent first review, but its method and prior exposure MUST be disclosed.
 
-### 10.3 Draft
+### 10.3 Maintainer adjudication
 
-A document is **draft** when its structure and unresolved concepts are visible but it is not ready for formal review.
+**Maintainer adjudication** accepts, modifies or rejects review findings and records resulting decisions before normative meaning changes.
 
-### 10.4 Review-ready
+### 10.4 Consolidated review
 
-A document is **review-ready** when terminology is coherent, alternatives and assumptions are visible, and traceability has begun.
+A **consolidated review** records the relationship among primary review, secondary verification, maintainer adjudication and resulting normative changes.
 
-### 10.5 Stable
+### 10.5 Qualifying review
 
-A document is **stable** only after required reviews are adjudicated, decisions and traceability are complete for its scope, and no known contradiction remains.
-
-### 10.6 Adopted
-
-A contract is **adopted** only after fresh main-repository validation and governed acceptance into the main repository. Lab status alone cannot establish adoption.
+A **qualifying review** identifies an exact ref, reviewed files, reviewer or model, method, findings, limitations and access outcome. Named products are not normative review roles.
 
 ## 11. DP1–DP5 terms
 
-- **DP1**: proof-of-architecture and evidence against a fresh main repository;
+- **DP1**: proof-of-architecture and evidence against an exact validation ref;
 - **DP2**: first production projection integrated into the existing system;
 - **DP3**: controlled rollout to additional handoff or bootstrap documents;
 - **DP4**: status-authority discovery and conditional migration;
@@ -301,13 +341,14 @@ DP1–DP5 are planned implementation slices until exact main-repository evidence
 1. A projection target MUST NOT be treated as an independent canonical source for the facts it renders.
 2. Evidence MUST NOT be read as runtime state by production behavior.
 3. Registry contracts MUST be declarative and statically resolved.
-4. Renderers MUST read declared sources only for semantic output.
+4. Renderers MUST read declared canonical sources and contract-declared configuration only for semantic output.
 5. The lifecycle MUST be the sole writer of projection targets.
 6. Workflow orchestration MUST own cross-ref serialization, not renderer code.
 7. Manual and projected regions MUST have explicit ownership.
 8. A repository-specific claim without exact evidence MUST remain `NEEDS_MAIN_REPO_VALIDATION` or `ASSUMPTION`.
-9. Review findings MUST NOT change normative meaning without adjudication.
+9. Review findings MUST NOT change normative meaning without maintainer adjudication.
 10. A planned DP slice MUST NOT be represented as completed implementation.
+11. An `access-blocked` output MUST NOT be treated as an architecture review verdict.
 
 ## 13. Ambiguous terms prohibited in normative use
 
@@ -320,13 +361,15 @@ The following words require qualification and SHOULD NOT appear alone in normati
 - `fresh` — use the derivational definition in this document;
 - `history` — distinguish canonical history, evidence and prose;
 - `state` — identify owner and scope;
-- `source` — distinguish declared source, evidence source and repository location.
+- `source` — distinguish declared source, evidence source and repository location;
+- `adoption` — distinguish lab adoption from contract adoption or controlled import.
 
 ## 14. Foundational relationship model
 
 ```mermaid
 flowchart LR
-    CS[Canonical State] -->|declared input| R[Static Renderer]
+    CS[Canonical State] -->|declared source| R[Static Renderer]
+    CFG[Contract-declared Configuration] --> R
     REG[Existing Documentation Registry] -->|projection contract| LC[Existing Document Lifecycle]
     REG -->|renderer identifier and sources| R
     R -->|text or bytes only| LC
@@ -334,7 +377,7 @@ flowchart LR
     WF[Workflow Orchestration] -->|cross-ref serialization and stale-plan guards| LC
     LC -->|findings and records| E[Evidence]
     E -. no runtime authority .-> CS
-    T --> C[Consumers]
+    T -->|after validation boundary| C[Consumers]
 ```
 
 ## 15. Main-repository validation boundary
@@ -342,6 +385,7 @@ flowchart LR
 The following terms are normative abstractions, while their concrete implementation remains `NEEDS_MAIN_REPO_VALIDATION`:
 
 - registry projection field names;
+- region-registration compatibility;
 - lifecycle module and command names;
 - finding identifiers and severity mapping;
 - Workspace methods and path fields;
@@ -354,10 +398,11 @@ The following terms are normative abstractions, while their concrete implementat
 
 A DPA specification conforms to DPA-100 when it:
 
-1. uses authority terms consistently;
+1. uses authority terms and the four vocabulary dimensions consistently;
 2. does not promote evidence or projections to canonical state implicitly;
 3. distinguishes local locking from cross-ref serialization;
-4. classifies repository-specific claims;
-5. distinguishes planned, verified and adopted states;
+4. classifies repository-specific claims against an exact evidence scope;
+5. distinguishes planned, verified, baseline-verified and adopted states;
 6. uses renderer, lifecycle and registry boundaries defined here;
-7. records any intentional terminology change through an accepted decision.
+7. references canonical invariants by their DPA-000 IDs;
+8. records any intentional terminology change through an accepted decision.
