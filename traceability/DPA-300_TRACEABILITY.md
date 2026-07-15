@@ -8,83 +8,90 @@ Status-date: 2026-07-15
 
 | ID | Requirement | Invariants / decisions | Discovery evidence | Later owner | Planned tests / probes | Gate obligation | Evidence obligation | Rollback consequence |
 |---|---|---|---|---|---|---|---|---|
-| RL-001 | Projection contracts extend the existing registry and do not create a second registry. | DPA-INV-006, DPA-INV-011, DPA-INV-012; ADR-001, ADR-005 | DISC-001 | DPA-300 | PROBE-001; existing-entry regression; unknown-field negatives | malformed or unknown projection metadata blocks use | exact parser/validator output at validation ref | remove optional extension and retain valid manual entry |
-| RL-002 | Manual documents remain valid when no projection contract exists. | ADR-001; DPA-200 manual form | DISC-001 | DPA-300 | registry regression over all existing entries | no new failure for projection-absent entries | entry-count and parser regression record | registry extension can be reverted without document rewrite |
-| RL-003 | Projection metadata is declarative and renderer resolution is static. | DPA-INV-006, DPA-INV-007; ADR-005 | DISC-001 | DPA-300 / DPA-400 | executable-field rejection; unknown-renderer negative | unknown renderer blocks plan | resolved identifier and contract fingerprint | remove rejected entry or restore prior registry version |
-| RL-004 | Registry validation is side-effect free and precedes rendering and planning. | DPA-INV-004, DPA-INV-015 | DISC-001, DISC-006 | DPA-300 | mutation-free validation tests | validation failure blocks render/write | validation result record | target remains unchanged |
-| RL-005 | A projection refresh follows Resolve→Inspect→Validate→Render→Plan→Preflight→Lock→Revalidate→Write→Verify→Record→Release. | DPA-INV-002–005, DPA-INV-015 | DISC-006, DISC-008 | DPA-300 | state-machine tests; phase-order negative tests | phase bypass blocks mutation | lifecycle transcript and phase results | failure before write is no-op; later failure requires governed recovery |
-| RL-006 | Planning is dry-run by default and execution is bound to an exact plan. | DPA-INV-015 | DISC-006 | DPA-300 | no-execute default; wrong-plan-id rejection | unbound execute blocks | immutable plan record | no target change |
-| RL-007 | Plans capture base, contract, renderer, sources, target, partition and output fingerprints. | ADR-004, ADR-006 | DISC-001, DISC-008 | DPA-300 | fingerprint-domain completeness; field-omission negatives | incomplete plan blocks | complete plan payload | regenerate plan from current authorities |
-| RL-008 | Any captured drift invalidates the plan. | ADR-004, ADR-006, DPA-INV-005 | DISC-008 | DPA-300 / DPA-600 | base/source/target/contract/renderer/partition/owner drift tests | stale plan blocks write | invalidation finding and compared fingerprints | regenerate; never merge target prose |
-| RL-009 | Every projection mutation uses the existing workspace mutation lock. | DPA-INV-004, ADR-003, ADR-006 | DISC-008 | DPA-300 | lock-acquisition, busy, stale-lock and reentrancy tests | lock failure blocks write | lock acquire/release evidence | target unchanged |
-| RL-010 | Lifecycle is the sole writer of projected and partition bytes. | DPA-INV-002–004; ADR-003, ADR-013 | DISC-003, DISC-006 | DPA-300 | writer-call-graph negatives; renderer-side-effect tests | direct write produces drift finding | writer identity and plan evidence | restore from Git-backed prior target or regenerate |
-| RL-011 | Region mutation constructs and atomically replaces the complete parent document. | ADR-013; DPA-200 byte ownership | DISC-003, DISC-006 | DPA-300 | crash/interruption tests; complete-file replacement | inability to prove atomicity blocks | pre/post file fingerprints | restore prior complete target from recoverable history |
-| RL-012 | Bytes outside a projected region are preserved byte-identically. | ADR-013, ADR-007 | DISC-002, DISC-003, DISC-010 | DPA-300 / DPA-700 | outside-region preservation tests; concurrent-edit negative | changed preserved bytes invalidate plan | preserved-region fingerprints | restore prior target; no historical merge |
-| RL-013 | Post-write verification precedes any gate acceptance. | ADR-014; DPA-INV-004 | DISC-005, DISC-006, DISC-009 | DPA-300 / DPA-500 | reread/fingerprint/boundary/normalization tests | verification failure blocks acceptance | verification record | governed recovery or prior-target restore |
-| RL-014 | Lifecycle never assigns `accepted`. | ADR-014 | DISC-005, DISC-009 | DPA-300 / DPA-500 | privilege-boundary negative tests | only DPA-500 gate set may accept | trust transition evidence | abandon refresh instance |
-| RL-015 | Direct writes are detected as target or partition drift without requiring a file watcher. | DPA-INV-004, ADR-004 | DISC-003, DISC-005, DISC-009 | DPA-300 / DPA-500 | modify-target-outside-lifecycle tests | drift finding blocks strict integration when adopted | expected vs observed target record | regenerate or restore; no silent normalization |
-| RL-016 | Evidence is bounded and never runtime authority. | DPA-INV-010; ADR-002, ADR-011 | DISC-005, DISC-006 | DPA-300 | evidence-input prohibition tests | evidence cannot satisfy source validation | mutation/verification evidence record | evidence deletion does not change semantic output |
-| RL-017 | Existing mutating command paths are adapted, not replaced by a parallel DPA command. | DPA-INV-011, DPA-INV-012; ADR-001 | DISC-003, DISC-004 | DPA-300 / DPA-800 | PROBE-002 command-path test | old append/direct path prohibited after adoption | command-to-lifecycle trace | revert adapter while preserving original command contract |
-| RL-018 | `admin-refresh-pr` replaces a governed region rather than appending when the candidate is later approved. | ADR-007, ADR-013 | DISC-003 | DPA-300–700 | PROBE-002 | append behavior fails proposed conformance | before/after target and command transcript | restore prior target; no form preselection |
-| RL-019 | Time is evidence only and cannot invalidate a plan or cause a hard failure by itself. | DPA-INV-013; ADR-008 | DISC-005, DISC-009 | DPA-300 / DPA-500 | old-plan-with-unchanged-inputs test | no time-only blocker | timestamp plus unchanged fingerprints | none |
-| RL-020 | Repository-specific mapping remains exact-ref bounded until Probe. | DPA-INV-017; ADR-011, ADR-015 | DISC-001–010 | DPA-300 / DPA-800 | review classification audit | unsupported claim blocks review-ready | cited evidence records | return claim to NEEDS_MAIN_REPO_VALIDATION |
+| RL-001 | Projection and partition contracts extend the existing registry only. | DPA-INV-006, DPA-INV-011, DPA-INV-012; ADR-001, ADR-005, ADR-017 | DISC-001 | DPA-300 | PROBE-001; existing-entry regression; unknown-field negatives | malformed or unknown metadata blocks use | exact parser/validator output | remove optional extension and retain manual entry |
+| RL-002 | Manual entries remain valid without projection contracts. | ADR-001; DPA-200 | DISC-001 | DPA-300 | full registry regression | no new failure for projection-absent entries | parser and count regression | revert extension without document rewrite |
+| RL-003 | Registry metadata is declarative and renderer resolution static. | DPA-INV-006, DPA-INV-007; ADR-005 | DISC-001 | DPA-300 / DPA-400 | executable-field and unknown-renderer negatives | unknown renderer blocks plan | resolved identifier and contract fingerprint | restore prior registry version |
+| RL-004 | Validation is side-effect free and precedes rendering. | DPA-INV-004, DPA-INV-015 | DISC-001, DISC-006 | DPA-300 | validation mutation negatives | validation failure blocks Render | validation record | target unchanged |
+| RL-005 | Refresh follows Recover→Resolve→Inspect→Validate→Render→Plan→Preflight→Lock→Revalidate→Write→Verify→Record→Release. | DPA-INV-002–005, DPA-INV-008, DPA-INV-015; ADR-003, ADR-016 | DISC-006, DISC-008 | DPA-300 | phase-order and bypass tests | bypass blocks mutation | lifecycle transcript | pre-Write failure no-op; later failure governed recovery |
+| RL-006 | Planning is dry-run and execution bound to an exact plan. | DPA-INV-015 | DISC-006 | DPA-300 | no-execute default; wrong-plan rejection | unbound execution blocks | immutable plan | no target change |
+| RL-007 | Plans capture all base, source, contract, renderer, target, payload, partition, preserved-region and complete-output guards. | ADR-004, ADR-006, ADR-013, ADR-016 | DISC-001, DISC-008 | DPA-300 | field-omission and fingerprint-domain tests | incomplete plan blocks | complete plan payload | regenerate plan |
+| RL-008 | Every captured drift invalidates the plan; no stale prose merge occurs. | DPA-INV-005, DPA-INV-014; ADR-004, ADR-006, ADR-007 | DISC-008 | DPA-300 / DPA-600 | all seven drift-class tests | stale plan blocks Write | compared fingerprints and findings | regenerate; never merge target prose |
+| RL-009 | Every projection mutation uses the existing Workspace lock without nested projection mutation. | DPA-INV-004; ADR-003, ADR-006 | DISC-008 | DPA-300 | busy, stale-lock, outer-reentrancy and nested-refresh negatives | lock/reentrancy violation blocks | lock and owner transcript | target unchanged |
+| RL-010 | Lifecycle is sole writer of projected, partition and acceptance-state bytes. | DPA-INV-002–004, DPA-INV-016; ADR-003, ADR-013, ADR-016 | DISC-003, DISC-006, DISC-007 | DPA-300 | call-graph and side-effect negatives | direct write finding | writer and state identity | restore or regenerate |
+| RL-011 | Region refresh reconstructs and atomically replaces the complete parent. | DPA-INV-014; ADR-013, ADR-017 | DISC-003, DISC-006 | DPA-300 | old-or-new crash tests | inability to prove atomicity blocks | pre/post complete-file fingerprints | restore prior complete target |
+| RL-012 | Non-projected bytes remain byte-identical. | DPA-INV-014; ADR-007, ADR-013 | DISC-002, DISC-003, DISC-010 | DPA-300 / DPA-700 | preservation and concurrent-edit negatives | changed preserved bytes invalidate plan | preserved-region fingerprint | restore; no historical merge |
+| RL-013 | Successful Write enters `written-unverified`; Verify precedes acceptance. | DPA-INV-004; ADR-014 | DISC-005, DISC-006, DISC-009 | DPA-300 / DPA-500 | write/verify transition tests | Verify failure blocks acceptance | write and verification record | abandon or recover |
+| RL-014 | Only DPA-500 may assign `accepted`. | ADR-014 | DISC-005, DISC-009 | DPA-500 | privilege-boundary negatives | lifecycle cannot accept | trust transition evidence | abandon instance |
+| RL-015 | Acceptance state is lifecycle state, not evidence, and classifies drift independently. | DPA-INV-010, DPA-INV-016; ADR-004, ADR-016 | DISC-003, DISC-005, DISC-007, DISC-009 | DPA-300 / DPA-500 | accepted-state loss/tamper; source-only, target-only and combined drift | missing/invalid state blocks strict acceptance | state-update result plus non-authoritative evidence | regenerate or restore; evidence deletion does not change state |
+| RL-016 | Interrupted refreshes are detected and disposed before a new mutation. | DPA-INV-004; ADR-006, ADR-014, ADR-016 | DISC-006, DISC-008 | DPA-300 / DPA-500 / DPA-700 | crash before/after Write; stale-lock takeover; recovered-plan validity | unresolved interruption blocks new mutation | takeover and recovery disposition | reverify valid plan or regenerate |
+| RL-017 | Parent registry entry owns one complete partition contract. | DPA-INV-004, DPA-INV-008; ADR-013, ADR-017 | DISC-001 | DPA-300 / DPA-400 | dangling, duplicate, overlap and unexplained-byte negatives; PROBE-001 | invalid partition blocks Render | effective partition fingerprint | restore prior registry contract |
+| RL-018 | Evidence is bounded and never runtime authority. | DPA-INV-010; ADR-002, ADR-011 | DISC-005, DISC-006 | DPA-300 | evidence-input prohibition | evidence cannot satisfy source or acceptance state | mandatory mutation evidence | evidence deletion does not alter semantics |
+| RL-019 | Existing writers are adapted rather than supplemented by a parallel DPA command. | DPA-INV-011, DPA-INV-012; ADR-001 | DISC-003, DISC-003b, DISC-004 | DPA-300 / DPA-800 | PROBE-002 writer-inventory and command-path tests | unadapted direct writer blocks adoption | command-to-lifecycle trace | revert adapter while preserving governed entry point |
+| RL-020 | An observed `admin-refresh-pr` writer must replace rather than append if the candidate is later approved. | DPA-INV-014; ADR-007, ADR-013 | DISC-003, DISC-003b | DPA-300–700 | PROBE-002 | append accumulation fails conformance | before/after target and transcript | restore prior target; no form preselection |
+| RL-021 | Time is evidence only. | DPA-INV-013; ADR-008 | DISC-005, DISC-009 | DPA-500 | unchanged old-plan test | no time-only blocker | timestamp with fingerprints | none |
+| RL-022 | Repository-specific mappings remain exact-ref bounded. | DPA-INV-017; ADR-011, ADR-015 | DISC-001–010, DISC-003b | DPA-800 | classification audit | unsupported claim blocks review-ready | cited records | return claim to validation-needed |
 
 ## 2. Trust-state mapping
 
-| Lifecycle event | Permitted resulting state | Prohibited result |
+| Lifecycle event | Resulting state | Prohibited result |
 |---|---|---|
 | renderer returns valid payload | `computed` | `accepted` |
-| immutable plan captured | `plan-captured` | target write without execution guard |
-| plan invalidated or validation rejected | `abandoned` | automatic merge or silent retry |
-| atomic write and byte verification succeed | `written-unverified` | direct `accepted` |
-| DPA-500 gate set succeeds | `accepted` | lifecycle-local acceptance shortcut |
+| immutable plan captured | `plan-captured` | Write without execution guard |
+| validation or plan rejected | `abandoned` | silent retry or textual merge |
+| atomic Write succeeds | `written-unverified` | direct `accepted` |
+| Verify fails or interrupted instance is detected | `abandoned` | retain instance as eligible for acceptance |
+| Verify succeeds but required gates/evidence are incomplete | `written-unverified` | lifecycle-local acceptance |
+| DPA-500 gate set succeeds | `accepted` | acceptance shortcut |
 
-## 3. DPA-300 invalid-state tests
+## 3. Invalid-state tests
 
-The planned implementation test suite MUST reject:
+The implementation MUST reject or detect:
 
-1. projection metadata accepted through a second registry;
-2. unknown contract schema version;
-3. unknown renderer identifier;
-4. executable renderer import path;
-5. ambiguous or duplicate target identity;
-6. overlapping regions;
-7. unowned boundary bytes;
-8. multiple owners for one byte range;
-9. renderer invocation before registry validation;
-10. mutation without a captured plan;
-11. execution with a nonmatching plan identity;
-12. mutation without the workspace lock;
-13. source, target, base, contract, renderer, partition or owner drift after planning;
-14. renderer or workflow code writing target bytes;
-15. in-place partial region write;
-16. modified outside-region bytes silently preserved into a stale plan;
-17. post-write verification omitted;
-18. lifecycle assignment of `accepted`;
-19. evidence used as a semantic input;
-20. a new DPA-only command bypassing the observed existing command path;
-21. append-based current-state accumulation after governed bounded replacement is adopted;
-22. hard failure caused only by elapsed time.
+1. second registry or DPA-only command authority;
+2. unknown projection, partition or fingerprint version;
+3. executable renderer reference or unknown renderer;
+4. ambiguous or duplicate target;
+5. missing, dangling, duplicate or inconsistent parent partition contract;
+6. overlapping regions, unexplained bytes or multiple owners;
+7. renderer invocation before validation;
+8. mutation without exact plan identity;
+9. mutation without Workspace lock;
+10. nested projection mutation;
+11. any stale base/source/target/contract/renderer/partition/ownership guard;
+12. renderer, workflow or evidence writer mutating target/state;
+13. in-place region Write;
+14. changed preserved bytes silently copied;
+15. Write without immediate `written-unverified` state;
+16. omitted or failed post-Write verification represented as success;
+17. lifecycle assignment of `accepted`;
+18. evidence used as acceptance or runtime state;
+19. missing acceptance-state record treated as fresh;
+20. source drift mislabeled solely as target drift;
+21. stale-lock takeover without interrupted-instance disposition;
+22. crashed-after-Write bytes silently accepted;
+23. append-based current-state accumulation after governed replacement adoption;
+24. hard failure caused only by elapsed time.
 
 ## 4. Probe mapping
 
 | Probe | DPA-300 questions |
 |---|---|
-| PROBE-001 | Can the actual registry parser and validator represent the optional contract without breaking existing entries or allowing silent fallback? |
-| PROBE-002 | Can the existing `admin-refresh-pr` writer path be routed through a plan-bound, locked, atomic, verified bounded replacement while preserving bytes outside the region? |
-| PROBE-003 | Can existing finding structures carry DPA lifecycle and direct-write findings without a parallel finding system? |
-| PROBE-005 | Can the existing local lock and transfer orchestration implement the DPA-300 local contract and provide the inputs DPA-600 needs? |
+| PROBE-001 | Can the actual registry represent optional projection and parent partition contracts without breaking manual entries or allowing silent fallback? |
+| PROBE-002 | Can every then-known writer, including the observed `admin-refresh-pr` path, be routed through plan-bound atomic replacement with Workspace-resolved acceptance state and interrupted recovery? |
+| PROBE-003 | Can existing findings carry drift, recovery, state and direct-write outcomes without a parallel finding system? |
+| PROBE-005 | Can the existing local lock and transfer orchestration implement the local contract while supplying DPA-600 cross-ref guards? |
 
 ## 5. Repository-specific evidence boundary
 
 The following facts are `VERIFIED` only at `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`:
 
-- the existing documentation registry is document-wide and does not expose the proposed projection schema;
-- the observed document lifecycle has dry-run triage and plan paths but no projection target writer;
-- the Workspace and workspace mutation lock exist;
-- `admin-refresh-pr` and `_refresh_operational_handoff_docs()` are the observed active mutation path for the handoff refresh family;
-- a bounded generated-block replacement primitive exists but is not used by that active `CURRENT_HANDOFF.md` append path;
-- CI executes Ruff, the complete pytest suite and CLI smoke;
-- Git contains recoverable prior document states.
+- the registry is document-wide and lacks the proposed projection/partition shape;
+- the lifecycle has dry-run triage and planning but no projection content writer;
+- Workspace and the reentrant PID-based mutation lock exist;
+- `admin-refresh-pr` through `_refresh_operational_handoff_docs()` is an observed writer of `CURRENT_HANDOFF.md`;
+- the inspected `chat-switch-complete` path does not write `CURRENT_HANDOFF.md`;
+- a bounded block replacement primitive exists but is not used by the observed append path;
+- CI runs Ruff, pytest and CLI smoke;
+- Git contains recoverable prior target states.
 
-No item above proves compatibility with this specification.
+No item proves compatibility or global writer-set completeness.
