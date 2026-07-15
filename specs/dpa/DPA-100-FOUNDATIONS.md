@@ -14,6 +14,8 @@ DPA documents MUST use these terms consistently. A later specification MAY refin
 
 DPA-ADR-009 separates four dimensions that MUST NOT be combined into compound statuses.
 
+DPA-ADR-014 adds consumer trust state as a fifth closed vocabulary dimension. Until its complete content is mechanically folded into this specification, `DPA-100-CONSUMER-TRUST-STATE-AMENDMENT.md` is incorporated here by normative reference and is part of DPA-100. This file remains the sole normative entry point and owner for the vocabulary model; the amendment is transitional and MUST be folded into this file at the next regular normative DPA-100 revision, then retired as a maintained normative source.
+
 ### 2.1 Repository-fact and architecture classifications
 
 - `VERIFIED`: supported by an exact repository ref and reproducible evidence sufficient for the claim at the time of use;
