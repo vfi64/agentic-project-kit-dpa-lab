@@ -1,7 +1,24 @@
 # Document Projection Architecture
 
-The files in this directory form the normative DPA specification.
+The files in this directory form the normative DPA specification series.
 
 Normative keywords `MUST`, `MUST NOT`, `SHOULD`, `SHOULD NOT` and `MAY` are used in their ordinary RFC sense.
 
-No repository-specific statement is `VERIFIED` until validated against the current main repository.
+No repository-specific statement is `VERIFIED` until validated against an exact main-repository validation ref.
+
+## Canonical file map
+
+| Number | Canonical file | Current status |
+|---|---|---|
+| DPA-000 | `DPA-000-VISION.md` | stable |
+| DPA-100 | `DPA-100-FOUNDATIONS.md` | stable |
+| DPA-200 | `DPA-200-DOCUMENT-MODEL.md` | review-ready |
+| DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | draft under post-review adjudication |
+| DPA-400 | `DPA-400-RENDERER-CONTRACT.md` | planned |
+| DPA-500 | `DPA-500-FRESHNESS-AND-GATES.md` | planned |
+| DPA-600 | `DPA-600-CONCURRENCY-AND-WORKFLOW.md` | planned |
+| DPA-700 | `DPA-700-MIGRATION-AND-ROLLBACK.md` | planned |
+| DPA-800 | `DPA-800-DP1-DP5-IMPLEMENTATION.md` | planned |
+| DPA-900 | `DPA-900-FUTURE-EVOLUTION.md` | planned |
+
+A DPA number MUST have exactly one canonical normative file. Amendments and historical pointers MUST identify their owner and MUST NOT remain competing normative homes.
