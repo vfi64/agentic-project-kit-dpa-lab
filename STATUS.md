@@ -1,6 +1,7 @@
 # Status
 
 Status: active
+
 Status-date: 2026-07-15
 Superseded-by: n/a
 
@@ -8,88 +9,80 @@ Superseded-by: n/a
 
 Phase A — Foundation is closed on `main` at commit `a1b81beaf8f8a065d8a869d15bbf39d0e6459aae`.
 
-Phase B — Core document-management integration is active on branch `discovery/dp1-main-repository`.
+Phase B — Core document-management integration is active on branch `spec/dpa-300-registry-lifecycle`.
 
 The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit`, contains no production kit code and has not been adopted with the kit.
 
 DPA-200 and its matrix are `review-ready`; DPA-ADR-013 through DPA-ADR-015 are accepted.
 
-## DP1 Discovery completion
+## DP1 Discovery
 
-Target repository: `vfi64/agentic-project-kit`
+DP1 Discovery is complete against:
 
-Validation ref: `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
+`vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-DISC-001 through DISC-010 now each have bounded records under `evidence/repo-facts/`.
+DISC-001 through DISC-010, synchronized `ASSUMPTIONS.md`, synchronized `MAIN_REPOSITORY_CONTEXT.md` and the DP1 Probe backlog are present.
 
-Completed fact families:
+No main-repository mutation occurred and no production document form was selected.
 
-1. registry representation;
-2. candidate reader graph;
-3. candidate writer graph;
-4. authority inputs;
-5. lifecycle findings;
-6. lifecycle mutation path;
-7. Workspace and path APIs;
-8. locking and concurrency;
-9. gates and CI;
-10. history and rollback inputs.
+## DPA-300 baseline
 
-Post-Discovery synchronization is complete:
+The first evidence-based DPA-300 baseline now contains:
 
-- `ASSUMPTIONS.md` now distinguishes verified facts from remaining Probe questions;
-- `MAIN_REPOSITORY_CONTEXT.md` records the exact-ref facts needed by DPA-300;
-- `integration/DP1_PROBE_BACKLOG.md` is bound to the completed records;
-- no main-repository mutation occurred;
-- no production form was selected.
+- `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
+- `traceability/DPA-300_TRACEABILITY.md`;
+- `diagrams/dpa-300-registry-lifecycle.mmd`;
+- `diagrams/dpa-300-command-integration.mmd`;
+- `diagrams/dpa-300-plan-state.mmd`;
+- `reviews/consolidated/DPA-300_PRE_REVIEW_AUDIT.md`.
 
-## Confirmed CURRENT_HANDOFF command path
+DPA-300 defines:
 
-The active mutation path is:
+1. an optional declarative projection contract in the existing registry;
+2. fail-loud registry validation;
+3. Resolve → Inspect → Validate → Render → Plan → Preflight → Lock → Revalidate → Write → Verify → Record → Release;
+4. deterministic plan identity and stale-plan invalidation;
+5. existing workspace-lock use;
+6. lifecycle-only atomic target and partition writes;
+7. exact preservation of non-projected bytes;
+8. post-write verification before acceptance;
+9. direct-write detection by expected-output recomputation;
+10. bounded non-authoritative evidence;
+11. adaptation of existing mutating commands rather than creation of a parallel DPA command.
+
+## Confirmed command integration obligation
+
+Exact-ref Discovery identified:
 
 `agentic-kit transfer admin-refresh-pr`
 → `transfer_repo_actions._refresh_operational_handoff_docs()`
 
-At the validation ref, this path updates source state and handoff artifacts but handles `CURRENT_HANDOFF.md` through narrow regex cleanup plus appended refresh prose. It does not route the target update through the existing safe bounded block-replacement primitive.
+as the active handoff mutation path at the validation ref.
 
-This is an explicit cross-spec obligation:
+DPA-300 requires this existing path to be adapted through the registry and lifecycle if `CURRENT_HANDOFF.md` is later selected as a projection target. It prohibits a parallel DPA-only writer and requires governed bounded replacement instead of append accumulation.
 
-- DPA-300: lifecycle-owned plan, validation, lock and write path;
-- DPA-400: pure payload renderer and no boundary-byte ownership;
-- DPA-500: marker, drift, direct-write and acceptance findings;
-- DPA-600: stale-plan and competing-PR serialization;
-- DPA-700: preservation and rollback without historical-prose merge;
-- DP1 Probe: demonstrate governed replacement rather than append behavior.
+This requirement remains conditional and does not select a full, hybrid or managed-head production form.
 
-The lab must extend this observed command path or provide a governed migration of it; it must not create a parallel operational refresh command.
+## Internal audit
+
+`reviews/consolidated/DPA-300_PRE_REVIEW_AUDIT.md` result:
+
+`PASS_WITH_REVIEW_QUESTIONS`
+
+No foundational contradiction, hidden parallel system, new runtime authority or false implementation claim was found.
+
+The audit records seven explicit reviewer questions concerning render/plan ordering, plan payload strength, lock reentrancy, evidence failure, direct-write fingerprints, command-contract preservation and partition fingerprints.
 
 ## Next governed step
 
-Create the first evidence-based DPA-300 baseline:
+1. create a Claude primary architecture review prompt bound to one immutable DPA-300 baseline commit;
+2. obtain Claude's read-only review;
+3. commit the review under `reviews/claude/`;
+4. perform secondary technical verification;
+5. adjudicate accepted findings before normative changes;
+6. promote DPA-300 to `review-ready` only after corrections and post-adjudication verification.
 
-1. write the registry-extension contract from DISC-001;
-2. define lifecycle planning, validation, trust transition, locking, atomic write and evidence boundaries from DISC-005/006/007/008;
-3. specify integration of the observed `admin-refresh-pr` writer path;
-4. define direct-write detection and failure ownership without importing DPA-500 gate policy;
-5. create DPA-300 traceability and registry/lifecycle/command-flow diagrams;
-6. perform an internal invariant/ADR/evidence audit;
-7. commit one immutable review baseline;
-8. generate the Claude primary architecture review prompt against that exact commit.
-
-DP1 Probe and Assessment remain deferred until DPA-300 is reviewable.
-
-## Claude review timing
-
-Claude is not required for raw Discovery records. Claude returns when one immutable commit contains:
-
-- the complete Discovery set;
-- synchronized assumptions and main-repository context;
-- finalized Probe backlog;
-- a reviewable DPA-300 draft;
-- DPA-300 traceability and diagrams;
-- explicit evidence-to-requirement mapping.
-
-Claude must verify that DPA-300 integrates the observed `transfer admin-refresh-pr` / `CURRENT_HANDOFF.md` path rather than specifying a parallel replacement workflow.
+DP1 Probe and Assessment remain deferred until the governing specifications are reviewable.
 
 ## Phase B restrictions
 
@@ -100,4 +93,4 @@ Claude must verify that DPA-300 integrates the observed `transfer admin-refresh-
 - No Probe may execute before its governing contract is reviewable.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue. DP1 Discovery is complete; DPA-300 drafting is now the active task.
+Phase B may continue. DPA-300 is a complete draft suitable for primary architecture review; it is not yet `review-ready`.
