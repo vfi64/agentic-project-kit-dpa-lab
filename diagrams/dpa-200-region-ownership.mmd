@@ -1,29 +1,39 @@
 flowchart TD
   DOC[Registered Document]
-  DOC --> FULL[Full-target ownership]
-  DOC --> REGIONS[Registered regions]
+  DOC --> FORM{Primary form}
+  FORM --> MAN[Manual Document]
+  FORM --> FULL[Full Projection]
+  FORM --> SPLIT[Split Projection: multiple target identities]
+  FORM --> HYB[Hybrid Document: one document, mixed regions]
+  HYB --> MH[Managed-head: exceptional hybrid subtype]
 
   FULL --> FL[Existing Document Lifecycle]
-  FL -->|sole write owner| FT[Full Projection Target]
+  FL -->|sole writer| FT[Full Projected Target]
 
-  REGIONS --> PR[Projected Region]
-  REGIONS --> MR[Manual Region]
-  REGIONS --> HR[Historical Region]
+  HYB --> PART[Document-level Partition Contract]
+  PART -->|owns boundary markers, separators, order and normalization| PB[Partition Bytes]
+  PART --> PR[Projected Region]
+  PART --> MR[Manual Region]
+  PART --> HR[Historical Region]
 
-  PR --> PL[Existing Document Lifecycle]
-  MR --> GM[Governed Manual Editing]
-  HR --> HO[Explicit Historical-region Owner]
+  FL -->|sole writer| PB
+  FL -->|validated write| PR
+  GM[Governed Manual Editor] -->|manual payload only| MR
+  GH[Governed Historical Writer] -->|historical payload only| HR
 
-  PL -->|validated write| PT[Projected Bytes]
-  GM -->|bounded manual write| MT[Manual Bytes]
-  HO -->|declared policy| HT[Historical Bytes]
+  R[Static Renderer] -->|projected payload bytes only; no partition bytes| FL
+  WF[Workflow Orchestration] -->|authorization, serialization and stale-plan guards| FL
 
-  PT --> CTB[Consumer Trust Boundary]
-  MT --> CTB
-  HT --> CTB
+  PR --> TS[Projected-byte Trust State]
+  FT --> TS
+  PB --> PV[Partition Validity]
+  MR --> MA[Declared Manual Authority]
+  HR --> HA[Declared Historical Role]
 
-  CTB -->|accepted only after required validation and gates| C[Consumers]
+  TS --> CTB[Consumer Trust Boundary]
+  PV --> CTB
+  MA --> CTB
+  HA --> CTB
+  CTB --> C[Consumers]
 
-  R[Renderer] -->|text or bytes only| PL
-  WF[Workflow Orchestration] -->|serialization and stale-plan guards| PL
-  E[Evidence] -. no runtime authority .-> DOC
+  E[Evidence] -. supports claims; no runtime authority .-> DOC
