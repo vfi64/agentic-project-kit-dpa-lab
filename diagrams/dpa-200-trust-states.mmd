@@ -1,0 +1,32 @@
+stateDiagram-v2
+  [*] --> Computed
+  Computed --> Planned: lifecycle plan created
+  Planned --> WrittenUnverified: governed write applied
+  WrittenUnverified --> Accepted: validation, reproducibility and gates pass
+
+  Computed --> Rejected: renderer or contract validation fails
+  Planned --> Rejected: plan becomes stale or unauthorized
+  WrittenUnverified --> Rejected: post-write validation or gate fails
+
+  Rejected --> Computed: regenerate from authoritative sources
+  Accepted --> Computed: source, target, base or contract drift requires refresh
+
+  note right of Computed
+    In-memory bytes only.
+    Not accepted repository state.
+  end note
+
+  note right of Planned
+    Evidence of intended mutation.
+    No write authority granted by the plan itself.
+  end note
+
+  note right of WrittenUnverified
+    Bytes exist in a governed workspace.
+    Consumers MUST NOT treat them as accepted state.
+  end note
+
+  note right of Accepted
+    Consumer trust boundary crossed only after
+    required lifecycle validation and gates.
+  end note
