@@ -1,9 +1,7 @@
 # DP1 Probe Backlog
 
 Status: active
-
 Status-date: 2026-07-15
-
 Authority: DPA-ADR-015
 
 ## 1. Purpose
@@ -42,29 +40,28 @@ Required evidence:
 
 ### PROBE-002 — CURRENT_HANDOFF governed bounded replacement
 
-Evidence source: `evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`
+Evidence sources:
+
+- `evidence/repo-facts/DP1-DISC-002-READER-GRAPH-6A9DA7D.md`
+- `evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`
+- `evidence/repo-facts/DP1-DISC-004-AUTHORITY-INPUTS-6A9DA7D.md`
+- `evidence/repo-facts/DP1-DISC-010-HISTORY-ROLLBACK-6A9DA7D.md`
 
 Observed command path:
 
 `agentic-kit transfer admin-refresh-pr`
 → `transfer_repo_actions._refresh_operational_handoff_docs()`
 
-Governing contracts required:
-
-- DPA-300 lifecycle and registry integration;
-- DPA-400 renderer purity and payload contract;
-- DPA-500 marker, drift and acceptance findings;
-- DPA-600 stale-plan and competing-PR guards;
-- DPA-700 preservation and rollback rules.
+Governing contracts required: DPA-300 through DPA-700 for their respective ownership, renderer, gate, serialization and rollback concerns.
 
 Question: Can the proposed DPA contract replace the observed append-based `CURRENT_HANDOFF.md` mutation with lifecycle-owned bounded replacement of the marked operational handoff region?
 
 The Probe MUST demonstrate:
 
-1. the command updates declared source state before rendering;
-2. the renderer returns only the target-region payload or contract-defined bytes and performs no write;
-3. the lifecycle validates exactly one ordered marker pair before mutation;
-4. missing, duplicated or misordered markers fail loud without changing the target;
+1. declared source state is updated before rendering;
+2. renderer output contains payload/contract-defined bytes only and performs no write;
+3. lifecycle validates exactly one ordered marker pair before mutation;
+4. malformed markers fail loud without mutation;
 5. bytes outside the governed region remain byte-identical;
 6. the generated region is replaced rather than appended;
 7. the write is planned, locked and atomic;
@@ -72,21 +69,24 @@ The Probe MUST demonstrate:
 9. post-write validation and evidence are emitted;
 10. direct target writes outside the lifecycle are detectable;
 11. competing administrative refreshes cannot silently overwrite one another;
-12. rollback restores the prior target from recoverable repository history without merging historical prose.
+12. rollback restores recoverable prior bytes without merging historical prose.
 
-The Probe MUST NOT preselect `CURRENT_HANDOFF.md` as full, hybrid or managed-head. Form eligibility is an Assessment decision after the Probe evidence exists.
+The Probe MUST NOT preselect a document form. Form eligibility is an Assessment decision.
 
 ### PROBE-003 — Lifecycle finding compatibility
 
-Evidence source: future DISC-005 record.
+Evidence sources:
+
+- `evidence/repo-facts/DP1-DISC-005-LIFECYCLE-FINDINGS-6A9DA7D.md`
+- `evidence/repo-facts/DP1-DISC-006-LIFECYCLE-MUTATION-6A9DA7D.md`
 
 Governing contracts required: reviewable DPA-300 and DPA-500.
 
-Question: Can the existing finding structures represent the required DPA drift, marker, ownership, stale-plan and acceptance failures without creating a parallel finding system?
+Question: Can the existing finding structures represent required DPA drift, marker, ownership, stale-plan and acceptance failures without creating a parallel finding system?
 
 ### PROBE-004 — Gate and CI compatibility
 
-Evidence source: future DISC-009 record.
+Evidence source: `evidence/repo-facts/DP1-DISC-009-GATES-CI-6A9DA7D.md`
 
 Governing contract required: reviewable DPA-500.
 
@@ -94,30 +94,31 @@ Question: Can existing gate and CI mechanisms carry staged DPA enforcement while
 
 ### PROBE-005 — Concurrency and serialization compatibility
 
-Evidence source: future DISC-008 record.
+Evidence source: `evidence/repo-facts/DP1-DISC-008-LOCKING-CONCURRENCY-6A9DA7D.md`
 
 Governing contract required: reviewable DPA-600.
 
-Question: Can existing local locks and branch/PR workflows enforce the proposed local and cross-ref serialization contract?
+Question: Can existing local locks and branch/PR workflows enforce the proposed local and cross-ref serialization contract, including stale plan rejection?
 
 ### PROBE-006 — Rollback-input sufficiency
 
-Evidence source: future DISC-010 record.
+Evidence source: `evidence/repo-facts/DP1-DISC-010-HISTORY-ROLLBACK-6A9DA7D.md`
 
 Governing contract required: reviewable DPA-700.
 
-Question: Are the observed Git and repository inputs sufficient to execute the proposed rollback contract without introducing a new canonical history source?
+Question: Are observed Git and repository inputs sufficient to execute the proposed rollback contract without introducing a new canonical history source?
 
 ## 4. Review boundary
 
-This backlog MUST be reviewed for completeness after DISC-001 through DISC-010 are committed and assumptions are synchronized.
+The Discovery record set, assumptions, main-repository context and this backlog are synchronized for the recorded validation ref.
 
-Claude primary architecture review is not requested for raw Discovery records. Claude should review the first exact-ref, reviewable DPA-300 contract together with:
+Claude primary architecture review is not requested for raw Discovery records. Claude should review the first immutable, reviewable DPA-300 baseline together with:
 
 - all DISC records;
 - synchronized `ASSUMPTIONS.md`;
 - synchronized `MAIN_REPOSITORY_CONTEXT.md`;
 - this Probe backlog;
-- the proposed DPA-300 traceability and Probe mapping.
+- DPA-300 traceability and integration diagrams;
+- an explicit evidence-to-requirement mapping.
 
-A separate Claude review is required after a material DPA-300 redesign or before DPA-300 is promoted from `review-ready` to `stable` if the first review was performed against an earlier semantic baseline.
+A separate Claude review is required after material DPA-300 redesign or before promotion to `stable` if the first review used an earlier semantic baseline.
