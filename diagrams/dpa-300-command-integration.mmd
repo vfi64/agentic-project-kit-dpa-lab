@@ -1,0 +1,32 @@
+sequenceDiagram
+    actor User
+    participant Cmd as Existing command entry point
+    participant WF as Workflow orchestration
+    participant Reg as Existing registry
+    participant LC as Existing lifecycle
+    participant Ren as Static renderer
+    participant Lock as Workspace mutation lock
+    participant T as Registered target
+    participant Ev as Evidence
+    participant Gate as DPA-500 gates
+
+    User->>Cmd: request governed refresh
+    Cmd->>WF: preserve existing command/workflow contract
+    WF->>Reg: resolve registered projection contract
+    Reg-->>WF: validated declarative contract
+    WF->>LC: request dry-run plan
+    LC->>Ren: render exactly one target
+    Ren-->>LC: text or bytes only
+    LC-->>WF: immutable plan + identity
+    WF->>LC: execute exact plan
+    LC->>Lock: acquire local mutation lock
+    LC->>Reg: revalidate contract
+    LC->>T: atomically replace complete file
+    LC->>T: reread and verify bytes
+    LC->>Ev: emit bounded record
+    LC->>Lock: release
+    LC-->>WF: written-unverified
+    WF->>Gate: request acceptance evaluation
+    Gate-->>WF: accepted or blocked
+
+    Note over Cmd,T: For CURRENT_HANDOFF, adapt admin-refresh-pr; do not create a parallel DPA-only writer.
