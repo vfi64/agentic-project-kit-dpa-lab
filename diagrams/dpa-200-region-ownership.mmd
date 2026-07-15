@@ -1,0 +1,29 @@
+flowchart TD
+  DOC[Registered Document]
+  DOC --> FULL[Full-target ownership]
+  DOC --> REGIONS[Registered regions]
+
+  FULL --> FL[Existing Document Lifecycle]
+  FL -->|sole write owner| FT[Full Projection Target]
+
+  REGIONS --> PR[Projected Region]
+  REGIONS --> MR[Manual Region]
+  REGIONS --> HR[Historical Region]
+
+  PR --> PL[Existing Document Lifecycle]
+  MR --> GM[Governed Manual Editing]
+  HR --> HO[Explicit Historical-region Owner]
+
+  PL -->|validated write| PT[Projected Bytes]
+  GM -->|bounded manual write| MT[Manual Bytes]
+  HO -->|declared policy| HT[Historical Bytes]
+
+  PT --> CTB[Consumer Trust Boundary]
+  MT --> CTB
+  HT --> CTB
+
+  CTB -->|accepted only after required validation and gates| C[Consumers]
+
+  R[Renderer] -->|text or bytes only| PL
+  WF[Workflow Orchestration] -->|serialization and stale-plan guards| PL
+  E[Evidence] -. no runtime authority .-> DOC
