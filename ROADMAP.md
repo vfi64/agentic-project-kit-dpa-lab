@@ -1,13 +1,14 @@
 # Roadmap
 
 Status: active
+
 Status-date: 2026-07-15
 
 ## Specification sequence
 
 1. DPA-000 — Vision and architectural principles — stable
 2. DPA-100 — Foundations and terminology — stable
-3. DPA-200 — Document model — draft under post-review consolidation
+3. DPA-200 — Document model — review-ready
 4. DPA-300 — Registry and lifecycle integration — planned
 5. DPA-400 — Renderer contract — planned
 6. DPA-500 — Freshness and gates — planned
@@ -45,14 +46,14 @@ Early Discovery does not constitute lab adoption, implementation or migration.
 
 ## DPA-200 completion work
 
-Current required order:
+Completed:
 
-1. Consolidate DPA-ADR-013 and DPA-ADR-014 into the DPA-200 owner text.
-2. Synchronize the document-form matrix.
-3. Regenerate region-ownership and trust-state diagrams.
-4. Add DM-011 and re-key taxonomy, invalidity and trust-transition traceability.
-5. Run bounded post-adjudication verification.
-6. Promote DPA-200 and its matrix to `review-ready` only after verification passes.
+1. Consolidated DPA-ADR-013 and DPA-ADR-014 into the DPA-200 owner text.
+2. Synchronized the document-form matrix.
+3. Regenerated region-ownership and trust-state diagrams.
+4. Added DM-011 and re-keyed taxonomy, invalidity and trust-transition traceability.
+5. Completed bounded post-adjudication verification.
+6. Promoted DPA-200 and its matrix to `review-ready`.
 
 ## DP1 Discovery scope
 
@@ -70,6 +71,29 @@ Discovery asks factual Ist-state questions only:
 
 Discovery MUST NOT answer whether an observed mechanism is sufficient for DPA. Suitability and compatibility belong to Probe.
 
+## Confirmed candidate-command obligation
+
+Exact-ref Discovery at `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3` identified the active `CURRENT_HANDOFF.md` mutation path as:
+
+`agentic-kit transfer admin-refresh-pr`
+→ `transfer_repo_actions._refresh_operational_handoff_docs()`
+
+The observed path updates `.agentic/handoff_state.yaml`, `.agentic/operational_handoff_state.yaml`, `STATUS.md`, `CURRENT_HANDOFF.md`, `START_NEW_CHAT_PROMPT.md` and successor-package projections.
+
+For `CURRENT_HANDOFF.md`, the observed implementation removes only one narrowly matched prior refresh section and appends a new historical refresh section. It does not use the existing bounded `replace_generated_operational_handoff_block()` primitive for that target.
+
+This finding creates the following governed obligations:
+
+- **DPA-300:** define the lifecycle-owned mutation contract for the marked operational handoff region, including plan, lock, validation, replacement, atomic write, post-write validation, evidence and direct-write detection.
+- **DPA-400:** require renderer output to contain region payload only and exclude partition markers or unrelated historical prose.
+- **DPA-500:** define findings and gate consequences for missing, duplicate, misordered or drifted markers and for stale generated content.
+- **DPA-600:** preserve stale-base and competing-PR protection for administrative handoff refreshes.
+- **DPA-700:** define preservation and rollback of bytes outside the governed region without automatic historical-prose merging.
+- **DP1 Probe:** demonstrate that the proposed contract can replace the append-based `CURRENT_HANDOFF.md` mutation with governed bounded replacement while preserving non-target bytes and failing loud on malformed boundaries.
+- **DP1 Assessment:** decide whether `CURRENT_HANDOFF.md` is eligible for any production migration form. Discovery evidence alone MUST NOT select the form.
+
+Primary evidence: `evidence/repo-facts/DP1-DISC-003-WRITER-GRAPH-6A9DA7D.md`.
+
 ## Review-derived later-spec obligations
 
 ### DPA-300
@@ -77,6 +101,7 @@ Discovery MUST NOT answer whether an observed mechanism is sufficient for DPA. S
 - Registry representation and fail-loud validation.
 - Lifecycle planning, locking, atomic write and direct-write detection.
 - Boundary-partition validation and crash recovery.
+- Governed replacement contract for the marked operational handoff region in the observed `transfer admin-refresh-pr` path.
 
 ### DPA-400
 
@@ -105,6 +130,7 @@ Discovery MUST NOT answer whether an observed mechanism is sufficient for DPA. S
 
 - DP1 Discovery, Probe and Assessment as internal stages of one slice.
 - Exact-ref evidence obligations and DP1 exit criteria.
+- Explicit Probe case for the `CURRENT_HANDOFF.md` admin-refresh command path.
 
 ## Prohibitions
 
