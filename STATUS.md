@@ -12,89 +12,62 @@ Phase B — Core document-management integration is active on branch `spec/dpa-2
 
 The lab remains non-authoritative for the runtime state of `vfi64/agentic-project-kit`, contains no production kit code and has not been adopted with the kit.
 
-## Completed Phase A work
-
-- DPA-000 and DPA-100 are stable.
-- Claude primary architecture review is complete.
-- ChatGPT secondary technical verification is complete.
-- Maintainer adjudication is complete.
-- DPA-ADR-009 through DPA-ADR-012 are accepted.
-- Canonical invariants `DPA-INV-001` through `DPA-INV-017` are stable.
-- Closed vocabulary, phase governance, review roles and minimal baseline evidence are synchronized.
-- Phase A traceability and final consistency review are complete.
-
 ## DPA-200 review baseline
 
-`specs/dpa/DPA-200-DOCUMENT-MODEL.md` remains `draft` and owns the normative document model.
-
-The exact primary-review baseline is:
+Primary architecture review baseline:
 
 `44a87127fca7f482bc2991f0c258af0a386a7048`
 
-The Claude review prompt is stored at:
+Claude primary architecture review:
 
-`reviews/claude/CLAUDE_DPA_200_REVIEW_PROMPT.md`
+- access outcome: `accessible`;
+- verdict: `ACCEPT_WITH_CHANGES`;
+- blockers: none;
+- DPA-200 may become `review-ready` after adjudication and corrections.
 
-The prompt was committed after the baseline and instructs Claude to check out the exact baseline rather than the later branch tip.
+ChatGPT secondary technical verification:
 
-Completed DPA-200 planning artifacts:
+- same architecture baseline;
+- verdict: `ACCEPT_WITH_CHANGES`;
+- all four Claude Major findings verified.
 
-- complete initial document-model draft;
-- document-form decision matrix;
-- DPA-200 requirement traceability DM-001 through DM-010;
-- region and write-ownership diagram;
-- consumer trust-state diagram;
-- full audit against `DPA-INV-001` through `DPA-INV-017`;
-- full audit against accepted DPA-ADR-001 through DPA-ADR-012;
-- exact-ref primary architecture review prompt.
+## Completed review and adjudication work
 
-No production candidate has been assigned a document form. Region support, concrete schemas, readers, writers, lifecycle paths, gate placement and rollback sources remain `NEEDS_MAIN_REPO_VALIDATION`.
+- Claude review recorded under `reviews/claude/`. — complete
+- ChatGPT technical verification recorded under `reviews/chatgpt/`. — complete
+- Maintainer adjudication recorded under `reviews/consolidated/`. — complete
+- DPA-ADR-013 accepted: document-form partition and boundary ownership. — complete
+- DPA-ADR-014 accepted: consumer trust-state model. — complete
+- Normative adjudicated amendment created as `specs/dpa/DPA-200-ADJUDICATED-AMENDMENTS.md`. — complete
 
-## Pre-review assessment
+## Accepted DPA-200 corrections
 
-The internal pre-review audit result is:
+1. Split projection is a multi-target arrangement only.
+2. A single document with projected and non-projected regions is a hybrid document.
+3. Managed-head is an exceptional hybrid subtype.
+4. Lifecycle-owned partition contracts own all boundary bytes.
+5. Renderers emit payload bytes only, never partition bytes.
+6. Consumer trust states are `computed`, `plan-captured`, `written-unverified`, `accepted`, `abandoned`.
+7. Drift starts a new refresh attempt and does not silently rewrite prior accepted-byte state.
+8. DPA-200 owns one normative invalid-state catalog.
+9. DM-011 must validate target-semantics completeness.
+10. `no migration` is the fourth accepted migration outcome when evidence is insufficient.
 
-`PASS_WITH_EXTERNAL_REVIEW_REQUIRED`
+## Remaining DPA-200 work
 
-No contradiction with stable DPA-000, DPA-100, canonical invariants or accepted decisions was found.
+1. Mechanically consolidate the adjudicated amendments into `DPA-200-DOCUMENT-MODEL.md`.
+2. Synchronize `DPA-200-DOCUMENT-FORM-MATRIX.md`.
+3. Regenerate the region-ownership and trust-state diagrams.
+4. Add DM-011 and re-key taxonomy, invalid-state and trust-transition traceability.
+5. Run a bounded post-adjudication verification.
+6. Promote DPA-200 and its matrix to `review-ready` only after that verification passes.
+7. Produce the next exact-ref review baseline if the post-adjudication verification finds a material ambiguity.
 
-The external review must independently examine:
+## Main-repository validation boundary
 
-- split projection versus general hybrid form;
-- managed-head exceptional constraints;
-- exhaustive byte ownership;
-- registered-region boundaries;
-- target semantics and normalization;
-- written-unverified trust state;
-- consumer classes and accepted-state boundary;
-- delegated specification ownership;
-- hidden authority ambiguity or parallel-system implications.
+Concrete registry-region support, marker syntax, candidate readers and writers, lifecycle hooks, gate mapping, concurrency mechanism and rollback implementation remain `NEEDS_MAIN_REPO_VALIDATION` until DP1 inspects an exact validation ref.
 
-## Active work
-
-1. Obtain the Claude primary architecture review against exact ref `44a87127fca7f482bc2991f0c258af0a386a7048`.
-2. Commit the review unchanged under `reviews/claude/`.
-3. Produce a secondary technical verification after the Claude review is available.
-4. Create a consolidated finding-by-finding maintainer adjudication.
-5. Apply accepted normative corrections.
-6. Decide whether DPA-200 may advance from `draft` to `review-ready`.
-
-## DPA-200 review-readiness tracking
-
-| Criterion | Progress |
-|---|---|
-| Complete document-form definitions | complete |
-| Authority and write ownership rules | complete |
-| Target semantics and invalidity rules | complete |
-| Consumer trust boundary | complete |
-| Decision matrix | complete |
-| Tests, gates, evidence and rollback traceability | complete for review baseline |
-| Region-boundary and trust-state diagrams | complete |
-| Full invariant and ADR audit | complete |
-| Exact-ref primary review baseline | complete |
-| Claude primary review | pending external reviewer output |
-| Secondary technical verification | pending primary review |
-| Maintainer adjudication | pending reviews |
+No production candidate has been assigned a form.
 
 ## Phase B restrictions
 
@@ -105,4 +78,4 @@ The external review must independently examine:
 - No DPA-300 detail may bypass DPA-200 authority, ownership or trust-state rules.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue only through the governed review and adjudication sequence. DPA-200 is not yet `review-ready`.
+Phase B may continue. DPA-200 remains `draft` until the accepted amendments are fully consolidated and verified.
