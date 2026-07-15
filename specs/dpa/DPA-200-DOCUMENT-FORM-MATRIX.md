@@ -1,212 +1,175 @@
 # DPA-200 — Document-Form Decision Matrix
 
-Status: draft
+Status: review-ready
 Status-date: 2026-07-15
 Owner: `specs/dpa/DPA-200-DOCUMENT-MODEL.md`
 Superseded-by: n/a
 
 ## 1. Purpose and authority
 
-This matrix is a normative companion to DPA-200. It makes permitted and prohibited combinations of document form, target identity, region ownership, source authority, write ownership, trust state and rollback explicit.
+This matrix is a normative companion to DPA-200. DPA-200 owns the document model and invalid-state catalog. This matrix operationalizes but MUST NOT redefine them.
 
-DPA-200 remains the normative owner of the document model. This matrix MUST NOT redefine DPA-000, DPA-100 or DPA-200 terms. A conflict is resolved in favor of DPA-000, DPA-100 and then DPA-200, in that order, until the matrix is reconciled.
-
-Concrete main-repository schemas, marker conventions, candidate documents, readers, writers and lifecycle behavior remain `NEEDS_MAIN_REPO_VALIDATION`.
+Concrete schemas, marker conventions, readers, writers and lifecycle behavior remain `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## 2. Decision symbols
 
-- `PERMITTED`: structurally conforming when all listed preconditions are satisfied.
-- `CONDITIONAL`: permitted only after the named evidence and later-spec obligations are satisfied.
-- `PROHIBITED`: violates the DPA authority or ownership model.
-- `NOT_APPLICABLE`: the dimension does not apply to that form.
+- `PERMITTED`
+- `CONDITIONAL`
+- `EXCEPTIONAL / CONDITIONAL`
+- `PROHIBITED`
+- `NOT_APPLICABLE`
 
-A `PERMITTED` or `CONDITIONAL` entry is not a production-form selection. DP1 MUST still prove the authority, reader, writer, compatibility and rollback graph at an exact validation ref.
+A permitted entry is not a production-form selection. DP1 evidence remains mandatory.
 
-## 3. Document-form matrix
+## 3. Unique primary form matrix
 
-| Form | Projection target | Required regions | Semantic source | Projected write owner | Manual/history write owner | Consumer trust | Selection status |
-|---|---|---|---|---|---|---|---|
-| Manual document | none | none required by DPA | existing authoritative state, outside a projection contract | NOT_APPLICABLE | governed manual editing under existing lifecycle rules | existing behavior preserved | PERMITTED |
-| Full projection | complete registered document | one full-target ownership domain | declared canonical sources plus contract-declared configuration | existing document lifecycle | none inside target | accepted only after lifecycle validation and required gates | CONDITIONAL |
-| Split projection | separate target or disjoint registered regions | projected current component plus separately owned historical/manual component | projected component from declared canonical sources only | existing document lifecycle | explicit governed owner for non-projected component | each consumed component must expose its trust and authority role | CONDITIONAL |
-| Managed-head projection | one leading registered region | projected head plus following historical region | head from declared canonical sources; history is not semantic renderer input | existing document lifecycle for head | explicit governed historical writer | current-state consumers must not treat history as current authority | EXCEPTIONAL / CONDITIONAL |
-| Hybrid document | one or more projected regions within one document | complete, non-overlapping region partition | each projected region from its own declared canonical sources | existing document lifecycle for projected regions | explicit governed owner for every manual region | consumer contract must identify authoritative current region | EXCEPTIONAL / CONDITIONAL |
+| Primary form | Identity shape | Region shape | Non-projected content | Required partition | Selection status |
+|---|---|---|---|---|---|
+| Manual document | no projection target | existing manual structure | manual/historical under existing behavior | existing manual structure | PERMITTED |
+| Full projection | one complete registered document target | no independently maintained region | none inside target | full-target ownership domain | CONDITIONAL |
+| Split projection | two or more independently registered target identities | targets are separate identities | history/explanation outside projected target | per-target contracts | CONDITIONAL |
+| Hybrid document | one registered document | one or more projected regions plus one or more non-projected regions | manual and/or historical regions | one document-level partition contract | EXCEPTIONAL / CONDITIONAL |
+| Managed-head projection | primary form: hybrid; subtype: managed-head | exactly one leading projected region plus one following historical region | historical tail | one lifecycle-owned partition contract | EXCEPTIONAL / CONDITIONAL |
+
+A single document with projected and non-projected regions is always hybrid, never split. Managed-head is a subtype and not a second primary classification.
 
 ## 4. Form-selection preconditions
 
-### 4.1 Manual document
+### Manual
 
-A manual document is conforming when:
+- no projection contract;
+- existing behavior unchanged;
+- malformed optional metadata fails loud.
 
-- no projection contract is present;
-- existing registry and lifecycle behavior remains unchanged;
-- no DPA path silently treats the document as projected;
-- malformed optional projection metadata fails explicitly rather than falling back silently.
+### Full projection
 
-### 4.2 Full projection
+- every byte reproducible from declared canonical sources and contract-declared configuration;
+- no independently maintained prose;
+- target identity and target semantics complete;
+- readers, writers, gates and rollback known.
 
-Full projection is permitted only when:
+### Split projection
 
-- every target byte is reproducible from declared canonical sources and contract-declared configuration;
-- no independently maintained prose remains inside the target;
-- the complete reader and writer graph is known;
-- rollback can restore the prior tracked target and registry state;
-- target identity and target semantics are unambiguous;
-- required gates establish the consumer trust boundary.
+- two or more independently registered target identities;
+- projected current representation and non-canonical history/explanation are separate targets;
+- each target has one owner and explicit consumer role;
+- rollback preserves all identities.
 
-Full projection is prohibited when any target byte depends on undocumented manual knowledge or non-canonical historical prose.
+### Hybrid
 
-### 4.3 Split projection
+- one document-level partition contract;
+- all payload and partition bytes owned exactly once;
+- projected, manual and historical regions non-overlapping;
+- every projected region independently registered;
+- consumers identify current authoritative representation;
+- partition, lifecycle, gate, serialization and rollback obligations defined.
 
-Split projection is permitted only when:
+### Managed-head subtype
 
-- current deterministic representation and non-canonical history can be assigned separate target identities or disjoint registered regions;
-- each component has one write owner;
-- consumers can distinguish current authoritative representation from historical material;
-- normalization and boundary rules cannot cause cross-component mutation;
-- rollback preserves both components without inventing a history source.
-
-### 4.4 Managed-head projection
-
-Managed-head projection is permitted only as a justified exception when:
-
-- the head is a precisely bounded registered region;
-- the following historical region has an explicit writer and edit policy;
-- append behavior cannot change the projected head or its boundaries;
-- source, target, base and contract drift are checked before integration;
-- competing branches or pull requests cannot integrate stale head assumptions;
-- drift recovery regenerates the head and never auto-merges historical prose;
-- rollback inputs are recoverable from Git history or another already-authoritative source.
-
-### 4.5 Hybrid document
-
-A hybrid document is permitted only when:
-
-- all bytes belong to exactly one declared region ownership domain;
-- projected and manual regions are non-overlapping;
-- every projected region is one independently registered target;
-- a renderer invocation computes exactly one registered region;
-- manual edits cannot alter projected boundaries or projected bytes;
-- consumers know which region carries current authoritative representation;
-- DPA-300, DPA-500, DPA-600 and DPA-700 define the required lifecycle, gate, serialization and rollback behavior.
+- exactly one leading projected region and one following historical region;
+- lifecycle owns projected payload and partition bytes;
+- explicit historical writer and edit policy;
+- append cannot alter partition or projected bytes;
+- stale-plan and competing-PR guards required;
+- no automatic historical merge;
+- rollback inputs recoverable.
 
 ## 5. Region-combination matrix
 
-| Projected region | Manual region | Historical region | Boundary ownership | Result |
+| Projected payload | Manual payload | Historical payload | Partition ownership | Result |
 |---|---|---|---|---|
-| absent | complete document | optional within manual ownership | existing manual contract | PERMITTED manual document |
-| complete document | absent | absent | full target | CONDITIONAL full projection |
-| one disjoint region | one disjoint region | optional within manual region | explicit and non-overlapping | CONDITIONAL hybrid or split projection |
-| leading region | absent | one following region | explicit projected/history boundary | EXCEPTIONAL managed-head projection |
-| multiple projected regions | absent | absent | each region independently registered and non-overlapping | CONDITIONAL hybrid projection |
-| projected region | overlapping manual region | any | ambiguous | PROHIBITED |
-| projected region | unowned bytes | any | incomplete | PROHIBITED |
-| projected region | any | history used as undeclared semantic input | any | PROHIBITED |
-| multiple projected regions computed by one renderer invocation | any | any | any | PROHIBITED |
-| projected append into historical region | any | any | shared or moving boundary | PROHIBITED |
+| absent | complete document | optional under manual contract | existing manual structure | PERMITTED manual |
+| complete document | absent | absent | full-target lifecycle ownership | CONDITIONAL full projection |
+| separate registered target | absent | separate registered target | independent target contracts | CONDITIONAL split projection |
+| one or more regions | one or more regions | optional | lifecycle-owned partition contract | EXCEPTIONAL / CONDITIONAL hybrid |
+| one leading region | absent | one following region | lifecycle-owned partition contract | EXCEPTIONAL / CONDITIONAL managed-head hybrid subtype |
+| overlapping payload regions | any | any | ambiguous | PROHIBITED |
+| any unowned byte | any | any | incomplete | PROHIBITED |
+| renderer emits boundary bytes | any | any | renderer/lifecycle conflict | PROHIBITED |
+| manual or historical writer changes boundaries | any | any | out-of-band partition mutation | PROHIBITED |
 
 ## 6. Authority and write-owner matrix
 
-| Region class | Runtime authority role | Semantic renderer input | Permitted write owner | Prohibited owner or behavior |
+| Class | Authority role | Renderer input | Permitted writer | Prohibited behavior |
 |---|---|---|---|---|
-| Canonical source | owns declared domain facts | yes, when declared | existing authoritative mechanism | renderer mutation; target-derived circular authority |
-| Contract-declared configuration | representation input, not domain-fact authority | yes, when declared and versioned | governed configuration owner | hidden input; unversioned output-affecting state |
-| Projected target or region | bounded authoritative representation after acceptance | no, unless independently declared canonical by another accepted contract | existing document lifecycle | renderer, workflow, evidence producer or ad hoc manual writer |
-| Manual region | human-maintained content under explicit ownership | no by default | governed manual editor | lifecycle projection write without contract |
-| Historical region | evidentiary or human history, not canonical by default | no | explicit governed historical writer | automatic merge, reconstruction as authority or renderer semantic input |
-| Evidence record | supports inspection and audit | no | evidence-producing governed mechanism | production runtime input or target write ownership |
+| Canonical source | owns domain facts | yes when declared | existing authoritative mechanism | renderer mutation or circular target authority |
+| Contract configuration | representation input | yes when declared/versioned | governed configuration owner | hidden or unversioned input |
+| Projected payload | bounded accepted representation | no unless independently canonical | existing lifecycle only | renderer, workflow, evidence or ad hoc manual write |
+| Partition bytes | structural ownership only | no | existing lifecycle only | renderer/manual/history mutation |
+| Manual payload | declared human-maintained content | no by default | governed manual editor | lifecycle projection write without contract |
+| Historical payload | non-canonical history by default | no | governed historical writer | automatic merge or semantic renderer input |
+| Evidence | supports inspection | no | governed evidence producer | runtime input or target ownership |
 
-## 7. Trust-state transition matrix
+## 7. Consumer trust-state transition matrix
 
 | From | To | Permitted by | Required condition | Consumer representation |
 |---|---|---|---|---|
-| none | computed | renderer | declared inputs resolved; no repository mutation | not accepted |
-| computed | planned | lifecycle planner | contract and expected output validated for planning | not accepted |
-| planned | written-unverified | lifecycle writer | explicit mutation authorization, lock and stale-plan revalidation | not accepted |
-| written-unverified | accepted | lifecycle plus governing gates | post-write reproducibility and required checks complete | accepted for stated scope |
-| any pre-accepted state | rejected/abandoned | lifecycle or workflow | failed validation, drift, cancellation or supersession | must not be presented as accepted |
-| accepted | planned replacement | lifecycle planner | new source, target, base or contract context | existing accepted bytes remain accepted until governed replacement |
+| none | `computed` | renderer | declared inputs resolved; no mutation | not accepted |
+| `computed` | `plan-captured` | lifecycle planner | contract and expected output validated for planning | not accepted |
+| `plan-captured` | `written-unverified` | lifecycle writer | explicit authorization, lock and stale-plan revalidation | not accepted |
+| `written-unverified` | `accepted` | lifecycle plus gates | post-write reproducibility and required checks pass | accepted for recorded scope |
+| any non-accepted state | `abandoned` | lifecycle/workflow | failure, cancellation or supersession | never accepted |
+| `abandoned` | `computed` | new refresh attempt | authoritative inputs resolved again | new attempt, not accepted |
+| `accepted` | `computed` | new refresh attempt | changed source, target, base or contract context | prior acceptance record unchanged unless DPA-500 explicitly invalidates it |
 
-No renderer, manual editor or workflow coordinator may directly declare output `accepted`.
+No renderer, manual editor or workflow coordinator may declare `accepted`.
 
-## 8. Invalid combinations
+## 8. Invalid-state mapping
 
-The following combinations are unconditionally prohibited:
+The following matrix checks derive from DPA-200 §12:
 
-1. A projection target with no declared canonical source for a rendered fact.
-2. A renderer that writes its own output.
-3. A target or region with multiple write owners.
-4. Overlapping registered regions.
-5. A byte range not covered by any ownership domain in a hybrid document.
-6. Historical prose used as semantic input without an independent accepted authority decision.
-7. Evidence used as production runtime input.
-8. A workflow treated as semantic write owner.
-9. A target considered accepted before required validation and gates complete.
-10. Automatic textual merge of projected output and historical prose during drift recovery.
-11. Rollback that depends on a newly invented or unavailable history source.
-12. Silent fallback from malformed projection metadata to manual behavior.
-13. One renderer invocation computing multiple independently registered targets.
-14. A region boundary controlled by both projected and manual writers.
-15. Append-only renderer behavior that moves or consumes a historical boundary.
-16. Selection of a production form solely from a candidate-document label or model opinion.
+1. missing/ambiguous authority;
+2. ambiguous target identity;
+3. overlapping regions;
+4. unowned bytes;
+5. duplicate ownership;
+6. malformed or shared-control boundaries;
+7. renderer partition output;
+8. manual/history partition mutation;
+9. undeclared semantic input;
+10. evidence/history as runtime authority;
+11. premature acceptance;
+12. automatic history merge;
+13. unavailable rollback source;
+14. silent malformed-contract fallback;
+15. multi-target renderer invocation;
+16. form selection without DP1 evidence;
+17. parallel subsystem requirement.
 
-## 9. Delegated enforcement ownership
+## 9. Delegated enforcement
 
-| Obligation | Normative owner |
+| Obligation | Owner |
 |---|---|
-| Registry representation and contract validation | DPA-300 |
-| Lifecycle planning, locking, atomic write and direct-write detection | DPA-300 |
-| Renderer input, purity and one-target behavior | DPA-400 |
-| Trust-state gates, drift findings and acceptance criteria | DPA-500 |
-| Cross-branch and cross-PR serialization | DPA-600 |
-| Migration choice, historical ownership and rollback | DPA-700 |
-| DP1 evidence and DP2–DP5 implementation sequence | DPA-800 |
+| Registry, partition and contract validation | DPA-300 |
+| Lifecycle planning, locking, writing and direct-write detection | DPA-300 |
+| Renderer payload-only and one-target behavior | DPA-400 |
+| Trust gates, boundary drift and acceptance invalidation | DPA-500 |
+| Cross-ref serialization | DPA-600 |
+| Migration, history and rollback | DPA-700 |
+| DP1 Discovery, Probe, Assessment and form decision | DPA-800 |
 
-Delegation MUST NOT weaken the DPA-200 authority or ownership model.
+## 10. DP1 evidence checklist
 
-## 10. DP1 evidence checklist for form selection
-
-Before selecting any production document form, DP1 MUST record:
+Before form selection DP1 records:
 
 - exact validation ref;
-- registry identity and compatibility evidence;
-- complete byte-level or region-level target identity;
+- registry and target identity;
 - canonical authority for every rendered fact;
-- contract-declared configuration and fingerprint domain;
-- all readers and their read order;
-- all writers and mutation paths;
-- region boundaries and malformed-boundary behavior;
-- current and historical content classification;
-- consumer trust and gate placement;
-- local and cross-ref concurrency requirements;
+- configuration and fingerprint domain;
+- all readers, writers and order assumptions;
+- partition representation and malformed-boundary behavior;
+- history classification;
+- trust and gate placement;
+- concurrency requirements;
 - rollback source and demonstrated recoverability;
 - reason lower-risk forms were accepted or rejected.
 
-If this evidence is incomplete or contradictory, the required decision is `no migration`.
+Incomplete or contradictory evidence requires `no migration`.
+
+Discovery under ADR-015 inventories facts only. Probe and Assessment determine compatibility and form outcome.
 
 ## 11. Traceability
 
-This matrix primarily operationalizes:
+This matrix operationalizes DPA-INV-001 through DPA-INV-005, DPA-INV-008 through DPA-INV-012, DPA-INV-014, DPA-INV-015 and DPA-INV-017, plus DPA-ADR-013 through DPA-ADR-015.
 
-- `DPA-INV-001` through canonical-source separation;
-- `DPA-INV-002` through `DPA-INV-004` through renderer/lifecycle write separation;
-- `DPA-INV-005` through cross-ref requirements for exceptional forms;
-- `DPA-INV-008` and `DPA-INV-009` through one-target and no-chaining constraints;
-- `DPA-INV-010` through evidence exclusion;
-- `DPA-INV-011` and `DPA-INV-012` through existing-system ownership;
-- `DPA-INV-014` through historical-prose merge prohibition;
-- `DPA-INV-015` through dry-run planning before mutation;
-- `DPA-INV-017` through exact-ref DP1 evidence.
-
-Relevant decisions include DPA-ADR-001, DPA-ADR-002, DPA-ADR-003, DPA-ADR-005, DPA-ADR-006, DPA-ADR-007, DPA-ADR-009 and DPA-ADR-010.
-
-## 12. Review obligations
-
-This matrix remains `draft` until:
-
-- DPA-200 and this matrix use identical form and trust-state terminology;
-- every `CONDITIONAL` entry has a named later-spec owner;
-- negative combinations map to planned validation tests;
-- rollback obligations cover every permitted projected form;
-- no entry implies a current main-repository capability without exact evidence;
-- the matrix and DPA-200 are reviewed against one exact ref.
+Detailed mappings are in `traceability/DPA-200_TRACEABILITY.md`.
