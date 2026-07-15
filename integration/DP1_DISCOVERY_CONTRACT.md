@@ -16,11 +16,28 @@ Discovery is evidence collection only. It is not implementation, migration, adop
 
 Target repository: `vfi64/agentic-project-kit`
 
-Before execution, the operator MUST record one exact fetched `origin/main` commit as the validation ref. Every evidence record MUST name that ref.
+Before any Discovery inspection begins, the operator MUST resolve and record one exact fetched `origin/main` commit as the validation ref.
 
-No claim may be generalized beyond that validation ref without separate evidence.
+The validation ref record is the first mandatory Discovery artifact. No `DISC-*` question may be marked started or complete before that record exists.
 
-## 3. Hard governance boundary
+Every evidence record MUST name that exact validation ref. No claim may be generalized beyond that validation ref without separate evidence.
+
+## 3. Mandatory execution order
+
+Discovery MUST execute in this order:
+
+1. resolve and record one exact validation ref;
+2. execute read-only inspection against only that ref;
+3. create one bounded ADR-011-conforming evidence record for each completed `DISC-*` fact family;
+4. review the record for factual scope, limitations and no-generalization language;
+5. only after the corresponding record exists, reclassify or narrow related entries in `ASSUMPTIONS.md`;
+6. transfer remaining suitability, compatibility and sufficiency questions to the DP1 Probe backlog.
+
+A Discovery session statement, model conclusion or maintainer recollection is not sufficient for reclassification.
+
+Reclassification from `ASSUMPTION` or `NEEDS_MAIN_REPO_VALIDATION` to `VERIFIED` is governed by the existence and scope of a completed evidence record, not by the judgment of the session that performed the inspection.
+
+## 4. Hard governance boundary
 
 Discovery MUST be strictly read-only.
 
@@ -38,11 +55,11 @@ Discovery MUST NOT:
 - select a production document form;
 - create, modify, accept or reject an architecture decision.
 
-Discovery MAY replace an assumption with exact-ref evidence. Evidence remains non-normative.
+Discovery MAY replace an assumption with exact-ref evidence only after the required record exists. Evidence remains non-normative.
 
-## 4. Evidence method
+## 5. Evidence method
 
-Each fact family MUST produce a bounded static record under `evidence/repo-facts/` containing:
+Each completed fact family MUST produce one bounded static record under `evidence/repo-facts/` containing:
 
 - repository and validation ref;
 - inspection date;
@@ -55,9 +72,13 @@ Each fact family MUST produce a bounded static record under `evidence/repo-facts
 - later Probe or Assessment obligation;
 - mandatory no-generalization note.
 
+A fact family that cannot be observed MUST still produce an explicit `not-observable` record containing the attempted method and limitation.
+
 Records MUST follow DPA-ADR-011 discipline and MUST NOT form a parallel evidence database or runtime service.
 
-## 5. Discovery questions
+A record may support `VERIFIED` only for the exact fact, scope and validation ref stated in that record.
+
+## 6. Discovery questions
 
 All questions below are factual inventory questions. Words such as `sufficient`, `compatible`, `safe`, `supports the DPA`, or `conforms` are prohibited in Discovery conclusions.
 
@@ -183,30 +204,35 @@ Record:
 
 Do not invent a new history source.
 
-## 6. Assumption handling
+## 7. Assumption handling
 
-For each related assumption:
+For each related assumption, after the corresponding evidence record exists:
 
 - mark it `VERIFIED` only for the exact validation-ref claim supported by the record;
-- mark it falsified or narrow its scope when evidence contradicts it;
+- mark it falsified or narrow its scope when the record contradicts it;
 - retain `NEEDS_MAIN_REPO_VALIDATION` for unanswered questions;
 - create a Probe obligation when the remaining question asks whether an observed mechanism satisfies a proposed contract.
 
+`ASSUMPTIONS.md` MUST NOT be reclassified from session prose, chat output, reviewer agreement or an uncommitted inspection result.
+
+The reclassification change MUST cite the corresponding `evidence/repo-facts/` record.
+
 Discovery MUST NOT convert an observation directly into `NORMATIVE` architecture.
 
-## 7. Required output set
+## 8. Required output set
 
 The Discovery stage is complete only when:
 
-- one validation ref is recorded;
+- one validation-ref record exists before all other Discovery records;
 - DISC-001 through DISC-010 each have a record or an explicit `not-observable` record with attempted method;
-- `ASSUMPTIONS.md` is synchronized;
+- every changed assumption cites its supporting record;
+- `ASSUMPTIONS.md` is synchronized only after the records are committed;
 - `MAIN_REPOSITORY_CONTEXT.md` is updated only where later work depends on the new exact-ref facts;
 - unresolved compatibility and sufficiency questions are transferred to a DP1 Probe backlog;
 - no main-repository mutation occurred;
 - no production form or architecture outcome was selected.
 
-## 8. Probe boundary
+## 9. Probe boundary
 
 The following are explicitly outside Discovery and require a reviewable DPA-300 or later contract:
 
@@ -217,18 +243,19 @@ The following are explicitly outside Discovery and require a reviewable DPA-300 
 - whether existing gate and workflow mechanisms satisfy DPA-500 and DPA-600;
 - whether a candidate document may adopt a specific migration form.
 
-## 9. Stop conditions
+## 10. Stop conditions
 
 Stop and record a bounded diagnosis if:
 
-- the exact validation ref cannot be established;
+- the exact validation ref cannot be established and recorded first;
 - inspection would require mutation;
 - secrets or private runtime state would need to be copied into the lab;
 - an observed fact cannot be separated from an architectural judgment;
 - the requested question belongs to Probe, Assessment or implementation;
-- evidence would require a parallel evidence service or maintained mirror.
+- evidence would require a parallel evidence service or maintained mirror;
+- a requested assumption reclassification lacks a committed supporting record.
 
-## 10. Traceability
+## 11. Traceability
 
 This contract implements DPA-ADR-015 and supports DPA-ADR-001, DPA-ADR-002, DPA-ADR-007 and DPA-ADR-011.
 
