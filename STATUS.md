@@ -25,15 +25,23 @@ The lab remains non-authoritative for the runtime state of `vfi64/agentic-projec
 
 ## Active DPA-200 work
 
-`specs/dpa/DPA-200-DOCUMENT-MODEL.md` is now `draft`.
+`specs/dpa/DPA-200-DOCUMENT-MODEL.md` remains `draft` and owns the normative document model.
 
-The initial draft defines:
+Completed DPA-200 planning artifacts:
+
+- initial full document-model draft;
+- `specs/dpa/DPA-200-DOCUMENT-FORM-MATRIX.md` with permitted, conditional, exceptional and prohibited form combinations;
+- `traceability/DPA-200_TRACEABILITY.md` with requirement IDs DM-001 through DM-010;
+- explicit form-to-test, gate, evidence and rollback mapping;
+- explicit negative-test obligations for invalid authority, ownership, boundary, trust and rollback states.
+
+The current model defines:
 
 - manual, full-projection, split-projection, managed-head and hybrid forms;
 - complete-target and registered-region identity;
 - target semantics and normalization requirements;
 - canonical-source, configuration and historical-region authority;
-- exclusive write ownership;
+- exclusive byte-range and region write ownership;
 - consumer trust states from computed through accepted;
 - compatibility for manual documents;
 - invalid document-model states;
@@ -41,16 +49,30 @@ The initial draft defines:
 - delegated obligations for DPA-300 through DPA-800;
 - traceability to stable invariants and accepted ADRs.
 
-No production candidate has been assigned a document form. Region support, concrete schemas, readers, writers, lifecycle paths and consumer gate placement remain `NEEDS_MAIN_REPO_VALIDATION`.
+No production candidate has been assigned a document form. Region support, concrete schemas, readers, writers, lifecycle paths, gate placement and rollback sources remain `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Next DPA-200 planning steps
 
-1. Audit the draft against every stable `DPA-INV-*` and accepted ADR.
-2. Add a document-form decision matrix with explicit allowed and prohibited combinations.
-3. Add region-boundary and ownership state diagrams.
-4. Extend Phase B traceability with DPA-200 requirements, tests, gates, evidence and rollback.
-5. Record unresolved DPA-200 decisions in `DECISIONS.md` only where alternatives change normative meaning.
-6. Produce an exact-ref primary review prompt when the draft satisfies its review-ready criteria.
+1. Add region-boundary and ownership state diagrams.
+2. Audit DPA-200 and its matrix against every stable `DPA-INV-*` and accepted ADR.
+3. Decide whether any unresolved alternative requires a new ADR; do not create one for purely delegated implementation detail.
+4. Harmonize the matrix terminology back into the owning DPA-200 text before review-ready promotion.
+5. Produce one exact-ref primary architecture review prompt for DPA-200 and its traceability artifacts.
+6. Adjudicate review findings before changing normative meaning.
+
+## DPA-200 review-readiness tracking
+
+| Criterion | Progress |
+|---|---|
+| Complete document-form definitions | complete |
+| Authority and write ownership rules | complete |
+| Target semantics and invalidity rules | complete |
+| Consumer trust boundary | complete |
+| Decision matrix | complete |
+| Tests, gates, evidence and rollback traceability | complete for initial draft |
+| Region-boundary diagrams | pending |
+| Full invariant and ADR audit | pending |
+| Exact-ref primary review baseline | pending |
 
 ## Phase B restrictions
 
