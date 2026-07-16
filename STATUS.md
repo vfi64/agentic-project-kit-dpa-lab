@@ -2,7 +2,7 @@
 
 Status: active
 
-Status-date: 2026-07-15
+Status-date: 2026-07-16
 
 Superseded-by: n/a
 
@@ -14,7 +14,7 @@ Phase B — Core document-management integration is active on branch `spec/dpa-3
 
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200 and its matrix are `review-ready`.
+DPA-200 and DPA-300 are `review-ready`.
 
 ## DP1 Discovery
 
@@ -32,21 +32,27 @@ DISC-003b established:
 
 No main-repository mutation occurred and no production form was selected.
 
-## DPA-300 review
+## DPA-300 review and promotion
 
 Primary review baseline:
 
 `6682485e3809d42bb17a90b62582b15e4d8fd467`
 
-Primary architecture review:
+Primary architecture review: `ACCEPT_WITH_CHANGES`.
 
-`ACCEPT_WITH_CHANGES`
+Secondary technical verification: `ACCEPT_WITH_CHANGES`.
 
-Secondary technical verification:
+Maintainer adjudication accepted ADR-016 and ADR-017 and synchronized DPA-100, DPA-200, DPA-300, evidence language, traceability and diagrams.
 
-`ACCEPT_WITH_CHANGES`
+Independent post-adjudication verification initially reported a narrow mechanical FAIL because `boundary drift` remained in DPA-200. The bounded synchronization commit corrected that residue, retired the obsolete DPA-200 amendment companion, repaired the canonical file map and added the DISC-003b cross-reference.
 
-No blocker, hidden parallel subsystem, new runtime authority, false implementation claim or production-form preselection was found.
+The diff-scoped re-check is recorded in:
+
+`reviews/consolidated/DPA-300_POST_ADJUDICATION_DIFF_RECHECK.md`
+
+Result: `PASS`.
+
+DPA-300 is therefore promoted to `review-ready`. Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
 
 ## Accepted DPA-300 decisions
 
@@ -61,45 +67,27 @@ Maintainer dispositions:
 4. DISC-003b is executed now rather than left as an ownerless gap;
 5. DPA-100 owns the closed drift vocabulary and `partition drift` replaces `boundary drift`.
 
-## Applied adjudication changes
+## Sequencing decision
 
-Completed:
+The next architecture work is DPA-400 and then DPA-500.
 
-- folded consumer trust states and the expanded drift vocabulary into `DPA-100-FOUNDATIONS.md`;
-- retired the temporary DPA-100 amendment as a normative source;
-- added lifecycle state, acceptance state, interrupted refresh and partition contract terminology;
-- revised DPA-300 for parent partition representation, acceptance state, multi-class drift detection and crash recovery;
-- corrected `written-unverified` timing;
-- prohibited nested projection mutation while retaining bounded outer orchestration reentrancy;
-- added payload, preserved-region and complete-target fingerprints;
-- updated command integration to `an observed writer path` and incorporated DISC-003b;
-- regenerated DPA-300 traceability and diagrams;
-- expanded PROBE-001 and PROBE-002;
-- removed the duplicate DPA-300 stub and added a canonical file map;
-- synchronized assumptions and main-repository context.
+During the current no-Mac period, both may be drafted and reviewed to `review-ready`, with every repository-dependent claim fenced as `NEEDS_MAIN_REPO_VALIDATION`.
 
-DPA-300 remains `draft` until independent post-adjudication verification passes.
+Neither DPA-400 nor DPA-500 may become `stable` before the applicable DP1 Probe evidence exists.
+
+PROBE-001 is governed by DPA-300 and ADR-017. It does not wait for DPA-400. The fixture may carry a syntactically plausible renderer identifier because DPA-300 already defines that registry field; actual renderer resolution and behavior remain DPA-400 and later Probe concerns.
+
+Portability literal fixes in the main repository are a separate maintenance stream and may run in parallel with Probe work during the later Mac phase. The `CURRENT_HANDOFF.md` writer must not be treated as a portability quick fix because its governed replacement is part of DPA/DP2 architecture.
+
+Independent-context verification is retained only as deferred future scope for DPA-800/DPA-900 and later kit governance. It is not a new active specification slice.
 
 ## Next governed step
 
-Run an independent post-adjudication verification against one immutable commit containing:
-
-- DPA-100 consolidation;
-- DPA-300 adjudicated contract;
-- ADR-016 and ADR-017;
-- DISC-003b and synchronized evidence language;
-- DPA-300 traceability and diagrams;
-- updated Probe backlog;
-- primary review, secondary verification and consolidated adjudication record.
-
-The verifier must not be the session that applied the changes.
-
-If verification passes:
-
-1. promote DPA-300 to `review-ready`;
-2. update ROADMAP and STATUS;
-3. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002;
-4. do not execute Probe until the review-ready gate is committed.
+1. complete the DPA-300 branch closeout and place the review-ready result on `main`;
+2. start a clean DPA-400 branch from updated `main`;
+3. draft the renderer contract, traceability and diagrams;
+4. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as non-executed fixtures and expected-result contracts;
+5. keep all Probe execution deferred until a suitable main-repository environment is available.
 
 ## Restrictions
 
@@ -107,6 +95,7 @@ If verification passes:
 - No `.agentic/` initialization or simulated adoption.
 - No production-form selection from Discovery evidence.
 - No Probe before its governing contract is reviewable.
+- No DPA-400 or DPA-500 stability before applicable Probe evidence.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue. The current gate is independent post-adjudication verification.
+Phase B may continue. The active architecture task is DPA-400 preparation.
