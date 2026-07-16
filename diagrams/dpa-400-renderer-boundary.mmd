@@ -1,0 +1,31 @@
+flowchart LR
+    REG[Existing Registry]
+    LC[Existing Lifecycle]
+    MAP[Static Renderer Map]
+    SRC[Declared Canonical Sources]
+    CFG[Contract-declared Configuration]
+    REN[One Renderer Invocation]
+    PAYLOAD[Text or Immutable Bytes]
+    PLAN[Immutable Mutation Plan]
+    PART[Parent PartitionContract]
+    TARGET[One Registered Target]
+    GATE[DPA-500 Gates]
+
+    REG -->|validated renderer identifier| LC
+    LC -->|resolve closed mapping| MAP
+    MAP -->|one reviewed implementation| REN
+    SRC -->|resolved immutable values| LC
+    CFG -->|validated immutable values| LC
+    LC -->|bounded invocation context| REN
+    REN -->|exactly one payload| PAYLOAD
+    PAYLOAD --> LC
+    PART -->|lifecycle-owned reconstruction only| LC
+    LC --> PLAN
+    PLAN -->|DPA-300 governed mutation| TARGET
+    TARGET --> GATE
+
+    REN -. no writes .-> TARGET
+    REN -. no partition bytes .-> PART
+    REN -. no locks or workflow orchestration .-> LC
+    REN -. no evidence or acceptance-state access .-> GATE
+    REN -. no renderer chaining .-> MAP
