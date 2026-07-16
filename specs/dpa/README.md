@@ -13,7 +13,7 @@ No repository-specific statement is `VERIFIED` until validated against an exact 
 | DPA-000 | `DPA-000-VISION.md` | stable |
 | DPA-100 | `DPA-100-FOUNDATIONS.md` | stable |
 | DPA-200 | `DPA-200-DOCUMENT-MODEL.md` | review-ready |
-| DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | draft under post-review adjudication |
+| DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | review-ready |
 | DPA-400 | `DPA-400-RENDERER-CONTRACT.md` | planned |
 | DPA-500 | `DPA-500-FRESHNESS-AND-GATES.md` | planned |
 | DPA-600 | `DPA-600-CONCURRENCY.md` | planned |
