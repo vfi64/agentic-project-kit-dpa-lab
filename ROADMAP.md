@@ -44,7 +44,8 @@ Pending:
 5. prepare renderer-map, determinism and purity fixtures for later DPA-400 Probe work;
 6. execute Probes when a suitable main-repository environment is available;
 7. revalidate DPA-300–500 against Probe evidence before any stability promotion;
-8. continue DPA-600–900 only after Probe evidence has bounded the correction surface.
+8. continue DPA-600–900 only after Probe evidence has bounded the correction surface;
+9. complete the DPA-900 sustainable-governance and review-economics contract before final DPA closeout.
 
 Early Discovery and fixture preparation do not constitute adoption, implementation or migration.
 
@@ -137,6 +138,23 @@ If the candidate is later approved, every then-known writer must be routed throu
 
 No production form is selected.
 
+## Required future objective — sustainable governance and review economics
+
+The DPA closeout MUST include a DPA-900 contract showing how future architecture and governance changes become cheaper to validate without weakening correctness, evidence discipline, authority clarity, rollback safety or Maintainer control.
+
+This objective MUST NOT be satisfied by a vague efficiency statement. DPA-900 must define:
+
+- risk-based review depth;
+- high-risk triggers requiring the full review path;
+- diff-scoped equivalence verification for semantic-preserving refactors;
+- bounded fast paths for low-risk editorial or deterministic generated changes;
+- selective independent-context verification for evidence-bearing high-risk changes;
+- machine-checkable consistency checks;
+- explicit cost controls and fallback to full review when equivalence cannot be proven;
+- measurable success criteria for reduced review cost and reduced synchronization defects.
+
+This is a mandatory future planning item and a DPA closeout criterion. It creates no current DPA-400 or DPA-500 scope and MUST NOT interrupt the active review and Probe sequence.
+
 ## Later-spec obligations
 
 ### DPA-500
@@ -172,7 +190,10 @@ No production form is selected.
 ### DPA-900
 
 - future independent-context verification as governed gate policy;
-- scope and cost controls;
+- sustainable governance and review economics;
+- risk classification and cost controls;
+- mechanically checked consistency and equivalence paths;
+- measurable reduction of future review cost without reduced assurance;
 - no current normative expansion from this future-scope note.
 
 ## Prohibitions
