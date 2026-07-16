@@ -167,15 +167,22 @@ Status: ACCEPTED
 
 Status: ACCEPTED
 
-**Context:** Phase A used repository-fact classifications, document lifecycle states, review progress and recorded-baseline scope as if they were one vocabulary.
+**Context:** Phase A used repository-fact classifications, document lifecycle states, review progress and recorded-baseline scope as if they were one vocabulary. Compound values such as `VERIFIED at recorded baseline` and `SATISFIED FOR INTERNAL BASELINE` were therefore ambiguous.
 
-**Decision:** The lab SHALL use separate closed vocabularies for repository-fact classification, document status, progress status and access outcome. Consumer trust state is separately governed by DPA-ADR-014.
+**Decision:** The lab SHALL use four separate closed vocabularies:
 
-**Alternatives considered:** Combining all states into one lattice; continuing compound prose statuses.
+1. Repository-fact and architecture classifications: `VERIFIED`, `VERIFIED_AT_RECORDED_BASELINE`, `ASSUMPTION`, `NORMATIVE`, `PROPOSAL`, `REJECTED`, `NEEDS_MAIN_REPO_VALIDATION`.
+2. Document status: `planned`, `draft`, `review-ready`, `stable`, `adopted`, and `active` for living governance or planning documents.
+3. Progress status: `pending`, `partial`, `complete`, `blocked`, `not-required`.
+4. Access outcome: `accessible`, `access-blocked`.
 
-**Rationale:** Separate dimensions prevent progress labels from masquerading as evidence classifications.
+`VERIFIED_AT_RECORDED_BASELINE` means an exact historical ref and minimum static evidence record exist, while revalidation against a later validation ref remains mandatory before implementation.
 
-**Consequences:** DPA-100 owns the vocabulary definitions. Governance, status, traceability and review artifacts must use the correct dimension explicitly.
+**Alternatives considered:** Add all progress states to the epistemic lattice; keep only six classifications and downgrade exact-ref baseline facts to assumptions; continue using compound prose statuses.
+
+**Rationale:** Separate dimensions prevent progress labels from masquerading as evidence classifications and preserve useful exact-ref historical context without claiming present implementation truth.
+
+**Consequences:** DPA-100 owns the vocabulary definitions. Governance, status, traceability and review artifacts must use the correct dimension explicitly. `VERIFIED_AT_RECORDED_BASELINE` cannot be used without satisfying DPA-ADR-011.
 
 **Validation status:** NORMATIVE lab governance and terminology decision.
 
@@ -189,13 +196,13 @@ Status: ACCEPTED
 
 **Context:** LAB_EXECUTION_CONTRACT §7, DPA-000 and traceability contained overlapping invariant lists with numbering and grouping drift.
 
-**Decision:** DPA-000 SHALL own the single canonical DPA invariant register with stable IDs `DPA-INV-001` through `DPA-INV-017`.
+**Decision:** DPA-000 SHALL own the single canonical DPA invariant register with stable IDs `DPA-INV-001` through `DPA-INV-017`. LAB_EXECUTION_CONTRACT SHALL reference that register rather than duplicate it. Traceability SHALL contain one row per canonical invariant and MUST NOT redefine or group invariant identities. The rule that lab decisions are planning authority rather than production truth remains a lab-governance rule outside the DPA invariant register.
 
-**Alternatives considered:** LEC ownership; a new standalone invariant file; traceability ownership.
+**Alternatives considered:** LEC ownership; a new standalone invariant file; traceability ownership; continued duplicated lists.
 
-**Rationale:** The normative specification series is the correct owner of architecture meaning.
+**Rationale:** The normative specification series is the correct owner of architecture meaning. Derived governance and traceability views must not become competing sources.
 
-**Consequences:** Later DPA documents, reviews, tests and gates cite stable invariant IDs.
+**Consequences:** Later DPA documents, reviews, tests and gates cite stable invariant IDs. Any invariant meaning change requires an accepted ADR and synchronized DPA-000 update.
 
 **Validation status:** NORMATIVE architecture-governance decision.
 
@@ -207,15 +214,25 @@ Status: ACCEPTED
 
 Status: ACCEPTED
 
-**Context:** The lab recorded exact main-repository refs without the required minimal evidence records.
+**Context:** The lab recorded exact main-repository refs but cited MAIN_REPOSITORY_CONTEXT.md as the reproduction source for its own claims, while governance required records under `evidence/repo-facts/`.
 
-**Decision:** A claim classified `VERIFIED_AT_RECORDED_BASELINE` MUST reference a minimal static record under `evidence/repo-facts/`.
+**Decision:** A claim classified `VERIFIED_AT_RECORDED_BASELINE` MUST reference a minimal static record under `evidence/repo-facts/`. Each record MUST contain:
 
-**Alternatives considered:** No records; rich generated evidence tooling; self-authenticating context documents.
+- repository and exact ref;
+- commit subject;
+- fact family or inspected claim;
+- inspected source paths or reproduction method;
+- inspection date;
+- limitations;
+- mandatory revalidation note.
+
+The lab MUST NOT build a parallel evidence database, generator or runtime evidence service. Missing records require classification as `ASSUMPTION` or `NEEDS_MAIN_REPO_VALIDATION`, not baseline verification.
+
+**Alternatives considered:** No records and downgrade all baseline facts; rich generated evidence tooling; treating MAIN_REPOSITORY_CONTEXT.md as self-authenticating evidence.
 
 **Rationale:** Minimal records remove circular citation while keeping evidence bounded and non-authoritative.
 
-**Consequences:** DP1 still revalidates all implementation-relevant facts against its validation ref.
+**Consequences:** Baseline records must be added before the recorded main-repository facts retain `VERIFIED_AT_RECORDED_BASELINE`. DP1 still revalidates all implementation-relevant facts against its validation ref.
 
 **Validation status:** NORMATIVE evidence-governance decision.
 
@@ -227,17 +244,22 @@ Status: ACCEPTED
 
 Status: ACCEPTED
 
-**Context:** A model-name-specific review requirement became unsatisfiable when one model environment lacked repository access.
+**Context:** A model-name-specific review requirement became unsatisfiable when one model environment lacked repository access. Access failures were also at risk of being misread as architecture verdicts.
 
-**Decision:** Phase reviews SHALL be governed by roles rather than named products: primary architecture review, secondary technical verification, Maintainer adjudication and consolidated review record.
+**Decision:** Phase reviews SHALL be governed by roles rather than named products:
 
-A reviewer may be a model or human. A qualifying review MUST identify an exact ref, reviewed files, method, findings and limitations. `access-blocked` is an access outcome, not an architecture verdict.
+1. Primary architecture review.
+2. Secondary technical verification.
+3. Maintainer adjudication.
+4. Consolidated review record.
 
-**Alternatives considered:** Require named products; count access-blocked outputs as reviews; require model consensus.
+A reviewer may be a model or human. A qualifying review MUST identify an exact ref, reviewed files, method, findings and limitations. `access-blocked` is an access outcome, not an architecture verdict. A named-model review MAY be collected but SHALL NOT be required when the required review role is already satisfied by a qualifying review.
+
+**Alternatives considered:** Require Claude, ChatGPT and Gemini by name; count access-blocked outputs as reviews; require model consensus without maintainer adjudication.
 
 **Rationale:** Stable governance roles outlive product availability and focus review quality on evidence, method and adjudication.
 
-**Consequences:** Review directories may retain model names as storage categories without making those names normative roles.
+**Consequences:** Phase A is satisfied by the Claude primary architecture review and ChatGPT technical verification audit, followed by maintainer adjudication and consolidation. Gemini is not required. Review directories may retain model names as storage categories without making those names normative roles.
 
 **Validation status:** NORMATIVE review-governance decision.
 
