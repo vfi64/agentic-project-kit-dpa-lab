@@ -1,0 +1,403 @@
+name: one-shot-dpa-400-adjudication-sync
+
+on:
+  push:
+    branches:
+      - spec/dpa-400-renderer-contract
+
+permissions:
+  contents: write
+
+jobs:
+  amend:
+    if: github.event.head_commit.message == 'Run governed DPA amendment batch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: spec/dpa-400-renderer-contract
+          fetch-depth: 0
+      - name: Apply governed amendments
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_one(path: str, old: str, new: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one occurrence, found {count}: {old[:80]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # DPA-100: register the renderer version model in the sole vocabulary owner.
+          p = 'specs/dpa/DPA-100-FOUNDATIONS.md'
+          replace_one(p,
+          '### 6.2 Renderer identifier and resolution\n\nA **renderer identifier** is a stable declarative name stored in the projection contract. **Renderer resolution** maps it through a static reviewed mapping. Unknown identifiers MUST fail loud; registry-controlled dynamic imports are prohibited.\n\n### 6.3 Document lifecycle',
+          '''### 6.2 Renderer identity, resolution and versions
+
+A **renderer identifier** is a stable declarative name stored in the projection contract. **Renderer resolution** maps it through a static reviewed mapping. Unknown identifiers MUST fail loud; registry-controlled dynamic imports are prohibited.
+
+A **renderer interface version** identifies the lifecycle-to-renderer callable contract, including the invocation-context and return-envelope shape. It changes when that interface contract changes.
+
+A **renderer semantic version** identifies output-relevant renderer behavior. It MUST change whenever an implementation change can alter output for identical declared inputs. It is the renderer-version token used in contract, plan, acceptance-state and drift fingerprint domains.
+
+**Renderer implementation evidence** identifies the concrete reviewed implementation, for example by repository commit. It is evidence only and MUST NOT replace the renderer semantic version or become a semantic renderer input.
+
+### 6.3 Document lifecycle''')
+          replace_one(p,
+          'A renderer is **deterministic** when identical declared sources, renderer identity and contract-declared configuration produce identical output bytes.',
+          'A renderer is **deterministic** when identical declared sources, renderer identifier, renderer semantic version and contract-declared configuration produce identical output bytes.')
+          replace_one(p,
+          '- **renderer drift**: renderer identity or version fingerprint differs;',
+          '- **renderer drift**: renderer identifier, interface version or semantic version differs from the captured contract or accepted lifecycle state;')
+
+          # DPA-300: restore ratified obligations and synchronize ADR-019 terminology.
+          p = 'specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md'
+          replace_one(p,
+          'Authority: normative DPA specification; primary review, secondary verification, maintainer adjudication and independent post-adjudication verification complete',
+          'Authority: normative DPA specification; review-ready lineage includes independent restructure-equivalence verification and explicit Maintainer ratification')
+          replace_one(p, '- DPA-ADR-001 through DPA-ADR-017;', '- DPA-ADR-001 through DPA-ADR-020;')
+          replace_one(p,
+          'The existing documentation registry owns reviewed declarative projection and partition contracts.',
+          'The existing documentation registry MUST remain the sole authority for reviewed declarative projection and partition contracts.')
+          replace_one(p,
+          '- renderer identifier and renderer contract version;\n- ordered declared canonical sources;\n- ordered contract-declared configuration;\n- target semantics and target-semantics version;\n- lifecycle policy;\n- freshness policy;\n- evidence policy;',
+          '- renderer identifier, renderer interface version and renderer semantic version;\n- ordered declared canonical sources;\n- ordered contract-declared configuration;\n- target semantics and target-semantics version;\n- lifecycle policy identifier;\n- freshness policy identifier;\n- evidence policy identifier;')
+          replace_one(p,
+          '- normalization and line-ending behavior for partition bytes;',
+          '- encoding, normalization and line-ending behavior for partition bytes;')
+          replace_one(p,
+          'Validation is side-effect free and MUST occur before rendering or planning.',
+          'Validation MUST be side-effect free and MUST occur before rendering or planning.')
+          replace_one(p,
+          '''The lifecycle MUST reject:
+
+1. unknown contract schema or compatibility version;
+2. unknown fingerprint algorithm or input-domain version;
+3. unknown renderer identifier or renderer contract version;
+4. executable or dynamic registry content;
+5. ambiguous, duplicate or unsupported target identity;
+6. region targets without exactly one valid parent partition contract;
+7. missing, dangling, duplicate or inconsistent partition-contract references;
+8. regions absent from the parent partition contract's ordered region list;
+9. overlapping regions, unowned bytes or duplicate owners;
+10. independently configured region boundary ownership or representation;
+11. missing canonical sources;
+12. undeclared output-affecting configuration;
+13. incomplete target semantics;
+14. unsupported form/target/partition combination;
+15. renderer-side-effect requirements;
+16. evidence or historical prose as semantic input without an independent accepted authority decision;
+17. silent fallback to manual behavior.''',
+          '''The lifecycle MUST reject:
+
+1. missing required contract or partition fields;
+2. unknown contract or partition schema or compatibility version;
+3. unknown fingerprint algorithm or input-domain version;
+4. unknown renderer identifier, renderer interface version or renderer semantic version;
+5. executable or dynamic registry content;
+6. ambiguous, duplicate or unsupported target identity;
+7. region targets without exactly one valid parent partition contract;
+8. missing, dangling, duplicate or inconsistent partition-contract references;
+9. regions absent from the parent partition contract's ordered region list;
+10. overlapping regions, unowned bytes or duplicate owners;
+11. independently configured region boundary ownership or representation;
+12. missing declared canonical sources;
+13. renderer access to undeclared canonical sources;
+14. undeclared output-affecting configuration;
+15. incomplete target semantics;
+16. unsupported form/target/partition combination;
+17. renderer-side-effect requirements;
+18. evidence or historical prose as semantic input without an independent accepted authority decision;
+19. silent fallback to manual behavior.''')
+          replace_one(p,
+          'Failure before Write leaves the target unchanged.',
+          'Failure before Write MUST leave the target unchanged.')
+          replace_one(p,
+          '- registry entry identity and contract fingerprint;\n- renderer identifier, implementation version and contract version;',
+          '- target identity;\n- registry entry identity and contract fingerprint;\n- renderer identifier, renderer interface version and renderer semantic version;')
+          replace_one(p,
+          '- renderer identity and implementation version;',
+          '- renderer identifier, renderer interface version and renderer semantic version;')
+          replace_one(p,
+          'Later inspection compares current observations independently with the accepted state:',
+          'Later inspection MUST compare current observations independently with the accepted state:')
+          replace_one(p,
+          'Primary decisions include DPA-ADR-001 through DPA-ADR-017.',
+          'Primary decisions include DPA-ADR-001 through DPA-ADR-020.')
+          replace_one(p,
+          '''## 20. Invalid states''',
+          '''## 20. Planned DP1 Probe obligations
+
+The governed Probe backlog and `traceability/DPA-300_TRACEABILITY.md` own the executable Probe recipes. At minimum, PROBE-001 MUST test projection- and partition-contract parser compatibility, and PROBE-002 MUST test lifecycle-owned plan, state, bounded replacement, recovery and writer integration behavior at an exact validation ref.
+
+A Probe result that falsifies a required compatibility mapping MUST return the affected contract to adjudication. Probe evidence MUST NOT silently rewrite architecture.
+
+## 21. Conformance demonstration
+
+A conforming implementation MUST demonstrate:
+
+1. manual registry entries retain existing behavior;
+2. malformed or unknown projection metadata fails loud;
+3. one exact target identity is bound to each plan;
+4. plan identity changes for every covered precondition or output change;
+5. mutation remains dry-run by default and execution is exact-plan-bound;
+6. every production DPA path resolves through Workspace;
+7. every projection mutation uses the existing local lock without nested projection mutation;
+8. only the lifecycle writes projected targets, partition bytes and acceptance state;
+9. complete-file replacement is atomic or Probe-proven equivalent;
+10. preserved bytes remain byte-identical and are revalidated under lock;
+11. successful Write immediately enters `written-unverified`;
+12. post-write verification checks every planned payload, partition, preserved-region and complete-target fingerprint;
+13. acceptance state supports independent multi-class drift comparison;
+14. interrupted refreshes are detected and dispositioned before a new plan;
+15. required evidence remains non-authoritative and bounded;
+16. no renderer, wrapper or workflow assigns `accepted`;
+17. no parallel registry, lifecycle, state, renderer, writer or gate subsystem is introduced.
+
+## 22. Invalid states''')
+          replace_one(p, '## 21. Traceability', '## 23. Traceability')
+          replace_one(p, '## 22. Review-ready exit criteria', '## 24. Review-ready exit criteria')
+          replace_one(p,
+          'All criteria are satisfied for the review-ready scope. Stability remains blocked on the applicable DP1 Probe evidence and subsequent governed revalidation.',
+          'The review-ready criteria are satisfied only together with the accepted restructure-equivalence verification and Maintainer ratification record. Stability remains blocked on the applicable DP1 Probe evidence and subsequent governed revalidation.')
+
+          # DPA-400: apply R4-M01..M03 and the minor/editorial batch.
+          p = 'specs/dpa/DPA-400-RENDERER-CONTRACT.md'
+          replace_one(p,
+          '- DPA-ADR-003, DPA-ADR-004, DPA-ADR-005, DPA-ADR-013, DPA-ADR-014, DPA-ADR-016 and DPA-ADR-017.',
+          '- DPA-ADR-003, DPA-ADR-004, DPA-ADR-005, DPA-ADR-013, DPA-ADR-014, DPA-ADR-016, DPA-ADR-017, DPA-ADR-019 and DPA-ADR-020.')
+          replace_one(p,
+          '- MAY read declared canonical sources;\n- MAY read contract-declared configuration;',
+          '- MAY consume lifecycle-resolved immutable canonical-source values or content-addressed immutable snapshots;\n- MAY consume lifecycle-resolved immutable contract-declared configuration;')
+          replace_one(p,
+          '''A conforming renderer receives an immutable invocation context containing, directly or through bounded value objects:
+
+- the validated projection-contract identity and version;
+- exactly one registered target identity;
+- ordered declared source values or source snapshots;
+- contract-declared configuration;
+- target semantics required to shape the payload;
+- renderer-version identity;
+- representation-only context explicitly permitted by this specification.''',
+          '''A conforming renderer receives an immutable invocation context containing, directly or through bounded value objects:
+
+- the validated projection-contract identity and version;
+- exactly one registered target identity;
+- ordered lifecycle-resolved immutable source values or content-addressed immutable source snapshots;
+- lifecycle-resolved immutable contract-declared configuration;
+- target semantics required to shape the payload;
+- renderer identifier;
+- renderer interface version;
+- renderer semantic version.
+
+No invocation-context values beyond this closed list are permitted without an accepted decision and a synchronized DPA-100/DPA-400 update.''')
+          replace_one(p,
+          '''The invocation context MUST be sufficient to compute output without ambient repository reads.
+
+If a main-repository implementation permits a renderer to receive repository paths, those paths MUST refer only to declared sources already resolved and validated by the lifecycle. The renderer MUST NOT discover additional inputs by traversal, globbing or search.''',
+          '''The invocation context MUST be sufficient to compute output without ambient repository reads.
+
+A renderer MUST NOT open, re-read or re-resolve mutable repository paths. If a large source is represented by a path-like handle, the lifecycle MUST provide an immutable content-addressed snapshot whose bytes are identical to the bytes fingerprinted before invocation. The renderer MUST NOT discover additional inputs by traversal, globbing or search.''')
+          replace_one(p,
+          '- renderer implementation/version;\n- projection contract;',
+          '- renderer identifier and renderer semantic version;\n- projection contract;')
+          replace_one(p,
+          'Read-only internal memoization MAY be used only when cache identity covers the complete invocation fingerprint and cache loss cannot change output semantics. A cache MUST NOT become canonical state or evidence authority.',
+          'Read-only internal memoization MAY be used only when cache identity covers the invocation identity tuple: projection-contract fingerprint, renderer identifier, renderer semantic version, ordered source fingerprints, configuration fingerprint and target-semantics version. Cache loss MUST NOT change output semantics. A cache MUST NOT become canonical state or evidence authority.')
+          replace_one(p,
+          '''## 12. Renderer version and fingerprints
+
+Every renderer implementation used by a projection contract MUST expose a stable renderer-version identity.
+
+The renderer version MUST change when an implementation change can alter output for identical declared inputs.
+
+The renderer-version identity MUST be included in:
+
+- the projection-contract fingerprint or its referenced version domain;
+- immutable mutation plans;
+- acceptance-state records;
+- mutation evidence.
+
+A source-code commit SHA MAY contribute to implementation evidence, but a raw current HEAD MUST NOT substitute for a stable renderer version when the contract requires reproducibility across refs.
+
+The exact version representation remains `NEEDS_MAIN_REPO_VALIDATION`.''',
+          '''## 12. Renderer identity, versions and fingerprints
+
+Every renderer contract MUST distinguish:
+
+1. **renderer identifier** — the stable declarative key resolved by the closed static mapping;
+2. **renderer interface version** — the lifecycle-to-renderer invocation and return-envelope contract;
+3. **renderer semantic version** — output-relevant behavior, which MUST change whenever implementation changes can alter output for identical declared inputs;
+4. **renderer implementation evidence** — the concrete reviewed implementation identity, such as a commit SHA, retained as evidence only.
+
+The renderer identifier, interface version and semantic version MUST be available before invocation. The renderer semantic version MUST be included in the projection-contract fingerprint, immutable mutation plans and acceptance-state records. The interface version MUST be validated for callable compatibility. Renderer implementation evidence MUST be recorded in mutation evidence but MUST NOT substitute for the semantic version or become fingerprint-relevant merely because unrelated repository commits changed.
+
+The exact serialized representation remains `NEEDS_MAIN_REPO_VALIDATION`.''')
+          replace_one(p,
+          '''On failure:
+
+- no mutation plan authorizing a write may be produced;''',
+          '''A failed invocation MAY return a bounded failure envelope containing a stable diagnostic code, a human-readable message and the identity of the offending declared input or contract field. The failure envelope MUST NOT coexist with a success payload, become a lifecycle finding or evidence authority, enter any fingerprint domain or authorize fallback behavior. The lifecycle alone translates it into findings and bounded evidence.
+
+On failure:
+
+- no mutation plan authorizing a write may be produced;''')
+          replace_one(p,
+          '''## 15. Resource bounds
+
+Renderer execution SHOULD have explicit resource bounds appropriate to the target and implementation environment.
+
+A resource policy MAY constrain:
+
+- maximum input size;
+- maximum output size;
+- recursion depth;
+- execution duration;
+- memory use.
+
+A resource limit MUST be deterministic, documented and applied as a validation or execution failure. Exceeding a limit MUST NOT produce truncated accepted output.
+
+Concrete enforcement remains `NEEDS_MAIN_REPO_VALIDATION`.''',
+          '''## 15. Resource bounds and operational aborts
+
+Renderer execution SHOULD have explicit resource controls appropriate to the target and implementation environment.
+
+### 15.1 Semantic bounds
+
+Contract-declared semantic bounds MAY constrain maximum input size, maximum output size, recursion depth or a deterministic step budget. A semantic bound MUST be deterministic, documented, versioned and included in the contract fingerprint when it can affect output or validity. Exceeding it is a renderer validation or execution failure.
+
+### 15.2 Operational safety aborts
+
+Wall-clock timeout, host memory termination and equivalent environment-dependent safety aborts are operational controls, not semantic renderer results. They MUST terminate the attempt as `abandoned`, emit a lifecycle finding, MUST NOT enter a semantic fingerprint domain and MUST NOT produce truncated accepted output. Retrying the identical plan is permitted.
+
+Concrete enforcement remains `NEEDS_MAIN_REPO_VALIDATION`.''')
+          replace_one(p,
+          '''Secrets, credentials and unrelated environment variables MUST NOT be exposed to renderers unless an accepted future contract explicitly establishes a bounded need. Such a future contract MUST preserve determinism and authority boundaries.''',
+          '''Secrets, credentials and unrelated environment variables MUST NOT be exposed to renderers unless an accepted future contract explicitly establishes a bounded need. Such a future contract MUST preserve determinism and authority boundaries.
+
+Capability enforcement has three levels: the immutable closed invocation context is mandatory prevention by construction; deterministic negative-test evidence for every prohibited capability class is mandatory; hard process or operating-system isolation is optional and remains Probe-assessed. Any detected capability violation MUST terminate the attempt as `abandoned`.''')
+          replace_one(p,
+          '20. renderer-version drift invalidating an existing plan;\n21. prior target bytes not becoming semantic input;\n22. evidence and acceptance state not becoming renderer input.',
+          '20. renderer semantic-version drift invalidating an existing plan;\n21. prior target bytes not becoming semantic input;\n22. evidence and acceptance state not becoming renderer input;\n23. lifecycle-visible bytes matching the fingerprinted immutable source snapshot;\n24. operational timeout or memory abort producing `abandoned` without semantic output;\n25. bounded failure-envelope handling without a success payload or authority transfer;\n26. template/import/traversal/shell-injection rejection;\n27. mandatory capability-boundary and negative-test enforcement.')
+          replace_one(p,
+          '- renderer-version representation;',
+          '- renderer interface-version and semantic-version representation;')
+          replace_one(p,
+          '- deterministic resource-bound implementation;',
+          '- deterministic semantic-bound and operational-abort implementation;')
+          replace_one(p,
+          '- renderer-version mismatch;\n- evidence and acceptance-state requirements.',
+          '- renderer interface- or semantic-version mismatch;\n- operational safety aborts and bounded renderer failure diagnostics;\n- evidence and acceptance-state requirements.')
+          replace_one(p,
+          '18. renderer-version mismatch ignored by planning;\n19. prior target or evidence used as semantic fallback;\n20. renderer success represented as acceptance.',
+          '18. renderer semantic-version mismatch ignored by planning;\n19. prior target or evidence used as semantic fallback;\n20. renderer success represented as acceptance;\n21. renderer re-opening a mutable repository path after lifecycle fingerprinting;\n22. operational timeout or memory abort represented as semantic output;\n23. failure diagnostics coexisting with a success payload or becoming authority;\n24. template or formatting input enabling code execution, import, traversal or shell expansion;\n25. capability prohibition claimed without the mandatory invocation boundary and negative-test evidence.')
+
+          # Traceability: synchronize version terms and add missing rows/tests.
+          p = 'traceability/DPA-400_TRACEABILITY.md'
+          replace_one(p,
+          '| RC-013 | Renderer version is stable and fingerprinted. | ADR-004, ADR-005 | plans and acceptance state capture renderer identity/version | version-change invalidates-plan tests | stale renderer version blocks write/acceptance | implementation version and plan fingerprint | restore prior renderer or regenerate plan |',
+          '| RC-013 | Renderer identifier, interface version, semantic version and implementation evidence remain distinct; semantic version is fingerprint-relevant. | ADR-004, ADR-005, ADR-019 | plans and acceptance state capture identifier and semantic version | interface-compatibility and semantic-version-change tests | stale or incompatible renderer blocks write/acceptance | identifier, interface version, semantic version and implementation evidence | restore prior semantic version or regenerate plan |')
+          replace_one(p,
+          '| RC-018 | Resource-bound failure never emits truncated accepted output. | ADR-004 | lifecycle validates output before plan | size/time/memory bound tests | resource failure blocks plan | resource policy and failure result | keep prior accepted target |\n| RC-019 | Repository-specific mapping and enforcement claims remain exact-ref fenced.',
+          '| RC-018 | Deterministic semantic bounds are fingerprinted where relevant; operational safety aborts remain non-semantic and never emit truncated accepted output. | ADR-004, ADR-019 | lifecycle validates output before plan and owns abandoned transitions | size/step-bound tests plus timeout/memory-abort tests | semantic violation blocks plan; operational abort blocks acceptance | semantic policy or operational-abort record | keep prior accepted target and permit governed retry |\n| RC-019 | Repository-specific mapping and enforcement claims remain exact-ref fenced.')
+          replace_one(p,
+          '| RC-019 | Repository-specific mapping and enforcement claims remain exact-ref fenced. | DPA-INV-017; ADR-011, ADR-015 | Probe stage supplies compatibility evidence | classification audit | unsupported claim blocks promotion/stability | exact-ref Probe record | return claim to NEEDS_MAIN_REPO_VALIDATION |',
+          '''| RC-019 | Repository-specific mapping and enforcement claims remain exact-ref fenced. | DPA-INV-017; ADR-011, ADR-015 | Probe stage supplies compatibility evidence | classification audit | unsupported claim blocks promotion/stability | exact-ref Probe record | return claim to NEEDS_MAIN_REPO_VALIDATION |
+| RC-020 | Template and formatting facilities cannot execute code, import modules, traverse the filesystem or expand shell content. | DPA-INV-006, DPA-INV-007; ADR-005 | lifecycle validates declared configuration before invocation | injection corpus negatives | injection capability blocks use | rejected input and diagnostic code | remove invalid template/configuration |
+| RC-021 | Renderer-visible source bytes are the immutable bytes fingerprinted by the lifecycle. | DPA-INV-001; ADR-004, ADR-019 | lifecycle resolves immutable values or content-addressed snapshots | mutation-between-fingerprint-and-invocation race test | identity mismatch blocks plan | source snapshot identity and fingerprint | regenerate from current declared source |
+| RC-022 | Failure diagnostics are bounded, failure-only and non-authoritative. | DPA-INV-002, DPA-INV-010; ADR-003, ADR-019 | lifecycle alone emits findings and evidence | success-plus-diagnostic and authority-escalation negatives | invalid envelope blocks plan | diagnostic code and lifecycle translation result | abandon attempt without mutation |
+| RC-023 | Capability conformance requires a closed invocation boundary plus deterministic negative-test evidence; OS isolation is optional. | DPA-INV-002, DPA-INV-004; ADR-003, ADR-019 | lifecycle constructs invocation context | prohibited-capability matrix | detected capability use blocks acceptance | boundary tier and negative-test evidence | abandon attempt |''')
+          replace_one(p,
+          '20. truncated output accepted after a resource-limit failure.',
+          '20. truncated output accepted after a resource-limit failure;\n21. renderer-visible source bytes differing from lifecycle-fingerprinted bytes;\n22. operational abort represented as a semantic renderer result;\n23. failure diagnostics returned beside a success payload or treated as authority;\n24. template or formatting input enabling code execution, import, traversal or shell expansion;\n25. capability conformance claimed without the closed invocation boundary or deterministic negative tests.')
+
+          # Diagram: remove target-only gate simplification and show versions/state explicitly.
+          Path('diagrams/dpa-400-renderer-boundary.mmd').write_text('''flowchart LR
+    REG[Existing Registry]
+    LC[Existing Lifecycle]
+    MAP[Static Renderer Map]
+    SRC[Immutable Declared Source Values or Snapshots]
+    CFG[Immutable Contract-declared Configuration]
+    VER[Identifier + Interface Version + Semantic Version]
+    REN[One Renderer Invocation]
+    PAYLOAD[One Text or Immutable-Bytes Payload]
+    PLAN[Immutable Mutation Plan]
+    PART[Parent PartitionContract]
+    TARGET[One Registered Target]
+    STATE[Lifecycle-owned Acceptance State]
+    GATE[DPA-500 Gates]
+
+    REG -->|validated contract and renderer identifier| LC
+    LC -->|resolve closed mapping| MAP
+    MAP -->|one reviewed implementation| REN
+    SRC -->|same bytes as lifecycle fingerprint| LC
+    CFG -->|validated immutable values| LC
+    VER --> LC
+    LC -->|closed immutable invocation context| REN
+    REN -->|exactly one payload| PAYLOAD
+    PAYLOAD --> LC
+    PART -->|lifecycle-owned reconstruction only| LC
+    LC --> PLAN
+    PLAN -->|DPA-300 governed mutation| TARGET
+    LC --> STATE
+    TARGET -->|observed bytes| GATE
+    STATE -->|accepted fingerprints and gate-set identity| GATE
+    PLAN -->|planned identities and fingerprints| GATE
+
+    REN -. no writes .-> TARGET
+    REN -. no partition bytes .-> PART
+    REN -. no locks or workflow orchestration .-> LC
+    REN -. no evidence or acceptance-state access .-> STATE
+    REN -. no renderer chaining .-> MAP
+''', encoding='utf-8')
+
+          # Decision index: record the separate decision files without duplicating their bodies.
+          p = Path('DECISIONS.md')
+          text = p.read_text(encoding='utf-8')
+          marker = '**Affected DP slices:** none directly.\n'
+          if text.count(marker) != 1:
+              raise SystemExit('DECISIONS.md: terminal marker mismatch')
+          appendix = '''
+
+## Decision-file index — DPA-ADR-013 through DPA-ADR-020
+
+The following accepted or deferred decisions are maintained in their dedicated files and are normative according to their recorded status:
+
+- DPA-ADR-013 — document-form partition and boundary ownership — ACCEPTED;
+- DPA-ADR-014 — consumer trust-state model — ACCEPTED;
+- DPA-ADR-015 — DP1 staged Discovery, Probe and Assessment — ACCEPTED;
+- DPA-ADR-016 — acceptance state and interrupted recovery — ACCEPTED;
+- DPA-ADR-017 — parent-entry PartitionContract — ACCEPTED;
+- DPA-ADR-018 — independent verification context — DEFERRED PROPOSAL, non-normative;
+- DPA-ADR-019 — renderer input, resource and version model — ACCEPTED;
+- DPA-ADR-020 — promotion commits and equivalence verification — ACCEPTED.
+
+Decision-status vocabulary for this register is `ACCEPTED`, `DEFERRED PROPOSAL` and `REJECTED`. A deferred proposal does not create a current normative obligation.
+'''
+          p.write_text(text.replace(marker, marker + appendix, 1), encoding='utf-8')
+
+          # Status and roadmap record the amendment batch without promotion.
+          for path in ('STATUS.md', 'ROADMAP.md'):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              note = '\n\n## DPA-400 adjudication amendment status\n\nThe governed ADR-019/ADR-020 amendment batch synchronizes DPA-100, DPA-300, DPA-400, traceability, diagrams and the decision index. DPA-400 remains `draft` until an independent post-adjudication verification passes. This is not a promotion commit.\n'
+              if '## DPA-400 adjudication amendment status' not in text:
+                  p.write_text(text.rstrip() + note, encoding='utf-8')
+          PY
+      - name: Commit governed amendment batch
+        shell: bash
+        run: |
+          git config user.name 'dpa-lab-governance-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add specs/dpa/DPA-100-FOUNDATIONS.md \
+                  specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md \
+                  specs/dpa/DPA-400-RENDERER-CONTRACT.md \
+                  traceability/DPA-400_TRACEABILITY.md \
+                  diagrams/dpa-400-renderer-boundary.mmd \
+                  DECISIONS.md STATUS.md ROADMAP.md
+          git diff --cached --check
+          git commit -m 'Apply governed DPA-400 adjudication amendments'
+          git push origin HEAD:spec/dpa-400-renderer-contract
