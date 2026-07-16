@@ -21,45 +21,28 @@ DP1 Discovery is complete for the explicitly inspected scope at:
 
 `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-DISC-001 through DISC-010 and DISC-003b are committed.
-
-DISC-003b established:
-
-- `transfer chat-switch-complete` does not write `CURRENT_HANDOFF.md` in the inspected code at that ref;
-- `transfer admin-refresh-pr` through `_refresh_operational_handoff_docs()` is an observed writer path;
-- global writer-set completeness is not claimed and must be revalidated at Probe time.
+DISC-001 through DISC-010 and DISC-003b are committed. Global writer-set completeness is not claimed and must be revalidated at Probe time.
 
 No main-repository mutation occurred and no production form was selected.
 
 ## DPA-300 closeout
 
-DPA-300 completed:
+DPA-300 completed primary review, secondary verification, Maintainer adjudication, independent post-adjudication verification, bounded synchronization correction and diff-scoped PASS re-check.
 
-- primary architecture review;
-- secondary technical verification;
-- Maintainer adjudication through ADR-016 and ADR-017;
-- independent post-adjudication verification;
-- bounded synchronization correction;
-- diff-scoped re-check with result `PASS`;
-- promotion to `review-ready`.
-
-The complete DPA-300 branch was fast-forwarded to `main` at:
+It is `review-ready` on `main` at:
 
 `aaa60ef2a596ccfbcd8ce1c49096822a0347c040`
 
 Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
 
-## DPA-400 active work
+## DPA-400 review baseline preparation
 
-The active renderer-contract branch was created from updated `main`:
-
-`spec/dpa-400-renderer-contract`
-
-The first DPA-400 baseline now contains:
+The active renderer-contract branch contains:
 
 - `specs/dpa/DPA-400-RENDERER-CONTRACT.md`;
 - `traceability/DPA-400_TRACEABILITY.md`;
-- `diagrams/dpa-400-renderer-boundary.mmd`.
+- `diagrams/dpa-400-renderer-boundary.mmd`;
+- `reviews/consolidated/DPA-400_PRE_REVIEW_AUDIT.md`.
 
 The draft defines:
 
@@ -74,6 +57,20 @@ The draft defines:
 9. renderer-version and fingerprint obligations;
 10. explicit failure and resource-bound contracts.
 
+The internal audit result is:
+
+`PASS_WITH_REVIEW_QUESTIONS`
+
+No foundational contradiction, parallel renderer subsystem, new runtime authority, false implementation claim or production-form preselection was found.
+
+The primary review must examine five explicit questions:
+
+- lifecycle-resolved source values versus renderer-owned source reads;
+- deterministic semantic bounds versus operational wall-clock timeouts;
+- bounded diagnostics without a second semantic output;
+- capability restriction versus post-hoc side-effect detection;
+- renderer-version identity and implementation fingerprinting.
+
 Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`.
 
 DPA-400 may progress to `review-ready` before Probe execution, but MUST NOT become `stable` before relevant renderer compatibility and purity evidence exists at an exact main-repository validation ref.
@@ -84,25 +81,17 @@ PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400
 
 DPA-400 will require later exact-ref evidence for static renderer mapping, capability restriction, determinism, renderer versioning and lifecycle integration.
 
-PROBE fixtures may be prepared during the no-Mac period but must not be represented as executed.
-
-## Parallel streams
-
-Portability literal fixes in the main repository remain a separate later maintenance stream and may run in parallel with Probe work during the Mac phase.
-
-The `CURRENT_HANDOFF.md` writer remains part of DPA/DP2 architecture and MUST NOT be treated as an isolated portability quick fix.
-
-Independent-context verification remains deferred future scope for DPA-800/DPA-900 and later kit governance; it is not a new active specification slice.
+Probe fixtures may be prepared during the no-Mac period but must not be represented as executed.
 
 ## Next governed step
 
-1. complete the DPA-400 normative contract, traceability and diagrams;
-2. run an internal invariant, ADR, failure-mode and cross-artifact audit;
-3. produce one immutable DPA-400 primary-review baseline;
-4. obtain Claude primary architecture review and secondary technical verification;
+1. bind Claude primary architecture review to one immutable DPA-400 baseline commit;
+2. obtain the read-only primary review;
+3. commit the review under `reviews/claude/`;
+4. perform secondary technical verification;
 5. adjudicate findings before normative changes;
-6. promote no further than `review-ready` before applicable Probe evidence;
-7. prepare, but do not execute, bounded renderer and PROBE-001/002 fixtures.
+6. perform required post-adjudication verification;
+7. promote no further than `review-ready` before applicable Probe evidence.
 
 ## Restrictions
 
@@ -113,4 +102,4 @@ Independent-context verification remains deferred future scope for DPA-800/DPA-9
 - No DPA-400 or DPA-500 stability before applicable Probe evidence.
 - No review finding becomes normative without adjudication.
 
-Phase B may continue. The active architecture task is DPA-400 completion and review preparation.
+Phase B may continue. The active gate is DPA-400 primary architecture review.
