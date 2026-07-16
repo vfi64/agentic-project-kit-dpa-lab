@@ -13,7 +13,7 @@ Phase B — Core document-management integration is active on branch `spec/dpa-4
 
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200 and DPA-300 are `review-ready`.
+DPA-200 and DPA-300 are `review-ready`. DPA-400 remains `draft` pending independent post-adjudication verification.
 
 ## DP1 Discovery
 
@@ -25,73 +25,57 @@ DISC-001 through DISC-010 and DISC-003b are committed. Global writer-set complet
 
 No main-repository mutation occurred and no production form was selected.
 
-## DPA-300 closeout
+## DPA-300 lineage closeout
 
-DPA-300 completed primary review, secondary verification, Maintainer adjudication, independent post-adjudication verification, bounded synchronization correction and diff-scoped PASS re-check.
+DPA-300 completed primary review, secondary verification, Maintainer adjudication, independent post-adjudication verification and bounded synchronization re-check.
 
-It is `review-ready` on `main` at:
+The later review-ready restructure was independently compared against the certified text and received `PASS_WITH_EXPLICIT_RATIFICATION`. The Maintainer ratification record restored the dropped target identity, generic required-field rejection, partition encoding declaration, policy identifiers and normative MUST force; it accepted the enumerated strengthenings and restored Probe and conformance pointers.
 
-`aaa60ef2a596ccfbcd8ce1c49096822a0347c040`
+DPA-300 remains `review-ready`. Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
 
-Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
+## DPA-400 review and adjudication
 
-## DPA-400 review baseline preparation
+The immutable primary-review baseline was:
 
-The active renderer-contract branch contains:
+`8c9b6892540895e58be53038c6064648d49a2b57`
 
+Claude's primary review returned `ACCEPT_WITH_CHANGES` with four majors:
+
+1. immutable lifecycle-resolved renderer inputs;
+2. semantic resource bounds separated from operational safety aborts;
+3. renderer identifier/interface-version/semantic-version/implementation-evidence separation;
+4. DPA-300 restructure lineage verification.
+
+All four were accepted. DPA-ADR-019 and DPA-ADR-020 are committed. The DPA-300 equivalence verification returned `PASS_WITH_EXPLICIT_RATIFICATION`, and its complete difference set was dispositioned.
+
+The governed amendment batch now synchronizes:
+
+- `specs/dpa/DPA-100-FOUNDATIONS.md`;
+- `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
 - `specs/dpa/DPA-400-RENDERER-CONTRACT.md`;
 - `traceability/DPA-400_TRACEABILITY.md`;
 - `diagrams/dpa-400-renderer-boundary.mmd`;
-- `reviews/consolidated/DPA-400_PRE_REVIEW_AUDIT.md`.
+- `DECISIONS.md`.
 
-The draft defines:
-
-1. one closed static renderer mapping;
-2. declarative renderer identifiers;
-3. declared-source and contract-configuration inputs only;
-4. text-or-immutable-bytes return values;
-5. one invocation for exactly one registered target;
-6. payload-only output for registered regions;
-7. no writes, locks, subprocesses, network calls, workflow calls, renderer chaining or acceptance assignment;
-8. deterministic and reproducible output;
-9. renderer-version and fingerprint obligations;
-10. explicit failure and resource-bound contracts.
-
-The internal audit result is:
-
-`PASS_WITH_REVIEW_QUESTIONS`
-
-No foundational contradiction, parallel renderer subsystem, new runtime authority, false implementation claim or production-form preselection was found.
-
-The primary review must examine five explicit questions:
-
-- lifecycle-resolved source values versus renderer-owned source reads;
-- deterministic semantic bounds versus operational wall-clock timeouts;
-- bounded diagnostics without a second semantic output;
-- capability restriction versus post-hoc side-effect detection;
-- renderer-version identity and implementation fingerprinting.
+DPA-400 now defines immutable content-addressed inputs, the four-part renderer identity/version model, bounded failure diagnostics, deterministic semantic bounds, non-semantic operational aborts and mandatory capability-boundary plus negative-test evidence.
 
 Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`.
-
-DPA-400 may progress to `review-ready` before Probe execution, but MUST NOT become `stable` before relevant renderer compatibility and purity evidence exists at an exact main-repository validation ref.
 
 ## Probe relationship
 
 PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400.
 
-DPA-400 will require later exact-ref evidence for static renderer mapping, capability restriction, determinism, renderer versioning and lifecycle integration.
+DPA-400 requires later exact-ref evidence for static renderer mapping, capability restriction, determinism, renderer versioning and lifecycle integration before `stable`.
 
 Probe fixtures may be prepared during the no-Mac period but must not be represented as executed.
 
 ## Next governed step
 
-1. bind Claude primary architecture review to one immutable DPA-400 baseline commit;
-2. obtain the read-only primary review;
-3. commit the review under `reviews/claude/`;
-4. perform secondary technical verification;
-5. adjudicate findings before normative changes;
-6. perform required post-adjudication verification;
-7. promote no further than `review-ready` before applicable Probe evidence.
+1. freeze the governed DPA-400 amendment ref;
+2. perform independent post-adjudication verification against that exact ref;
+3. correct only verified residuals through a bounded amendment if necessary;
+4. promote DPA-400 no further than `review-ready` after PASS;
+5. begin DPA-500 drafting and PROBE-001/002 fixture preparation.
 
 ## Restrictions
 
@@ -101,5 +85,6 @@ Probe fixtures may be prepared during the no-Mac period but must not be represen
 - No Probe execution without its governing reviewable contract and suitable environment.
 - No DPA-400 or DPA-500 stability before applicable Probe evidence.
 - No review finding becomes normative without adjudication.
+- A promotion commit changes status surfaces only and MUST NOT change normative text.
 
-Phase B may continue. The active gate is DPA-400 primary architecture review.
+Phase B may continue. The active gate is DPA-400 independent post-adjudication verification.
