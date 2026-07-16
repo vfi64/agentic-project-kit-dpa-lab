@@ -2,14 +2,14 @@
 
 Status: active
 
-Status-date: 2026-07-15
+Status-date: 2026-07-16
 
 ## Specification sequence
 
 1. DPA-000 — Vision and principles — stable
 2. DPA-100 — Foundations and terminology — stable, consolidated
 3. DPA-200 — Document model — review-ready
-4. DPA-300 — Registry and lifecycle integration — draft after adjudication; independent verification pending
+4. DPA-300 — Registry and lifecycle integration — review-ready
 5. DPA-400 — Renderer contract — planned
 6. DPA-500 — Freshness and gates — planned
 7. DPA-600 — Concurrency and workflow serialization — planned
@@ -34,21 +34,60 @@ Completed:
 - evidence-based DPA-300 draft;
 - primary architecture review and secondary technical verification;
 - maintainer adjudication through ADR-016 and ADR-017;
-- normative and derived artifact consolidation.
+- independent post-adjudication verification, bounded synchronization fix and diff-scoped PASS re-check;
+- DPA-300 `review-ready` promotion.
 
 Pending:
 
-1. independent post-adjudication verification by a verifier that did not apply the changes;
-2. DPA-300 `review-ready` promotion if verification passes;
-3. preparation and execution of PROBE-001 and the DPA-300-owned subset of PROBE-002;
-4. DPA-400 drafting from DPA-300 and Probe evidence;
-5. DPA-500 drafting with accepted-state, recovery and drift findings.
+1. complete the DPA-300 branch closeout and update `main`;
+2. draft and review DPA-400 to no more than `review-ready` before applicable Probe evidence;
+3. draft and review DPA-500 to no more than `review-ready` before applicable Probe evidence;
+4. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
+5. execute PROBE-001/002 when a suitable main-repository environment is available;
+6. revalidate DPA-300–500 against Probe evidence before any stability promotion;
+7. continue DPA-600–900 only after the Probe evidence has bounded the correction surface.
 
-Early Discovery does not constitute adoption, implementation or migration.
+Early Discovery and fixture preparation do not constitute adoption, implementation or migration.
+
+## Probe and specification relationship
+
+PROBE-001 tests the real registry parser and validator against the DPA-300/ADR-017 `ProjectionContract` and `PartitionContract` serialization proposal.
+
+DPA-400 does not gate PROBE-001. A PROBE-001 fixture needs only a syntactically plausible renderer identifier because DPA-300 already defines that field. Renderer resolution and runtime behavior remain DPA-400 concerns.
+
+DPA-400 and DPA-500 may be fully drafted and reviewed during the no-Mac period. Repository-dependent claims MUST remain `NEEDS_MAIN_REPO_VALIDATION`, and neither specification may become `stable` before the relevant Probe evidence is available and adjudicated.
+
+## Parallel main-repository maintenance stream
+
+Verified kit deficiencies fall into separate work classes:
+
+### Architecture/DPA stream
+
+- governed content writer;
+- lifecycle-owned bounded replacement for candidate projections;
+- semantic freshness and projection gates;
+- `CURRENT_HANDOFF.md` writer adaptation through DP2.
+
+These MUST follow DPA and Probe contracts. The handoff writer MUST NOT be patched as an isolated portability quick fix.
+
+### Portability maintenance stream
+
+- hard-coded registry paths that bypass Workspace;
+- boot-source and profile assumptions requiring namespace-profile review;
+- additional direct path literals in protected planning, GUI readiness and removed-source audit paths.
+
+These are ordinary maintenance slices and may run in parallel with Probe work during the Mac/Codex phase, provided they do not pre-empt DPA architecture.
+
+### Adoption and project-maturity stream
+
+- namespace-profile habitability;
+- first external-repository adoption evidence;
+- bus-factor and repeatability concerns;
+- later CSC validation.
 
 ## DPA-300 adjudicated architecture
 
-DPA-300 now defines:
+DPA-300 defines:
 
 - optional projection contracts in the existing registry;
 - one parent-entry partition contract for multi-region documents;
@@ -88,23 +127,26 @@ No production form is selected.
 ### DPA-400
 
 - static renderer resolution;
-- payload-only purity;
-- declared sources/configuration;
-- no partition bytes or nested renderer invocation.
+- declared canonical sources and contract-declared configuration;
+- pure payload-only output;
+- exactly one registered target per invocation;
+- no partition bytes, writes, locks, workflow calls, evidence authority or nested renderer invocation;
+- deterministic and reproducible output contracts;
+- fail-loud behavior for unknown identifiers and undeclared inputs.
 
 ### DPA-500
 
 - findings and gates for all drift classes;
-- acceptance-state absence/tamper;
+- acceptance-state absence or tamper;
 - interrupted refresh and evidence failure;
 - transition to `accepted` only after complete gates;
-- no time-only hard failure.
+- staged enforcement and no time-only hard failure.
 
 ### DPA-600
 
 - base and cross-ref revalidation;
 - competing-PR serialization;
-- interaction with local plan/recovery state.
+- interaction with local plan and recovery state.
 
 ### DPA-700
 
@@ -118,7 +160,14 @@ No production form is selected.
 - DP1 stage exit criteria;
 - exact-ref Probe recipes;
 - DP2 implementation of acceptance state, partition contracts and recovery;
-- CURRENT_HANDOFF writer inventory and command adaptation.
+- CURRENT_HANDOFF writer inventory and command adaptation;
+- possible later risk-based independent-verification rule for evidence-bearing DP2–DP5 workflows.
+
+### DPA-900
+
+- future independent-context verification as governed gate policy;
+- scope, cost controls and relationship to deterministic tests, Maintainer adjudication and real-repository Probes;
+- no current normative expansion from this future-scope note.
 
 ## Prohibitions
 
@@ -126,5 +175,7 @@ No production form is selected.
 - No `.agentic/` initialization before adoption.
 - No production-form selection from Discovery or Probe capability alone.
 - No parallel registry, lifecycle, state, evidence, command or gate system.
-- No Probe before DPA-300 review-ready.
+- No Probe before its governing specification is reviewable.
+- No DPA-400 or DPA-500 stability before applicable Probe evidence.
+- No new active specification slice solely for independent-context verification during DPA-400 work.
 - No review prose becomes normative without adjudication.
