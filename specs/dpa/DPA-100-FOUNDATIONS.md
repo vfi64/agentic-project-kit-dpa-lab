@@ -2,7 +2,7 @@
 
 Status: stable
 
-Status-date: 2026-07-15
+Status-date: 2026-07-16
 
 Superseded-by: n/a
 
@@ -186,9 +186,15 @@ A **renderer** is statically reviewed code that accepts resolved declared source
 
 It MUST NOT write, lock, commit, invoke workflows, trigger another renderer or invent canonical facts.
 
-### 6.2 Renderer identifier and resolution
+### 6.2 Renderer identity, resolution and versions
 
 A **renderer identifier** is a stable declarative name stored in the projection contract. **Renderer resolution** maps it through a static reviewed mapping. Unknown identifiers MUST fail loud; registry-controlled dynamic imports are prohibited.
+
+A **renderer interface version** identifies the lifecycle-to-renderer callable contract, including the invocation-context and return-envelope shape. It changes when that interface contract changes.
+
+A **renderer semantic version** identifies output-relevant renderer behavior. It MUST change whenever an implementation change can alter output for identical declared inputs. It is the renderer-version token used in contract, plan, acceptance-state and drift fingerprint domains.
+
+**Renderer implementation evidence** identifies the concrete reviewed implementation, for example by repository commit. It is evidence only and MUST NOT replace the renderer semantic version or become a semantic renderer input.
 
 ### 6.3 Document lifecycle
 
@@ -214,7 +220,7 @@ The **consumer trust boundary** is the point at which projected bytes may be tre
 
 ### 7.1 Deterministic
 
-A renderer is **deterministic** when identical declared sources, renderer identity and contract-declared configuration produce identical output bytes.
+A renderer is **deterministic** when identical declared sources, renderer identifier, renderer semantic version and contract-declared configuration produce identical output bytes.
 
 ### 7.2 Reproducible
 
@@ -236,7 +242,7 @@ A **validation ref** is the exact fetched main-repository commit against which r
 - **source drift**: one or more declared source fingerprints differ;
 - **target drift**: target bytes differ from the captured or accepted output while the distinction from source drift is evaluated independently;
 - **contract drift**: projection-contract semantics differ;
-- **renderer drift**: renderer identity or version fingerprint differs;
+- **renderer drift**: renderer identifier, interface version or semantic version differs from the captured contract or accepted lifecycle state;
 - **partition drift**: partition-contract or lifecycle-owned partition bytes differ;
 - **ownership drift**: the declared byte-owner mapping differs.
 
