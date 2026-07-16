@@ -9,7 +9,7 @@ Status-date: 2026-07-16
 2. DPA-100 — Foundations and terminology — stable, consolidated
 3. DPA-200 — Document model — review-ready
 4. DPA-300 — Registry and lifecycle integration — review-ready
-5. DPA-400 — Renderer contract — draft
+5. DPA-400 — Renderer contract — draft under primary review preparation
 6. DPA-500 — Freshness and gates — planned
 7. DPA-600 — Concurrency and workflow serialization — planned
 8. DPA-700 — Migration and rollback — planned
@@ -30,16 +30,15 @@ Completed:
 - DP1 read-only Discovery at `6a9da7d…`;
 - DISC-001 through DISC-010 and DISC-003b;
 - assumptions, main-repository context and Probe backlog synchronization;
-- DPA-300 primary review, verification, adjudication and correction;
-- DPA-300 diff-scoped PASS re-check and `review-ready` promotion;
-- DPA-300 branch closeout and fast-forward to `main` at `aaa60ef2…`;
-- clean DPA-400 branch creation from updated `main`;
-- first DPA-400 normative contract, traceability and boundary diagram.
+- DPA-300 review, verification, adjudication, correction and review-ready promotion;
+- DPA-300 closeout to `main` at `aaa60ef2…`;
+- DPA-400 normative contract, traceability and renderer-boundary diagram;
+- DPA-400 internal invariant, ADR, failure-mode, traceability and cross-artifact audit.
 
 Pending:
 
-1. complete DPA-400 internal audit and review baseline;
-2. review and adjudicate DPA-400 to no more than `review-ready` before applicable Probe evidence;
+1. bind the DPA-400 primary review to one immutable baseline;
+2. review, verify and adjudicate DPA-400 to no more than `review-ready` before applicable Probe evidence;
 3. draft and review DPA-500 to no more than `review-ready` before applicable Probe evidence;
 4. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
 5. prepare renderer-map, determinism and purity fixtures for later DPA-400 Probe work;
@@ -57,7 +56,7 @@ DPA-400 does not gate PROBE-001. A PROBE-001 fixture needs only a syntactically 
 
 DPA-400 and DPA-500 may be fully drafted and reviewed during the no-Mac period. Repository-dependent claims MUST remain `NEEDS_MAIN_REPO_VALIDATION`, and neither specification may become `stable` before the relevant Probe evidence is available and adjudicated.
 
-## DPA-400 active work
+## DPA-400 primary-review scope
 
 The renderer contract owns:
 
@@ -76,17 +75,26 @@ Current artifacts:
 
 - `specs/dpa/DPA-400-RENDERER-CONTRACT.md`;
 - `traceability/DPA-400_TRACEABILITY.md`;
-- `diagrams/dpa-400-renderer-boundary.mmd`.
+- `diagrams/dpa-400-renderer-boundary.mmd`;
+- `reviews/consolidated/DPA-400_PRE_REVIEW_AUDIT.md`.
+
+The internal audit result is `PASS_WITH_REVIEW_QUESTIONS`.
+
+Primary review must independently examine:
+
+1. whether renderers consume immutable lifecycle-resolved values or may open declared source paths themselves;
+2. how deterministic semantic limits differ from operational timeouts;
+3. whether a bounded diagnostics envelope is needed;
+4. whether side-effect conformance requires prevention, detection or equivalent evidence;
+5. whether renderer-version identity needs a stronger semantic-version / implementation-fingerprint relation.
 
 Next DPA-400 milestones:
 
-1. internal invariant, ADR, terminology, failure-mode and cross-artifact audit;
-2. synchronization of any audit corrections;
-3. immutable primary-review ref;
-4. Claude primary architecture review;
-5. secondary verification and Maintainer adjudication;
-6. post-adjudication verification;
-7. promotion to at most `review-ready` before renderer Probe evidence.
+1. immutable primary-review ref;
+2. Claude primary architecture review;
+3. secondary verification and Maintainer adjudication;
+4. post-adjudication verification;
+5. promotion to at most `review-ready` before renderer Probe evidence.
 
 ## Parallel main-repository maintenance stream
 
