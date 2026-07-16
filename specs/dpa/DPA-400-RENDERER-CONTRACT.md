@@ -2,13 +2,13 @@
 
 Status: draft
 Status-date: 2026-07-16
-Authority: normative DPA specification, subject to review and Probe evidence
+Authority: normative DPA specification, subject to post-adjudication verification and Probe evidence
 
 ## 1. Purpose
 
 This specification defines the renderer contract for the Document Projection Architecture.
 
-A renderer is a statically resolved, side-effect-free computation that reads only declared semantic inputs and contract-declared configuration and returns text or bytes for exactly one registered projection target.
+A renderer is a statically resolved, side-effect-free computation that consumes only lifecycle-resolved immutable declared semantic inputs and contract-declared configuration and returns text or bytes for exactly one registered projection target.
 
 This specification extends the existing documentation-management architecture. It does not create a plugin framework, a second registry, a second lifecycle, a command family, a state authority or a write path.
 
@@ -19,10 +19,10 @@ Concrete module names, callable signatures, renderer identifiers and implementat
 DPA-400 depends on:
 
 - DPA-000 for the canonical invariants;
-- DPA-100 for authority, source, configuration, determinism, fingerprint and failure vocabulary;
+- DPA-100 for authority, source, configuration, renderer-version, determinism, fingerprint and failure vocabulary;
 - DPA-200 for target identity, document forms, partition ownership and target semantics;
 - DPA-300 for registry integration, lifecycle phase ordering, immutable plans, stale-plan guards, acceptance state and recovery;
-- DPA-ADR-003, DPA-ADR-004, DPA-ADR-005, DPA-ADR-013, DPA-ADR-014, DPA-ADR-016 and DPA-ADR-017.
+- DPA-ADR-003, DPA-ADR-004, DPA-ADR-005, DPA-ADR-013, DPA-ADR-014, DPA-ADR-016, DPA-ADR-017, DPA-ADR-019 and DPA-ADR-020.
 
 ## 3. Scope
 
@@ -37,7 +37,7 @@ DPA-400 owns:
 7. one-invocation/one-target behavior;
 8. payload-only region output;
 9. renderer failure classification at the architecture boundary;
-10. renderer-version and fingerprint obligations;
+10. renderer identifier, interface-version, semantic-version and implementation-evidence obligations;
 11. renderer test and conformance obligations.
 
 DPA-400 does not own:
@@ -57,8 +57,8 @@ A renderer has projection authority only for the bytes it computes under one val
 
 A renderer:
 
-- MAY read declared canonical sources;
-- MAY read contract-declared configuration;
+- MAY consume lifecycle-resolved immutable canonical-source values or content-addressed immutable snapshots;
+- MAY consume lifecycle-resolved immutable contract-declared configuration;
 - MUST return text or bytes only;
 - MUST NOT write repository files, lifecycle state, registry state, evidence, logs used as runtime authority or acceptance state;
 - MUST NOT acquire locks;
@@ -79,7 +79,7 @@ Every projection contract MUST declare one renderer identifier.
 
 The identifier MUST be:
 
-- stable within the contract version;
+- stable within its declared compatibility scope;
 - declarative;
 - reviewable in registry content;
 - resolvable through a static mapping owned by reviewed main-repository code;
@@ -118,17 +118,20 @@ A conforming renderer receives an immutable invocation context containing, direc
 
 - the validated projection-contract identity and version;
 - exactly one registered target identity;
-- ordered declared source values or source snapshots;
-- contract-declared configuration;
+- ordered lifecycle-resolved immutable source values or content-addressed immutable source snapshots;
+- lifecycle-resolved immutable contract-declared configuration;
 - target semantics required to shape the payload;
-- renderer-version identity;
-- representation-only context explicitly permitted by this specification.
+- renderer identifier;
+- renderer interface version;
+- renderer semantic version.
+
+No invocation-context values beyond this closed list are permitted without an accepted decision and synchronized DPA-100 and DPA-400 changes.
 
 A renderer MUST NOT receive mutable lifecycle, Workspace, registry, lock, Git client, filesystem writer, subprocess, network or gate objects.
 
 The invocation context MUST be sufficient to compute output without ambient repository reads.
 
-If a main-repository implementation permits a renderer to receive repository paths, those paths MUST refer only to declared sources already resolved and validated by the lifecycle. The renderer MUST NOT discover additional inputs by traversal, globbing or search.
+A renderer MUST NOT open, re-read or re-resolve mutable repository paths. If a large source is represented by a path-like handle, the lifecycle MUST provide an immutable content-addressed snapshot whose bytes are identical to the bytes fingerprinted before invocation. The renderer MUST NOT discover additional inputs by traversal, globbing or search.
 
 ## 7. Declared inputs
 
@@ -136,7 +139,7 @@ If a main-repository implementation permits a renderer to receive repository pat
 
 Every semantic input that can change output facts MUST be declared by the projection contract.
 
-The lifecycle MUST resolve and fingerprint declared sources before renderer invocation.
+The lifecycle MUST resolve and fingerprint declared sources before renderer invocation. The renderer-visible value or snapshot MUST represent exactly those fingerprinted bytes.
 
 A renderer MUST reject or fail when a required source value is absent or structurally invalid. It MUST NOT substitute:
 
@@ -172,7 +175,7 @@ Where representation legitimately depends on one of these values, the value MUST
 
 ### 8.1 Return type
 
-A renderer MUST return exactly one of:
+A successful renderer invocation MUST return exactly one of:
 
 - Unicode text governed by an explicit encoding step in the lifecycle; or
 - immutable bytes.
@@ -181,7 +184,7 @@ A renderer MUST NOT return:
 
 - a path;
 - a file handle;
-- a stream with external side effects;
+- a stream unless it is fully materialized into an immutable side-effect-free byte buffer before crossing the renderer boundary;
 - a mutation callback;
 - a command;
 - a lifecycle finding as a substitute for output;
@@ -218,9 +221,10 @@ A renderer returning empty output where the contract prohibits it MUST cause val
 
 For identical:
 
-- renderer implementation/version;
+- renderer identifier and renderer semantic version;
+- renderer interface version compatible with the same invocation contract;
 - projection contract;
-- declared source values;
+- declared source values or immutable snapshots;
 - contract-declared configuration;
 - target-semantics version;
 
@@ -259,7 +263,7 @@ During invocation it MUST NOT:
 11. invoke subprocesses or shell commands;
 12. modify acceptance state or trust state.
 
-Read-only internal memoization MAY be used only when cache identity covers the complete invocation fingerprint and cache loss cannot change output semantics. A cache MUST NOT become canonical state or evidence authority.
+Read-only internal memoization MAY be used only when cache identity covers the invocation identity tuple: projection-contract fingerprint, renderer identifier, renderer semantic version, ordered source fingerprints, configuration fingerprint and target-semantics version. Cache loss MUST NOT change output semantics. A cache MUST NOT become canonical state or evidence authority.
 
 ## 11. One invocation, one registered target
 
@@ -275,22 +279,18 @@ A renderer MUST NOT:
 
 When multiple targets derive from the same canonical sources, each target requires its own registered contract, invocation, plan and lifecycle transition. Workflow orchestration MAY coordinate these refreshes, but the renderers remain independent.
 
-## 12. Renderer version and fingerprints
+## 12. Renderer identity, versions and fingerprints
 
-Every renderer implementation used by a projection contract MUST expose a stable renderer-version identity.
+Every renderer contract MUST distinguish:
 
-The renderer version MUST change when an implementation change can alter output for identical declared inputs.
+1. **renderer identifier** — the stable declarative key resolved by the closed static mapping;
+2. **renderer interface version** — the lifecycle-to-renderer invocation and return-envelope contract;
+3. **renderer semantic version** — output-relevant behavior, which MUST change whenever implementation changes can alter output for identical declared inputs;
+4. **renderer implementation evidence** — the concrete reviewed implementation identity, such as a commit SHA, retained as evidence only.
 
-The renderer-version identity MUST be included in:
+The renderer identifier, interface version and semantic version MUST be available before invocation. The renderer semantic version MUST be included in the projection-contract fingerprint, immutable mutation plans and acceptance-state records. The interface version MUST be validated for callable compatibility. Renderer implementation evidence MUST be recorded in mutation evidence but MUST NOT substitute for the semantic version or become fingerprint-relevant merely because unrelated repository commits changed.
 
-- the projection-contract fingerprint or its referenced version domain;
-- immutable mutation plans;
-- acceptance-state records;
-- mutation evidence.
-
-A source-code commit SHA MAY contribute to implementation evidence, but a raw current HEAD MUST NOT substitute for a stable renderer version when the contract requires reproducibility across refs.
-
-The exact version representation remains `NEEDS_MAIN_REPO_VALIDATION`.
+The exact serialized representation remains `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## 13. Validation before and after rendering
 
@@ -298,8 +298,9 @@ Before invocation, the lifecycle MUST validate:
 
 - the renderer identifier;
 - static mapping uniqueness;
-- renderer-version availability;
-- declared source completeness;
+- renderer interface-version compatibility;
+- renderer semantic-version availability;
+- declared source completeness and immutable identity;
 - configuration schema and version;
 - target semantics;
 - target identity;
@@ -313,7 +314,7 @@ After invocation and before plan capture, the lifecycle MUST validate:
 - normalization rules;
 - payload-only behavior for region targets;
 - output fingerprint;
-- size or bounded-resource policy where governed.
+- semantic resource-bound policy where governed.
 
 A renderer MUST NOT silently coerce invalid sources or invalid output into a valid-looking projection.
 
@@ -324,13 +325,22 @@ Renderer failures are explicit non-accepted outcomes.
 A renderer invocation may fail because of:
 
 - missing or invalid declared input;
-- unknown renderer identity or version;
+- unknown renderer identifier or incompatible interface or semantic version;
 - invalid configuration;
 - deterministic computation error;
 - invalid output type;
 - target-semantics violation;
 - detected side effect;
-- resource-bound violation.
+- semantic resource-bound violation;
+- operational safety abort.
+
+A failed invocation MAY return a bounded failure envelope containing:
+
+- a stable diagnostic code;
+- a human-readable message;
+- the identity of the offending declared input or contract field when known.
+
+The failure envelope MUST NOT coexist with a success payload, become a lifecycle finding or evidence authority, enter any fingerprint domain or authorize fallback behavior. The lifecycle alone translates it into findings and bounded evidence.
 
 On failure:
 
@@ -343,23 +353,32 @@ On failure:
 
 DPA-500 owns finding identifiers, severity and gate consequences.
 
-## 15. Resource bounds
+## 15. Resource bounds and operational aborts
 
-Renderer execution SHOULD have explicit resource bounds appropriate to the target and implementation environment.
+Renderer execution SHOULD have explicit resource controls appropriate to the target and implementation environment.
 
-A resource policy MAY constrain:
+### 15.1 Semantic bounds
 
-- maximum input size;
-- maximum output size;
-- recursion depth;
-- execution duration;
-- memory use.
+Contract-declared semantic bounds MAY constrain maximum input size, maximum output size, recursion depth or a deterministic step budget.
 
-A resource limit MUST be deterministic, documented and applied as a validation or execution failure. Exceeding a limit MUST NOT produce truncated accepted output.
+A semantic bound MUST be deterministic, documented, versioned and included in the contract fingerprint when it can affect output or validity. Exceeding it is a renderer validation or execution failure.
+
+### 15.2 Operational safety aborts
+
+Wall-clock timeout, host memory termination and equivalent environment-dependent safety aborts are operational controls, not semantic renderer results.
+
+They MUST:
+
+- terminate the attempt as `abandoned`;
+- emit a lifecycle finding;
+- remain outside semantic fingerprint domains;
+- never produce truncated accepted output.
+
+Retrying the identical plan is permitted.
 
 Concrete enforcement remains `NEEDS_MAIN_REPO_VALIDATION`.
 
-## 16. Security and isolation
+## 16. Security, isolation and capability enforcement
 
 Registry data MUST NOT select arbitrary executable code.
 
@@ -368,6 +387,14 @@ Renderers MUST treat declared source text as data, not executable instructions.
 Template or formatting facilities MUST NOT permit arbitrary code execution, imports, filesystem traversal or shell expansion.
 
 Secrets, credentials and unrelated environment variables MUST NOT be exposed to renderers unless an accepted future contract explicitly establishes a bounded need. Such a future contract MUST preserve determinism and authority boundaries.
+
+Capability enforcement has three levels:
+
+1. **mandatory construction boundary** — the lifecycle supplies only the closed immutable invocation context from §6;
+2. **mandatory conformance evidence** — deterministic negative tests cover each prohibited capability class;
+3. **optional hard isolation** — process or operating-system isolation may be adopted when Probe evidence supports it.
+
+Any detected capability violation MUST terminate the attempt as `abandoned`.
 
 ## 17. Conformance tests
 
@@ -392,9 +419,14 @@ A conforming implementation MUST include tests for:
 17. partition-byte rejection;
 18. empty-output policy;
 19. malformed configuration rejection;
-20. renderer-version drift invalidating an existing plan;
-21. prior target bytes not used as semantic fallback;
-22. evidence and acceptance state not used as inputs.
+20. renderer semantic-version drift invalidating an existing plan;
+21. prior target bytes not becoming semantic input;
+22. evidence and acceptance state not becoming renderer input;
+23. renderer-visible bytes matching the fingerprinted immutable source snapshot;
+24. operational timeout or memory abort producing `abandoned` without semantic output;
+25. bounded failure-envelope handling without a success payload or authority transfer;
+26. template/import/traversal/shell-injection rejection;
+27. mandatory invocation-boundary and capability-negative-test enforcement.
 
 Tests MAY use fakes or capability-restricted contexts, but the production boundary MUST provide equivalent guarantees.
 
@@ -417,10 +449,10 @@ The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
 - static renderer-map location and representation;
 - callable signature and capability restriction mechanism;
-- renderer-version representation;
+- renderer interface-version and semantic-version representation;
 - actual existing renderer candidates and reuse suitability;
 - enforcement of filesystem, network and subprocess prohibition;
-- deterministic resource-bound implementation;
+- deterministic semantic-bound and operational-abort implementation;
 - integration with the observed command and lifecycle surfaces;
 - finding and gate mapping;
 - exact tests and CI placement.
@@ -433,12 +465,13 @@ No claim in this document states that the current main repository already confor
 
 DPA-500 MUST define findings and gates for:
 
-- unknown or changed renderer identity;
+- unknown or changed renderer identifier;
 - renderer output drift;
 - nondeterministic output;
 - invalid return type;
 - side-effect or undeclared-input violations;
-- renderer-version mismatch;
+- renderer interface- or semantic-version mismatch;
+- operational safety aborts and bounded renderer failure diagnostics;
 - evidence and acceptance-state requirements.
 
 ### DPA-600
@@ -447,7 +480,7 @@ DPA-600 MUST ensure renderer output is never integrated from a stale base, sourc
 
 ### DPA-700
 
-DPA-700 MUST define rollback consequences when renderer behavior changes or a prior renderer version is no longer executable.
+DPA-700 MUST define rollback consequences when renderer behavior changes or a prior renderer semantic version is no longer executable.
 
 ### DPA-800
 
@@ -468,7 +501,7 @@ The following are invalid:
 3. renderer invocation before contract validation;
 4. undeclared semantic input;
 5. ambient repository discovery;
-6. time-, random-, environment- or host-dependent output not declared by contract;
+6. time-, random-, environment- or host-dependent semantic output not declared by contract;
 7. mutable global state affecting output;
 8. renderer file, state, evidence or acceptance-state write;
 9. lock acquisition;
@@ -480,9 +513,14 @@ The following are invalid:
 15. invalid output type;
 16. disallowed empty output;
 17. silent fallback renderer;
-18. renderer-version mismatch ignored by planning;
+18. renderer semantic-version mismatch ignored by planning;
 19. prior target or evidence used as semantic fallback;
-20. renderer success represented as acceptance.
+20. renderer success represented as acceptance;
+21. renderer re-opening a mutable repository path after lifecycle fingerprinting;
+22. operational timeout or memory abort represented as semantic output;
+23. failure diagnostics coexisting with a success payload or becoming authority;
+24. template or formatting input enabling code execution, import, traversal or shell expansion;
+25. capability conformance claimed without the mandatory invocation boundary and negative-test evidence.
 
 ## 22. Review-ready criteria
 
