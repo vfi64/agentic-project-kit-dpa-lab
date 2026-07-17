@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: active
-Status-date: 2026-07-16
+Status-date: 2026-07-17
 
 ## Specification sequence
 
@@ -9,7 +9,7 @@ Status-date: 2026-07-16
 2. DPA-100 — Foundations and terminology — stable, synchronized through ADR-019
 3. DPA-200 — Document model — review-ready
 4. DPA-300 — Registry and lifecycle integration — review-ready, restructure lineage ratified
-5. DPA-400 — Renderer contract — draft under post-adjudication verification
+5. DPA-400 — Renderer contract — review-ready after independent post-adjudication verification
 6. DPA-500 — Freshness and gates — planned
 7. DPA-600 — Concurrency and workflow serialization — planned
 8. DPA-700 — Migration and rollback — planned
@@ -34,19 +34,20 @@ Completed:
 - DPA-300 independent restructure-equivalence verification and explicit Maintainer ratification;
 - DPA-400 normative contract, traceability, diagram and internal audit;
 - DPA-400 primary review;
-- ADR-019/ADR-020 decisions and governed amendment batch.
+- ADR-019/ADR-020 decisions and governed amendment batch;
+- durable read-only Lab gates and deterministic validator;
+- independent DPA-400 post-adjudication verification at `6050d066…` with `PASS`;
+- status-only DPA-400 promotion to `review-ready`.
 
 Pending:
 
-1. independent DPA-400 post-adjudication verification against one immutable ref;
-2. promotion of DPA-400 to no more than `review-ready` after PASS;
-3. DPA-500 draft and review to no more than `review-ready` before applicable Probe evidence;
-4. preparation of PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
-5. preparation of renderer-map, determinism, immutable-input and purity fixtures for later DPA-400 Probe work;
-6. Probe execution when a suitable main-repository environment is available;
-7. revalidation of DPA-300–500 against Probe evidence before any stability promotion;
-8. continuation of DPA-600–900 only after Probe evidence has bounded the correction surface;
-9. completion of the DPA-900 sustainable-governance and review-economics contract before final DPA closeout.
+1. DPA-500 draft and review to no more than `review-ready` before applicable Probe evidence;
+2. preparation of PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
+3. preparation of renderer-map, determinism, immutable-input and purity fixtures for later DPA-400 Probe work;
+4. Probe execution when a suitable main-repository environment is available;
+5. revalidation of DPA-300–500 against Probe evidence before any stability promotion;
+6. continuation of DPA-600–900 only after Probe evidence has bounded the correction surface;
+7. completion of the DPA-900 sustainable-governance and review-economics contract before final DPA closeout.
 
 Early Discovery and fixture preparation do not constitute adoption, implementation or migration.
 
@@ -56,11 +57,11 @@ PROBE-001 tests the real registry parser and validator against the DPA-300/ADR-0
 
 DPA-400 does not gate PROBE-001. A PROBE-001 fixture needs only a syntactically plausible renderer identifier because DPA-300 already defines that field. Renderer resolution and runtime behavior remain DPA-400 concerns.
 
-DPA-400 and DPA-500 may be fully drafted and reviewed during the no-Mac period. Repository-dependent claims MUST remain `NEEDS_MAIN_REPO_VALIDATION`, and neither specification may become `stable` before relevant Probe evidence is available and adjudicated.
+DPA-400 is `review-ready`; DPA-500 may be drafted and reviewed during the no-Mac period. Repository-dependent claims MUST remain `NEEDS_MAIN_REPO_VALIDATION`, and neither specification may become `stable` before relevant Probe evidence is available and adjudicated.
 
 ## DPA-400 adjudicated contract
 
-The renderer contract now owns:
+The renderer contract owns:
 
 - closed static renderer resolution;
 - lifecycle-resolved immutable canonical-source values or content-addressed snapshots;
@@ -76,12 +77,14 @@ The renderer contract now owns:
 - mandatory closed invocation boundary and prohibited-capability negative tests;
 - fail-loud input, output, resource and side-effect behavior.
 
-Next DPA-400 milestones:
+DPA-400 completed:
 
 1. immutable amendment ref;
 2. independent post-adjudication verification;
-3. bounded residual correction if required;
-4. status-only promotion to `review-ready` after PASS.
+3. zero-blocker PASS adjudication closeout;
+4. status-only promotion to `review-ready`.
+
+Its next milestone is exact-ref Probe evidence before any possible `stable` promotion.
 
 ## Parallel main-repository maintenance stream
 
