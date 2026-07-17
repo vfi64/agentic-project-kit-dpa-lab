@@ -4,7 +4,7 @@ Status: review-ready
 
 Status-date: 2026-07-16
 
-Authority: normative DPA specification; primary review, secondary verification, maintainer adjudication and independent post-adjudication verification complete
+Authority: normative DPA specification; review-ready lineage includes independent restructure-equivalence verification and explicit Maintainer ratification
 
 ## 1. Purpose
 
@@ -21,7 +21,7 @@ DPA-300 depends on:
 - DPA-000 for architectural invariants;
 - DPA-100 for authority, lifecycle-state, trust-state, drift and fingerprint vocabulary;
 - DPA-200 for document forms, registered targets, regions, partition ownership and target semantics;
-- DPA-ADR-001 through DPA-ADR-017;
+- DPA-ADR-001 through DPA-ADR-020;
 - DP1 Discovery records DISC-001 through DISC-010 and DISC-003b at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
 
 Discovery evidence informs this contract but is not normative authority.
@@ -49,7 +49,7 @@ DPA-300 does not own renderer implementation semantics, final gate severity, cro
 
 ### 4.1 Registry
 
-The existing documentation registry owns reviewed declarative projection and partition contracts.
+The existing documentation registry MUST remain the sole authority for reviewed declarative projection and partition contracts.
 
 The registry MUST NOT contain executable import paths, arbitrary plugin references, shell fragments or dynamic expressions.
 
@@ -92,13 +92,13 @@ A conforming projection contract MUST declare:
 - contract schema version;
 - one target identity;
 - primary document form;
-- renderer identifier and renderer contract version;
+- renderer identifier, renderer interface version and renderer semantic version;
 - ordered declared canonical sources;
 - ordered contract-declared configuration;
 - target semantics and target-semantics version;
-- lifecycle policy;
-- freshness policy;
-- evidence policy;
+- lifecycle policy identifier;
+- freshness policy identifier;
+- evidence policy identifier;
 - fingerprint algorithm and input-domain version;
 - migration compatibility version.
 
@@ -124,7 +124,7 @@ The partition contract MUST declare:
 - region identity and owner class for every payload region;
 - one boundary representation per adjacent region pair or one document-wide equivalent;
 - boundary-marker, separator and delimiter ownership;
-- normalization and line-ending behavior for partition bytes;
+- encoding, normalization and line-ending behavior for partition bytes;
 - ordering and adjacency constraints;
 - behavior for missing, duplicate, malformed or reordered boundaries;
 - complete-byte ownership rules explaining every target byte;
@@ -168,27 +168,29 @@ A registry edit affecting any covered field invalidates existing plans.
 
 ## 6. Validation contract
 
-Validation is side-effect free and MUST occur before rendering or planning.
+Validation MUST be side-effect free and MUST occur before rendering or planning.
 
 The lifecycle MUST reject:
 
-1. unknown contract schema or compatibility version;
-2. unknown fingerprint algorithm or input-domain version;
-3. unknown renderer identifier or renderer contract version;
-4. executable or dynamic registry content;
-5. ambiguous, duplicate or unsupported target identity;
-6. region targets without exactly one valid parent partition contract;
-7. missing, dangling, duplicate or inconsistent partition-contract references;
-8. regions absent from the parent partition contract's ordered region list;
-9. overlapping regions, unowned bytes or duplicate owners;
-10. independently configured region boundary ownership or representation;
-11. missing canonical sources;
-12. undeclared output-affecting configuration;
-13. incomplete target semantics;
-14. unsupported form/target/partition combination;
-15. renderer-side-effect requirements;
-16. evidence or historical prose as semantic input without an independent accepted authority decision;
-17. silent fallback to manual behavior.
+1. missing required contract or partition fields;
+2. unknown contract or partition schema or compatibility version;
+3. unknown fingerprint algorithm or input-domain version;
+4. unknown renderer identifier, renderer interface version or renderer semantic version;
+5. executable or dynamic registry content;
+6. ambiguous, duplicate or unsupported target identity;
+7. region targets without exactly one valid parent partition contract;
+8. missing, dangling, duplicate or inconsistent partition-contract references;
+9. regions absent from the parent partition contract's ordered region list;
+10. overlapping regions, unowned bytes or duplicate owners;
+11. independently configured region boundary ownership or representation;
+12. missing declared canonical sources;
+13. renderer access to undeclared canonical sources;
+14. undeclared output-affecting configuration;
+15. incomplete target semantics;
+16. unsupported form/target/partition combination;
+17. renderer-side-effect requirements;
+18. evidence or historical prose as semantic input without an independent accepted authority decision;
+19. silent fallback to manual behavior.
 
 Validation failure MUST prevent rendering, planning and mutation.
 
@@ -212,7 +214,7 @@ A projection refresh follows these phases in order:
 
 Rendering precedes immutable plan capture because the plan binds the rendered payload. If captured source, contract and renderer fingerprints still match under-lock revalidation, renderer determinism makes a second render unnecessary and prohibited for the same plan.
 
-Failure before Write leaves the target unchanged.
+Failure before Write MUST leave the target unchanged.
 
 A successful Write immediately places the refresh output in `written-unverified`.
 
@@ -226,8 +228,9 @@ A plan MUST capture:
 
 - plan schema version and deterministic plan identity;
 - exact base commit identity;
+- target identity;
 - registry entry identity and contract fingerprint;
-- renderer identifier, implementation version and contract version;
+- renderer identifier, renderer interface version and renderer semantic version;
 - ordered source identities and fingerprints;
 - ordered configuration identities and fingerprints;
 - pre-mutation complete-target fingerprint;
@@ -348,7 +351,7 @@ The record MUST contain at least:
 - target identity and acceptance scope;
 - accepted plan identity;
 - projection- and partition-contract fingerprints;
-- renderer identity and implementation version;
+- renderer identifier, renderer interface version and renderer semantic version;
 - ordered source fingerprints;
 - base identity;
 - accepted payload fingerprint;
@@ -363,7 +366,7 @@ The acceptance-state record is lifecycle state. It is not evidence, canonical st
 
 ### 12.2 Drift classification
 
-Later inspection compares current observations independently with the accepted state:
+Later inspection MUST compare current observations independently with the accepted state:
 
 - changed source fingerprints produce source drift;
 - changed actual target bytes against the accepted complete-target fingerprint produce target drift;
@@ -534,7 +537,35 @@ The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
 Probe confirms compatibility. It does not create architecture silently.
 
-## 20. Invalid states
+## 20. Planned DP1 Probe obligations
+
+The governed Probe backlog and `traceability/DPA-300_TRACEABILITY.md` own the executable Probe recipes. At minimum, PROBE-001 MUST test projection- and partition-contract parser compatibility, and PROBE-002 MUST test lifecycle-owned plan, state, bounded replacement, recovery and writer integration behavior at an exact validation ref.
+
+A Probe result that falsifies a required compatibility mapping MUST return the affected contract to adjudication. Probe evidence MUST NOT silently rewrite architecture.
+
+## 21. Conformance demonstration
+
+A conforming implementation MUST demonstrate:
+
+1. manual registry entries retain existing behavior;
+2. malformed or unknown projection metadata fails loud;
+3. one exact target identity is bound to each plan;
+4. plan identity changes for every covered precondition or output change;
+5. mutation remains dry-run by default and execution is exact-plan-bound;
+6. every production DPA path resolves through Workspace;
+7. every projection mutation uses the existing local lock without nested projection mutation;
+8. only the lifecycle writes projected targets, partition bytes and acceptance state;
+9. complete-file replacement is atomic or Probe-proven equivalent;
+10. preserved bytes remain byte-identical and are revalidated under lock;
+11. successful Write immediately enters `written-unverified`;
+12. post-write verification checks every planned payload, partition, preserved-region and complete-target fingerprint;
+13. acceptance state supports independent multi-class drift comparison;
+14. interrupted refreshes are detected and dispositioned before a new plan;
+15. required evidence remains non-authoritative and bounded;
+16. no renderer, wrapper or workflow assigns `accepted`;
+17. no parallel registry, lifecycle, state, renderer, writer or gate subsystem is introduced.
+
+## 22. Invalid states
 
 A conforming implementation MUST reject or block:
 
@@ -566,13 +597,13 @@ A conforming implementation MUST reject or block:
 26. append accumulation after governed bounded replacement;
 27. hard failure caused only by elapsed time.
 
-## 21. Traceability
+## 23. Traceability
 
 Detailed requirement, test, Probe, gate, evidence and rollback mappings are in `traceability/DPA-300_TRACEABILITY.md`.
 
-Primary decisions include DPA-ADR-001 through DPA-ADR-017.
+Primary decisions include DPA-ADR-001 through DPA-ADR-020.
 
-## 22. Review-ready exit criteria
+## 24. Review-ready exit criteria
 
 DPA-300 is `review-ready` when:
 
@@ -584,4 +615,4 @@ DPA-300 is `review-ready` when:
 6. primary review, secondary verification, maintainer adjudication and independent post-adjudication verification are complete;
 7. no production form or implementation success is claimed.
 
-All criteria are satisfied for the review-ready scope. Stability remains blocked on the applicable DP1 Probe evidence and subsequent governed revalidation.
+The review-ready criteria are satisfied only together with the accepted restructure-equivalence verification and Maintainer ratification record. Stability remains blocked on the applicable DP1 Probe evidence and subsequent governed revalidation.

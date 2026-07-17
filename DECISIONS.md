@@ -1,7 +1,7 @@
 # Decisions
 
 Status: active
-Status-date: 2026-07-15
+Status-date: 2026-07-16
 
 ## DPA-ADR-001 — Extend the existing document-management system
 
@@ -266,3 +266,18 @@ A reviewer may be a model or human. A qualifying review MUST identify an exact r
 **Affected specifications:** none directly; governs all reviews and phase exits.
 
 **Affected DP slices:** none directly.
+
+## Decision-file index — DPA-ADR-013 through DPA-ADR-020
+
+The following decisions are maintained in dedicated files and are normative according to their recorded status:
+
+- DPA-ADR-013 — document-form partition and boundary ownership — ACCEPTED;
+- DPA-ADR-014 — consumer trust-state model — ACCEPTED;
+- DPA-ADR-015 — DP1 staged Discovery, Probe and Assessment — ACCEPTED;
+- DPA-ADR-016 — acceptance state and interrupted recovery — ACCEPTED;
+- DPA-ADR-017 — parent-entry PartitionContract — ACCEPTED;
+- DPA-ADR-018 — independent verification context — DEFERRED PROPOSAL, non-normative;
+- DPA-ADR-019 — renderer input, resource and version model — ACCEPTED;
+- DPA-ADR-020 — promotion commits and equivalence verification — ACCEPTED.
+
+Decision-status vocabulary for this register is `ACCEPTED`, `DEFERRED PROPOSAL` and `REJECTED`. A deferred proposal does not create a current normative obligation.
