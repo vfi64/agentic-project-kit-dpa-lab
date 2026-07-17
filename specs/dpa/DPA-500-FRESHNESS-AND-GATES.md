@@ -6,7 +6,7 @@ Authority: normative DPA specification, subject to primary review, technical ver
 
 ## 1. Purpose
 
-This specification defines freshness evaluation, findings, trust-state consequences and gate behavior for registered document projections.
+This specification defines freshness evaluation, structured findings, consumer-trust consequences and gate behavior for registered document projections.
 
 DPA-500 extends the existing main-repository documentation registry, lifecycle, findings and gate architecture. It does not create a second freshness engine, a second finding taxonomy, a second gate runner, a second evidence store or a new runtime authority.
 
@@ -17,7 +17,7 @@ Repository-specific finding identifiers, severity mappings, command names, workf
 DPA-500 depends on:
 
 - DPA-000 for canonical invariants;
-- DPA-100 for authority, classification, trust-state, finding, freshness, fingerprint and gate vocabulary;
+- DPA-100 for authority, classification, consumer trust-state, drift, freshness, fingerprint and gate vocabulary;
 - DPA-200 for target identity, document form, partition ownership and target semantics;
 - DPA-300 for registry contracts, lifecycle ordering, immutable plans, acceptance state, recovery and evidence boundaries;
 - DPA-400 for renderer identity, immutable inputs, semantic versions, deterministic output, purity and failure behavior;
@@ -27,20 +27,21 @@ DPA-500 depends on:
 
 DPA-500 owns:
 
-1. projection freshness dimensions;
+1. projection freshness dimensions and classification;
 2. freshness evaluation inputs;
-3. structured drift classes;
+3. projection-specific finding subreasons mapped to the DPA-100 drift vocabulary;
 4. abstract finding semantics;
-5. trust-state consequences;
-6. gate outcome semantics;
+5. consumer trust-state consequences;
+6. gate-decision semantics within the existing DPA-100 gate vocabulary;
 7. strictness and staged enforcement rules;
 8. handling of missing, stale, tampered or unverifiable acceptance state;
-9. handling of renderer, source, contract, target and evidence drift;
+9. handling of renderer, source, contract, target and evidence failures;
 10. recovery-facing gate behavior;
 11. freshness and gate test obligations.
 
 DPA-500 does not own:
 
+- foundational vocabulary owned by DPA-100;
 - registry serialization;
 - target rendering or writing;
 - lifecycle lock acquisition;
@@ -56,11 +57,11 @@ Freshness evaluation is lifecycle-owned and gate-integrated.
 
 A renderer MUST NOT:
 
-- assign freshness;
+- assign freshness classification;
 - emit authoritative findings;
 - select severity;
-- assign trust state;
-- decide gate pass or failure;
+- assign consumer trust state;
+- decide gate pass, warning or failure;
 - repair stale state;
 - accept its own output.
 
@@ -86,7 +87,22 @@ The mandatory dimensions are:
 
 Time alone MUST NOT make a projection stale unless time is an explicitly declared semantic source or an accepted policy requires bounded revalidation for reasons independent of output equivalence.
 
-## 6. Evaluation inputs
+## 6. Freshness classification
+
+Freshness classification is distinct from consumer trust state, lifecycle attempt outcome, finding severity, gate decision and enforcement stage.
+
+The projection-specific freshness classifications are:
+
+- `fresh` — every applicable mandatory dimension matches and is verifiable;
+- `stale` — one or more comparable current dimensions differ from the accepted state;
+- `invalid` — the contract, target, partition, acceptance state or comparison boundary cannot be safely interpreted;
+- `indeterminate` — mandatory current information or evaluation machinery is unavailable and neither `fresh`, `stale` nor `invalid` can be established safely.
+
+These classifications do not extend the closed DPA-100 consumer trust-state vocabulary.
+
+The same evaluated tree, lifecycle state and declared inputs MUST produce the same freshness classification and finding set.
+
+## 7. Evaluation inputs
 
 A freshness evaluation MUST use only lifecycle-resolved and Workspace-resolved inputs.
 
@@ -106,9 +122,9 @@ At minimum it evaluates:
 - current required gate-set identity;
 - base or ref context where the requested operation requires it.
 
-Missing mandatory input MUST produce an explicit non-fresh result. It MUST NOT be interpreted as fresh, unknown-but-pass or an invitation to infer prior state.
+Missing mandatory input MUST classify the evaluation as `indeterminate` or `invalid` according to the failure type and MUST produce an explicit finding. It MUST NOT be interpreted as fresh or as permission to infer prior state.
 
-## 7. Acceptance state
+## 8. Acceptance state
 
 Acceptance state is lifecycle state, not evidence.
 
@@ -134,95 +150,103 @@ An acceptance-state record is invalid when it is missing required fields, uses a
 
 Invalid acceptance state MUST NOT be repaired silently from current target bytes or evidence.
 
-## 8. Trust states
+## 9. Consumer trust-state consequences
 
-DPA-500 applies the consumer trust-state vocabulary owned by DPA-100.
+DPA-500 applies, and does not extend, the consumer trust-state vocabulary owned by DPA-100:
 
-For projection-gate purposes:
+- `computed` remains bytes produced without an immutable mutation plan;
+- `plan-captured` remains bytes owned by an immutable lifecycle plan and its guards;
+- `written-unverified` remains written bytes whose required verification, evidence and gates are incomplete;
+- `accepted` remains bytes accepted by the complete required gate set with acceptance state recorded;
+- `abandoned` remains a refresh instance that ended through rejection, failure, invalidation or interruption and cannot later become accepted.
 
-- `accepted` means the current target has passed all required checks against the current immutable plan and the acceptance state has been recorded successfully;
-- `written-unverified` means bytes may have been written but complete verification and acceptance did not finish;
-- `stale` means at least one current freshness dimension differs from the accepted state without evidence of malformed or hostile state;
-- `invalid` means the target, contract, state or boundary cannot be safely interpreted under the registered contract;
-- `unknown` means required current information is unavailable and no stronger valid state can be established;
-- `abandoned` describes an attempt outcome and MUST NOT be misrepresented as target acceptance.
+A freshness classification of `stale`, `invalid` or `indeterminate` does not itself create a new trust state. It produces findings and gate consequences while preserving the currently recorded trust state unless the lifecycle contract requires a transition for the active attempt.
 
-Trust-state assignment MUST be deterministic for the same evaluated tree and state inputs.
+Only complete post-Write verification, required gate `pass`, successful acceptance-state persistence and lifecycle completion may produce `accepted`.
 
-A lower-trust state MUST NOT be promoted to `accepted` by suppression, evidence presence, elapsed time, successful rendering alone or a previously green workflow run.
+No state may be promoted to `accepted` by suppression, evidence presence, elapsed time, successful rendering alone or a previously green workflow run.
 
-## 9. Drift classes
+## 10. Drift vocabulary and finding subreasons
 
-The lifecycle MUST distinguish at least the following drift classes:
+DPA-500 MUST use the closed DPA-100 drift classes:
 
-1. `contract_drift`;
-2. `partition_contract_drift`;
-3. `source_drift`;
-4. `configuration_drift`;
-5. `renderer_identifier_drift`;
-6. `renderer_interface_drift`;
-7. `renderer_semantic_drift`;
-8. `target_drift`;
-9. `preserved_region_drift`;
-10. `partition_boundary_drift`;
-11. `target_semantics_drift`;
-12. `gate_set_drift`;
-13. `acceptance_state_missing`;
-14. `acceptance_state_invalid`;
-15. `acceptance_state_tamper_or_scope_mismatch`;
-16. `base_or_ref_drift`;
-17. `nondeterministic_renderer_output`;
-18. `renderer_side_effect_or_capability_violation`;
-19. `renderer_operational_abort`;
-20. `renderer_failure_diagnostic`;
-21. `write_verification_failure`;
-22. `evidence_recording_failure`.
+1. `base drift`;
+2. `source drift`;
+3. `target drift`;
+4. `contract drift`;
+5. `renderer drift`;
+6. `partition drift`;
+7. `ownership drift`.
+
+Projection-specific findings MAY refine those classes with stable subreasons, including:
+
+- projection-contract change or partition-contract change under `contract drift` or `partition drift` as applicable;
+- declared-source fingerprint or output-affecting configuration change under `source drift` or `contract drift` according to the accepted contract model;
+- renderer identifier, interface-version or semantic-version change under `renderer drift`;
+- complete-target, payload or preserved-region byte mismatch under `target drift`;
+- partition-contract, partition-byte or boundary mismatch under `partition drift`;
+- declared byte-owner mapping change under `ownership drift`;
+- repository base or required ref mismatch under `base drift`.
+
+The following are finding causes or lifecycle failures, not new drift classes:
+
+- missing, malformed, tampered or scope-mismatched acceptance state;
+- gate-set mismatch;
+- renderer nondeterminism;
+- renderer side effect or prohibited capability use;
+- renderer operational abort;
+- bounded renderer failure diagnostic;
+- post-Write verification failure;
+- acceptance-state persistence failure;
+- evidence recording failure;
+- unavailable mandatory evaluation machinery.
 
 Concrete identifiers and mapping to existing main-repository findings remain `NEEDS_MAIN_REPO_VALIDATION`.
 
-Independent dimensions MUST remain independently visible. A single generic `stale` message MUST NOT erase which comparisons failed.
+Independent dimensions and subreasons MUST remain independently visible. A single generic stale message MUST NOT erase which comparisons or evaluations failed.
 
-## 10. Finding contract
+## 11. Finding contract
 
 Each projection freshness finding MUST be structured and bounded.
 
 It MUST include:
 
-- abstract drift class;
+- DPA-100 drift class when the finding represents drift, otherwise an explicit non-drift category;
+- projection-specific subreason;
 - target identity;
 - lifecycle phase;
+- freshness classification;
 - expected identity or fingerprint when safe and useful;
 - observed identity or fingerprint when safe and useful;
 - whether mutation occurred;
-- current trust state;
+- current consumer trust state;
 - applicable contract or gate-set identity;
 - remediation category;
 - evidence reference when bounded evidence exists.
 
 Findings MUST NOT include secrets, unbounded file content or fabricated expected values.
 
-Multiple independent failures MUST remain separately reportable even when one gate outcome blocks the operation.
+Multiple independent failures MUST remain separately reportable even when one gate decision blocks the operation.
 
 Severity and user-facing wording are implementation mappings owned by the existing main-repository finding system and remain subject to exact-ref validation.
 
-## 11. Gate outcomes
+## 12. Gate decisions
 
-Projection gates produce one of these abstract outcomes:
+DPA-500 uses the DPA-100 gate vocabulary:
 
 - `pass` — every required check for the requested operation passed;
-- `warn` — only explicitly non-blocking findings exist under the active staged policy;
-- `block` — the requested operation MUST NOT proceed or integrate;
-- `error` — the gate could not evaluate reliably because required machinery or inputs failed.
+- `warning` — only explicitly non-blocking findings exist under the active staged policy;
+- `failure` — the requested operation MUST NOT proceed, integrate or become accepted.
 
-`error` MUST fail closed for mutation, acceptance, integration and strict validation.
+Evaluation machinery failure or unavailable mandatory input MUST yield a `failure` decision for mutation, acceptance, integration and strict validation. The finding MUST preserve whether the underlying freshness classification was `indeterminate` or `invalid`.
 
-A `warn` outcome MUST NOT authorize a target to become `accepted` when a mandatory acceptance check failed.
+A `warning` decision MUST NOT authorize a target to become `accepted` when any mandatory acceptance check failed.
 
-Gate outcome and target trust state are related but distinct. A read-only audit may complete with `block` while preserving the prior target bytes and prior recorded state.
+Gate decision, freshness classification and consumer trust state are related but distinct. A read-only audit may return `failure` while preserving prior target bytes and recorded lifecycle state.
 
-## 12. Mandatory blocking conditions
+## 13. Mandatory failure conditions
 
-The following MUST block mutation acceptance and integration regardless of staged rollout mode:
+The following MUST produce gate `failure` for mutation, acceptance and integration regardless of staged rollout mode:
 
 - malformed or ambiguous target or partition contract;
 - missing required declared source;
@@ -230,7 +254,7 @@ The following MUST block mutation acceptance and integration regardless of stage
 - renderer interface incompatibility;
 - renderer semantic-version mismatch against an immutable execution plan;
 - stale plan after lock or preflight revalidation;
-- partition-boundary invalidity;
+- partition invalidity;
 - target identity mismatch;
 - renderer nondeterminism detected during required verification;
 - renderer side effect or prohibited capability use;
@@ -238,70 +262,73 @@ The following MUST block mutation acceptance and integration regardless of stage
 - truncated or invalid output;
 - post-Write verification failure;
 - acceptance-state write failure after target Write;
-- evidence or state represented as canonical source without an accepted authority contract.
+- evidence or lifecycle state represented as canonical source without an accepted authority contract;
+- unavailable mandatory evaluation machinery.
 
 A staged policy MAY control whether pre-existing noncompliance blocks unrelated read-only commands, but it MUST NOT weaken the safety conditions for new mutation or acceptance.
 
-## 13. Staged enforcement
+## 14. Staged enforcement
 
 Adoption MUST be staged through the existing gate and lifecycle architecture.
 
-At minimum the stages are:
+At minimum the enforcement stages are:
 
 1. **observe** — emit structured findings and evidence without changing mutation behavior not already protected by existing safety rules;
 2. **warn** — surface projection-specific noncompliance prominently while preserving bounded compatibility;
-3. **block-new** — block creation or acceptance of new nonconforming projection states while allowing explicitly governed legacy states to remain readable;
-4. **strict** — block every in-scope nonconforming operation under the active gate policy.
+3. **block-new** — prevent creation or acceptance of new nonconforming projection states while allowing explicitly governed legacy states to remain readable;
+4. **strict** — fail every in-scope nonconforming operation under the active gate policy.
 
-Stage transitions MUST be explicit, reviewable, reversible and controlled by existing configuration or direction authority. They MUST NOT be activated by elapsed time alone.
+The stage name `warn` is an enforcement-stage token and MUST NOT be used as a gate-decision token; the gate decision remains `warning`.
+
+Stage transitions MUST be explicit, reviewable, reversible and controlled by existing configuration or Direction authority. They MUST NOT be activated by elapsed time alone.
 
 Unknown findings MUST fail closed when they affect mutation safety, contract interpretation, target identity or acceptance. Treatment of unrelated unknown findings remains a main-repository policy decision.
 
 No lab statement activates production strict mode.
 
-## 14. Freshness checks by operation
+## 15. Freshness checks by operation
 
-### 14.1 Read-only audit
+### 15.1 Read-only audit
 
 A read-only audit MUST evaluate all available dimensions and return structured findings without mutation.
 
-### 14.2 Dry-run plan
+### 15.2 Dry-run plan
 
 Dry-run MUST resolve the current contract, sources, renderer identities, target state and required gates and MUST produce a plan that is fingerprint-bound to those inputs.
 
 Dry-run success does not authorize later execution after drift.
 
-### 14.3 Mutation execution
+### 15.3 Mutation execution
 
-Before Write, execution MUST revalidate every plan-bound identity and fingerprint under the lifecycle lock. Any drift MUST abandon the attempt before Write.
+Before Write, execution MUST revalidate every plan-bound identity and fingerprint under the lifecycle lock. Any mismatch or mandatory evaluation failure MUST abandon the attempt before Write.
 
-### 14.4 Post-Write verification
+### 15.4 Post-Write verification
 
 After Write, the lifecycle MUST verify target bytes, partition preservation, target semantics, renderer output equivalence where required and every mandatory gate.
 
 Only complete success permits acceptance-state recording and transition to `accepted`.
 
-### 14.5 Integration or protected workflow
+### 15.5 Integration or protected workflow
 
-Integration MUST reject evidence or output produced from a stale base, source, target, contract, renderer, gate-set or acceptance-state context. DPA-600 owns cross-ref serialization mechanics.
+Integration MUST reject evidence or output produced from a mismatched or unverifiable base, source, target, contract, renderer, gate-set or acceptance-state context. DPA-600 owns cross-ref serialization mechanics.
 
-## 15. Renderer-related findings
+## 16. Renderer-related findings
 
 DPA-400 failure classes map into DPA-500 as follows:
 
-- unknown or changed renderer identifier: block before rendering;
-- incompatible interface version: block before rendering;
-- changed semantic version: stale accepted state and invalidate stale plans;
+- unknown or changed renderer identifier: `renderer drift` where comparable, otherwise a non-drift contract-resolution failure; gate `failure` before rendering;
+- incompatible interface version: `renderer drift`; gate `failure` before rendering;
+- changed semantic version: `renderer drift`, freshness `stale`, stale plans invalidated;
 - changed implementation evidence without semantic change: evidence update only, unless Probe or policy identifies an unversioned semantic change;
-- nondeterministic output: `invalid` for acceptance and mandatory block;
-- side effect or capability violation: `invalid`, attempt `abandoned`, mandatory block;
+- nondeterministic output: freshness `invalid`, attempt `abandoned`, gate `failure`;
+- side effect or capability violation: freshness `invalid`, attempt `abandoned`, gate `failure`;
 - deterministic semantic-bound violation: renderer failure, attempt `abandoned`, no acceptance;
-- operational safety abort: attempt `abandoned`, structured finding, no semantic output and no acceptance;
+- operational safety abort: attempt `abandoned`, structured non-drift finding, no semantic output and no acceptance;
 - bounded failure diagnostic: lifecycle-translated finding only, never acceptance authority.
 
 A raw repository commit change MUST NOT by itself create renderer semantic drift when the declared renderer semantic version and behavior contract remain unchanged; implementation evidence remains evidence-only.
 
-## 16. Target and partition handling
+## 17. Target and partition handling
 
 For complete-target projections, target freshness compares the complete target fingerprint.
 
@@ -315,9 +342,9 @@ For registered-region projections, freshness MUST independently evaluate:
 
 Manual or historical regions MUST NOT be regenerated merely to clear projection staleness.
 
-Preserved-region drift MUST invalidate a stale execution plan but MUST NOT automatically classify the renderer-owned payload itself as semantically stale.
+Preserved-region target drift MUST invalidate a stale execution plan but MUST NOT automatically classify the renderer-owned payload itself as semantically stale.
 
-## 17. Recovery and interrupted operations
+## 18. Recovery and interrupted operations
 
 A target left `written-unverified` after interruption MUST NOT be treated as accepted.
 
@@ -333,7 +360,7 @@ Recovery MAY verify and complete recording only when the exact written bytes and
 
 Recovery MUST NOT reconstruct acceptance state from target bytes alone.
 
-## 18. Evidence behavior
+## 19. Evidence behavior
 
 Gate evidence is non-authoritative and bounded.
 
@@ -343,16 +370,18 @@ Evidence SHOULD record:
 - target identity;
 - contract, renderer and gate-set identities;
 - evaluated dimensions;
-- findings and abstract outcomes;
+- freshness classification;
+- DPA-100 drift classes and finding subreasons;
+- gate decision and enforcement stage;
 - mutation and verification phases reached;
-- prior and resulting trust states;
+- prior and resulting consumer trust states;
 - limitations and unavailable checks.
 
-Evidence failure after Write is a lifecycle failure. It MUST NOT erase the more important distinction between verified target bytes and recorded acceptance state, and it MUST NOT fabricate a successful evidence record.
+Evidence failure after Write is a lifecycle failure. It MUST NOT erase the distinction between verified target bytes and recorded acceptance state, and it MUST NOT fabricate a successful evidence record.
 
 Exact evidence ordering relative to acceptance-state persistence remains `NEEDS_MAIN_REPO_VALIDATION` and MUST preserve crash-safe semantics.
 
-## 19. Main-repository validation boundary
+## 20. Main-repository validation boundary
 
 The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
@@ -369,27 +398,27 @@ The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 
 No claim in this document states that the current main repository already conforms.
 
-## 20. Conformance tests
+## 21. Conformance tests
 
 A conforming implementation MUST test:
 
 1. fresh accepted complete-target projection;
 2. fresh accepted registered-region projection;
-3. missing acceptance state;
+3. missing acceptance state producing `indeterminate` or `invalid` and gate `failure`;
 4. malformed acceptance state;
 5. target-scope mismatch in acceptance state;
 6. contract drift;
 7. source drift;
-8. configuration drift;
+8. configuration-related contract or source drift according to its declared ownership;
 9. renderer identifier drift;
 10. renderer interface incompatibility;
 11. renderer semantic-version drift;
 12. implementation-evidence-only change without semantic drift;
 13. target-byte drift;
-14. preserved-region drift;
-15. partition-boundary drift;
-16. target-semantics drift;
-17. gate-set drift;
+14. preserved-region target drift;
+15. partition drift;
+16. target-semantics-related contract or partition drift;
+17. gate-set mismatch as a non-drift finding cause;
 18. stale plan before lock;
 19. stale plan after lock revalidation;
 20. nondeterministic renderer output;
@@ -401,14 +430,16 @@ A conforming implementation MUST test:
 26. acceptance-state recording failure;
 27. evidence recording failure;
 28. interrupted `written-unverified` recovery;
-29. observe, warn, block-new and strict stages;
-30. no time-only staleness;
-31. unknown mandatory input failing closed;
-32. read-only audit producing findings without mutation.
+29. observe, warn, block-new and strict enforcement stages;
+30. pass, warning and failure gate decisions;
+31. no time-only staleness;
+32. unavailable mandatory input failing closed;
+33. read-only audit producing findings without mutation;
+34. separation of freshness classification, drift class, trust state, gate decision and enforcement stage.
 
 Tests MUST prove that a successful renderer invocation alone cannot produce `accepted`.
 
-## 21. Invalid states
+## 22. Invalid states
 
 The following are invalid:
 
@@ -417,33 +448,37 @@ The following are invalid:
 3. evidence treated as acceptance state;
 4. target bytes used to reconstruct authority silently;
 5. independent drift dimensions collapsed into an unstructured result;
-6. stale plan executed after any bound input changed;
-7. warning policy allowing mandatory acceptance failure to pass;
-8. operational abort represented as renderer success;
-9. nondeterministic output accepted;
-10. side-effecting renderer accepted;
-11. interface incompatibility ignored;
-12. semantic-version drift ignored;
-13. implementation commit SHA used as automatic semantic version;
-14. partition drift repaired by renderer output;
-15. manual or historical bytes regenerated to clear projection drift;
-16. `written-unverified` represented as accepted;
-17. acceptance-state recording failure hidden;
-18. unknown mandatory input interpreted as pass;
-19. strict mode activated by time alone;
-20. a lab gate represented as main-repository runtime conformance.
+6. finding causes represented as new DPA-100 drift classes;
+7. freshness classifications represented as consumer trust states;
+8. enforcement stages represented as gate decisions;
+9. stale plan executed after any bound input changed;
+10. warning policy allowing mandatory acceptance failure to pass;
+11. operational abort represented as renderer success;
+12. nondeterministic output accepted;
+13. side-effecting renderer accepted;
+14. interface incompatibility ignored;
+15. semantic-version drift ignored;
+16. implementation commit SHA used as automatic semantic version;
+17. partition drift repaired by renderer output;
+18. manual or historical bytes regenerated to clear projection drift;
+19. `written-unverified` represented as accepted;
+20. acceptance-state recording failure hidden;
+21. unavailable mandatory input interpreted as pass;
+22. strict mode activated by time alone;
+23. a lab gate represented as main-repository runtime conformance.
 
-## 22. Review-ready criteria
+## 23. Review-ready criteria
 
 DPA-500 may become `review-ready` when:
 
-1. freshness dimensions and drift classes are complete and consistent with DPA-300 and DPA-400;
-2. finding, trust-state and gate semantics are unambiguous;
-3. staged enforcement preserves fail-closed mutation safety;
-4. acceptance-state and recovery behavior are complete;
-5. every requirement is traced to invariants, tests, later implementation, evidence and rollback;
-6. diagrams are synchronized;
-7. repository-specific mappings remain exact-ref fenced;
-8. primary review, technical verification, Maintainer adjudication and required post-adjudication verification are complete.
+1. freshness dimensions and classifications are complete and consistent with DPA-100 through DPA-400;
+2. DPA-100 drift classes and DPA-500 finding subreasons are cleanly separated;
+3. finding, consumer trust-state and gate semantics are unambiguous;
+4. staged enforcement preserves fail-closed mutation safety;
+5. acceptance-state and recovery behavior are complete;
+6. every requirement is traced to invariants, tests, later implementation, evidence and rollback;
+7. diagrams are synchronized;
+8. repository-specific mappings remain exact-ref fenced;
+9. primary review, technical verification, Maintainer adjudication and required post-adjudication verification are complete.
 
 DPA-500 MUST NOT become `stable` before applicable freshness, finding, gate, recovery and strict-adoption Probes have evidence at an exact main-repository validation ref.
