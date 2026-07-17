@@ -2,7 +2,7 @@
 
 Status: review-ready
 
-Status-date: 2026-07-16
+Status-date: 2026-07-17
 
 Authority: normative DPA specification; review-ready lineage includes independent restructure-equivalence verification and explicit Maintainer ratification
 
@@ -21,7 +21,7 @@ DPA-300 depends on:
 - DPA-000 for architectural invariants;
 - DPA-100 for authority, lifecycle-state, trust-state, drift and fingerprint vocabulary;
 - DPA-200 for document forms, registered targets, regions, partition ownership and target semantics;
-- DPA-ADR-001 through DPA-ADR-020;
+- DPA-ADR-001 through DPA-ADR-021;
 - DP1 Discovery records DISC-001 through DISC-010 and DISC-003b at validation ref `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
 
 Discovery evidence informs this contract but is not normative authority.
@@ -353,7 +353,7 @@ The record MUST contain at least:
 - projection- and partition-contract fingerprints;
 - renderer identifier, renderer interface version and renderer semantic version;
 - ordered source fingerprints;
-- base identity;
+- accepted base identity when the projection contract declares base dependence;
 - accepted payload fingerprint;
 - accepted complete-target fingerprint;
 - accepted partition fingerprint where applicable;
@@ -362,18 +362,25 @@ The record MUST contain at least:
 - acceptance gate-set identity and result;
 - acceptance timestamp as evidence only.
 
+A mutation plan always captures its exact base. Acceptance state persists that base only for a contract whose semantics or acceptance explicitly depend on it. A base-independent accepted record without a base field is valid and MUST remain evaluable after the attempt-scoped plan has been cleaned up.
+
 The acceptance-state record is lifecycle state. It is not evidence, canonical state, registry authority, target metadata or renderer input. Its concrete path and schema remain `NEEDS_MAIN_REPO_VALIDATION` for PROBE-002.
 
-### 12.2 Drift classification
+### 12.2 Drift classification and layered acceptance
 
-Later inspection MUST compare current observations independently with the accepted state:
+Later inspection MUST compare current observations independently with accepted state and active contracts:
 
 - changed source fingerprints produce source drift;
-- changed actual target bytes against the accepted complete-target fingerprint produce target drift;
-- changed contract or renderer identity produces contract or renderer drift;
-- changed partition bytes produce partition drift;
+- for complete-target projections, changed actual target bytes against the accepted complete-target fingerprint produce target drift;
+- for registered-region projections, changed lifecycle-owned projected payload bytes against the accepted payload fingerprint produce target drift;
+- changed lifecycle-owned partition bytes or boundaries produce partition drift;
 - changed ownership declarations produce ownership drift;
-- changed required base produces base drift.
+- changed contract or renderer identity produces contract or renderer drift;
+- changed required base produces base drift only when the governing plan, requested operation or accepted contract requires that base.
+
+For registered-region projections, complete-target and preserved-region fingerprints remain mandatory plan, under-lock reconstruction, post-Write verification and recovery guards. After acceptance, a governed change to bytes owned by a declared non-lifecycle owner, performed consistently with the active partition and ownership contracts, does not by itself produce projection target drift or invalidate the accepted lifecycle-owned payload.
+
+An unexplained change to lifecycle-owned projected bytes remains target drift. An unexplained change to partition bytes or boundaries remains partition drift. A change whose responsible owner cannot be established safely MUST fail closed and MUST NOT be presumed authorized.
 
 Multiple findings MAY coexist.
 
@@ -472,7 +479,7 @@ DPA-300 owns lifecycle transitions among:
 - `written-unverified` immediately after successful atomic Write;
 - `abandoned` after rejection, invalidation, failed verification, cancellation or detected interruption.
 
-Only DPA-500 owns transition to `accepted`.
+Only DPA-500 owns transition to `accepted`, including its governed gate-set re-acceptance operation over unchanged already-accepted bytes.
 
 A failed Verify keeps the instance non-accepted and transitions it to `abandoned`. A failed evidence write after successful verification leaves it `written-unverified` with a blocking finding.
 
@@ -495,7 +502,8 @@ The lifecycle MUST fail loud for:
 - failed post-write verification;
 - failed required evidence emission;
 - acceptance-state absence or tamper where comparison is required;
-- direct writes or drift mismatches.
+- direct writes or drift mismatches;
+- ambiguous or unverifiable region ownership.
 
 A warning-only signal never authorizes mutation. Mutation always requires explicit exact-plan-bound execution.
 
@@ -526,7 +534,8 @@ The following remain `NEEDS_MAIN_REPO_VALIDATION`:
 - parser unknown-field and version behavior;
 - renderer mapping location;
 - lifecycle integration points;
-- acceptance-state path and schema;
+- acceptance-state path and schema, including conditional base identity;
+- authorized-owner provenance and comparison mechanics;
 - interrupted-instance detection mechanics;
 - atomic-write implementation;
 - complete writer inventory at the Probe ref;
@@ -539,7 +548,7 @@ Probe confirms compatibility. It does not create architecture silently.
 
 ## 20. Planned DP1 Probe obligations
 
-The governed Probe backlog and `traceability/DPA-300_TRACEABILITY.md` own the executable Probe recipes. At minimum, PROBE-001 MUST test projection- and partition-contract parser compatibility, and PROBE-002 MUST test lifecycle-owned plan, state, bounded replacement, recovery and writer integration behavior at an exact validation ref.
+The governed Probe backlog and `traceability/DPA-300_TRACEABILITY.md` own the executable Probe recipes. At minimum, PROBE-001 MUST test projection- and partition-contract parser compatibility, and PROBE-002 MUST test lifecycle-owned plan, state, bounded replacement, recovery, writer integration, conditional base persistence and layered region-comparison behavior at an exact validation ref.
 
 A Probe result that falsifies a required compatibility mapping MUST return the affected contract to adjudication. Probe evidence MUST NOT silently rewrite architecture.
 
@@ -560,10 +569,14 @@ A conforming implementation MUST demonstrate:
 11. successful Write immediately enters `written-unverified`;
 12. post-write verification checks every planned payload, partition, preserved-region and complete-target fingerprint;
 13. acceptance state supports independent multi-class drift comparison;
-14. interrupted refreshes are detected and dispositioned before a new plan;
-15. required evidence remains non-authoritative and bounded;
-16. no renderer, wrapper or workflow assigns `accepted`;
-17. no parallel registry, lifecycle, state, renderer, writer or gate subsystem is introduced.
+14. base-independent accepted state remains evaluable after plan cleanup;
+15. contract-declared base dependence persists and compares accepted base identity;
+16. governed non-lifecycle-owner region evolution does not create projection target drift;
+17. unexplained lifecycle-owned payload or partition mutation fails with the correct drift class;
+18. interrupted refreshes are detected and dispositioned before a new plan;
+19. required evidence remains non-authoritative and bounded;
+20. no renderer, wrapper or workflow assigns `accepted`;
+21. no parallel registry, lifecycle, state, renderer, writer or gate subsystem is introduced.
 
 ## 22. Invalid states
 
@@ -584,24 +597,27 @@ A conforming implementation MUST reject or block:
 13. mutation without the Workspace lock;
 14. any stale captured guard;
 15. partial in-place region write;
-16. changed preserved bytes silently reused;
+16. changed preserved bytes silently reused during a governed mutation plan;
 17. missing post-write verification;
 18. evidence used as acceptance state;
 19. recomputation used instead of persisted accepted comparison;
 20. source drift mislabeled solely as target drift;
 21. stale-lock takeover without interrupted-instance disposition;
 22. crashed-after-Write bytes silently accepted;
-23. lifecycle assigning `accepted`;
+23. lifecycle assigning `accepted` outside DPA-500 gate authority;
 24. successful Write failing to enter `written-unverified` immediately;
 25. a new parallel DPA writer command;
 26. append accumulation after governed bounded replacement;
-27. hard failure caused only by elapsed time.
+27. hard failure caused only by elapsed time;
+28. base-independent accepted state made unevaluable solely because its attempt plan was cleaned up;
+29. authorized non-lifecycle-owner region evolution treated automatically as lifecycle target drift;
+30. unexplained lifecycle-owned byte change treated as authorized owner evolution.
 
 ## 23. Traceability
 
 Detailed requirement, test, Probe, gate, evidence and rollback mappings are in `traceability/DPA-300_TRACEABILITY.md`.
 
-Primary decisions include DPA-ADR-001 through DPA-ADR-020.
+Primary decisions include DPA-ADR-001 through DPA-ADR-021.
 
 ## 24. Review-ready exit criteria
 
@@ -615,4 +631,4 @@ DPA-300 is `review-ready` when:
 6. primary review, secondary verification, maintainer adjudication and independent post-adjudication verification are complete;
 7. no production form or implementation success is claimed.
 
-The review-ready criteria are satisfied only together with the accepted restructure-equivalence verification and Maintainer ratification record. Stability remains blocked on the applicable DP1 Probe evidence and subsequent governed revalidation.
+The review-ready criteria are satisfied only together with the accepted restructure-equivalence verification and Maintainer ratification record. The ADR-021 bounded amendment requires DPA-500 post-adjudication verification to confirm synchronized meaning. Stability remains blocked on applicable DP1 Probe evidence and subsequent governed revalidation.

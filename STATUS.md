@@ -1,6 +1,7 @@
 # Status
 
 Status: active
+
 Status-date: 2026-07-17
 
 Superseded-by: n/a
@@ -9,11 +10,11 @@ Superseded-by: n/a
 
 Phase A is closed on `main`.
 
-Phase B — Core document-management integration is active on branch `spec/dpa-400-renderer-contract`.
+Phase B — Core document-management integration is complete through DPA-500 on branch `spec/dpa-500-freshness-gates`.
 
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200, DPA-300 and DPA-400 are `review-ready`. DPA-400 remains blocked from `stable` pending applicable exact-ref Probe evidence.
+DPA-200, DPA-300, DPA-400 and DPA-500 are `review-ready`. DPA-400 and DPA-500 remain blocked from `stable` pending applicable exact-ref Probe evidence.
 
 ## DP1 Discovery
 
@@ -25,59 +26,63 @@ DISC-001 through DISC-010 and DISC-003b are committed. Global writer-set complet
 
 No main-repository mutation occurred and no production form was selected.
 
-## DPA-300 lineage closeout
+## DPA-300 lineage and bounded amendment
 
 DPA-300 completed primary review, secondary verification, Maintainer adjudication, independent post-adjudication verification and bounded synchronization re-check.
 
 The later review-ready restructure was independently compared against the certified text and received `PASS_WITH_EXPLICIT_RATIFICATION`. The Maintainer ratification record restored the dropped target identity, generic required-field rejection, partition encoding declaration, policy identifiers and normative MUST force; it accepted the enumerated strengthenings and restored Probe and conformance pointers.
 
-DPA-300 remains `review-ready`. Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
+DPA-300 remains `review-ready`. ADR-021 adds a bounded synchronized amendment for conditional accepted-base persistence and layered post-acceptance comparison of registered-region projections. That amendment was included in the DPA-500 independent post-adjudication verification and passed without blocking findings. DPA-300 stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
 
-## DPA-400 review and adjudication
+## DPA-400 closeout
+
+DPA-400 completed primary review, adjudication, governed amendment, independent post-adjudication verification and status-only promotion.
+
+Independent verification at exact ref `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c` returned `PASS` with zero blocking findings. DPA-400 is `review-ready` and was merged through PR #2 at merge commit `7de43fff8debe5c0b9b0c8276a21723d5bc12da6`.
+
+Repository-specific renderer mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`; no production implementation, Probe success or main-repository conformance is claimed.
+
+## DPA-500 closeout
 
 The immutable primary-review baseline was:
 
-`8c9b6892540895e58be53038c6064648d49a2b57`
+`60d6457f0473365789ece4f885a48ea5320b01ff`
 
-Claude's primary review returned `ACCEPT_WITH_CHANGES` with four majors:
+Claude's primary architecture review returned `ACCEPT_WITH_CHANGES` with three majors, four minors and three editorial findings. All findings were accepted and adjudicated through ADR-021.
 
-1. immutable lifecycle-resolved renderer inputs;
-2. semantic resource bounds separated from operational safety aborts;
-3. renderer identifier/interface-version/semantic-version/implementation-evidence separation;
-4. DPA-300 restructure lineage verification.
+The governed amendment batch synchronizes:
 
-All four were accepted. DPA-ADR-019 and DPA-ADR-020 are committed. The DPA-300 equivalence verification returned `PASS_WITH_EXPLICIT_RATIFICATION`, and its complete difference set was dispositioned.
-
-The governed amendment batch synchronized:
-
-- `specs/dpa/DPA-100-FOUNDATIONS.md`;
 - `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
-- `specs/dpa/DPA-400-RENDERER-CONTRACT.md`;
-- `traceability/DPA-400_TRACEABILITY.md`;
-- `diagrams/dpa-400-renderer-boundary.mmd`;
-- `DECISIONS.md`.
+- `specs/dpa/DPA-500-FRESHNESS-AND-GATES.md`;
+- `traceability/DPA-500_TRACEABILITY.md`;
+- `diagrams/dpa-500-freshness-gates.mmd`;
+- `decisions/DPA-ADR-021-FRESHNESS-REACCEPTANCE-AND-LAYERED-ACCEPTANCE.md`.
 
-DPA-400 defines immutable content-addressed inputs, the four-part renderer identity/version model, bounded failure diagnostics, deterministic semantic bounds, non-semantic operational aborts and mandatory capability-boundary plus negative-test evidence.
+The immutable post-adjudication verification ref was:
 
-Independent post-adjudication verification at exact ref `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c` returned `PASS` with zero blocking findings. The report is committed as `reviews/claude/CLAUDE_DPA_400_POST_ADJUDICATION_VERIFICATION.md`.
+`bb3db42e49db0ce9a38e0a019962cdd61f51785c`
 
-DPA-400 is promoted to `review-ready`. Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`; no production implementation, Probe success or main-repository conformance is claimed.
+Independent verification returned `PASS_WITH_NON_BLOCKING_FINDINGS` with zero blocking findings, zero majors, zero minors and two editorial findings. It confirmed complete closure of all adjudicated findings, DPA-300/DPA-500 synchronization, derived traceability anchors, diagram consistency, authority boundaries and the absence of parallel systems.
+
+DPA-500 is now `review-ready`. This promotion does not establish production implementation, Probe success, adoption or main-repository conformance.
 
 ## Probe relationship
 
-PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400.
+PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400 or DPA-500 runtime completion.
 
 DPA-400 requires later exact-ref evidence for static renderer mapping, capability restriction, determinism, renderer versioning and lifecycle integration before `stable`.
+
+DPA-500 requires later exact-ref evidence for findings, severities, conditional base persistence, re-acceptance, ownership provenance, layered freshness, gate integration, recovery and staged strict adoption before `stable`.
 
 Probe fixtures may be prepared during the no-Mac period but must not be represented as executed.
 
 ## Next governed step
 
-1. keep the durable Lab gates green on the promoted branch head;
-2. begin DPA-500 drafting;
-3. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
-4. prepare renderer-map, determinism, immutable-input and purity fixtures for later DPA-400 Probe work;
-5. execute Probes only when a suitable main-repository environment is available.
+1. merge the completed DPA-500 review-ready slice through PR #3;
+2. preserve the two non-blocking editorial findings for the next ordinary amendment;
+3. execute PROBE-001 and the DPA-300-owned subset of PROBE-002 when a suitable main-repository environment is available;
+4. revalidate DPA-300 through DPA-500 against exact-ref Probe evidence before any possible stability promotion;
+5. continue DPA-600 through DPA-900 under the documented phase sequence.
 
 ## Restrictions
 
@@ -89,4 +94,4 @@ Probe fixtures may be prepared during the no-Mac period but must not be represen
 - No review finding becomes normative without adjudication.
 - A promotion commit changes status surfaces only and MUST NOT change normative text.
 
-Phase B may continue. The active specification step is DPA-500 drafting with bounded Probe-fixture preparation.
+Phase B through DPA-500 is review-complete. The active gate is PR #3 merge and later exact-ref Probe execution.
