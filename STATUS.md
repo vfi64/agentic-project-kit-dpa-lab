@@ -9,11 +9,11 @@ Superseded-by: n/a
 
 Phase A is closed on `main`.
 
-Phase B — Core document-management integration is active on branch `spec/dpa-400-renderer-contract`.
+Phase B — Core document-management integration is active on branch `spec/dpa-500-freshness-gates`.
 
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200, DPA-300 and DPA-400 are `review-ready`. DPA-400 remains blocked from `stable` pending applicable exact-ref Probe evidence.
+DPA-200, DPA-300 and DPA-400 are `review-ready`. DPA-500 is `draft`. DPA-400 and DPA-500 remain blocked from `stable` pending applicable exact-ref Probe evidence.
 
 ## DP1 Discovery
 
@@ -33,51 +33,53 @@ The later review-ready restructure was independently compared against the certif
 
 DPA-300 remains `review-ready`. Stability remains blocked on applicable DP1 Probe evidence and later governed revalidation.
 
-## DPA-400 review and adjudication
+## DPA-400 closeout
 
-The immutable primary-review baseline was:
+DPA-400 completed primary review, adjudication, governed amendment, independent post-adjudication verification and status-only promotion.
 
-`8c9b6892540895e58be53038c6064648d49a2b57`
+Independent verification at exact ref `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c` returned `PASS` with zero blocking findings. DPA-400 is `review-ready` and was merged through PR #2 at merge commit `7de43fff8debe5c0b9b0c8276a21723d5bc12da6`.
 
-Claude's primary review returned `ACCEPT_WITH_CHANGES` with four majors:
+Repository-specific renderer mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`; no production implementation, Probe success or main-repository conformance is claimed.
 
-1. immutable lifecycle-resolved renderer inputs;
-2. semantic resource bounds separated from operational safety aborts;
-3. renderer identifier/interface-version/semantic-version/implementation-evidence separation;
-4. DPA-300 restructure lineage verification.
+## DPA-500 draft
 
-All four were accepted. DPA-ADR-019 and DPA-ADR-020 are committed. The DPA-300 equivalence verification returned `PASS_WITH_EXPLICIT_RATIFICATION`, and its complete difference set was dispositioned.
+The first normative DPA-500 draft now defines:
 
-The governed amendment batch synchronized:
+- multidimensional projection freshness rather than time-only freshness;
+- acceptance-state validity and trust-state consequences;
+- independent contract, source, configuration, renderer, target, partition, gate-set and base-context drift classes;
+- structured finding semantics;
+- `pass`, `warn`, `block` and fail-closed `error` gate outcomes;
+- mandatory mutation and acceptance blockers;
+- observe, warn, block-new and strict staged enforcement;
+- renderer failure, nondeterminism, side-effect and operational-abort handling;
+- complete-target and registered-region freshness behavior;
+- interrupted `written-unverified` recovery;
+- bounded non-authoritative evidence;
+- conformance-test and invalid-state catalogs.
 
-- `specs/dpa/DPA-100-FOUNDATIONS.md`;
-- `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
-- `specs/dpa/DPA-400-RENDERER-CONTRACT.md`;
-- `traceability/DPA-400_TRACEABILITY.md`;
-- `diagrams/dpa-400-renderer-boundary.mmd`;
-- `DECISIONS.md`.
+Traceability is recorded in `traceability/DPA-500_TRACEABILITY.md` and the primary flow in `diagrams/dpa-500-freshness-gates.mmd`.
 
-DPA-400 defines immutable content-addressed inputs, the four-part renderer identity/version model, bounded failure diagnostics, deterministic semantic bounds, non-semantic operational aborts and mandatory capability-boundary plus negative-test evidence.
-
-Independent post-adjudication verification at exact ref `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c` returned `PASS` with zero blocking findings. The report is committed as `reviews/claude/CLAUDE_DPA_400_POST_ADJUDICATION_VERIFICATION.md`.
-
-DPA-400 is promoted to `review-ready`. Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`; no production implementation, Probe success or main-repository conformance is claimed.
+Concrete finding identifiers, severities, acceptance-state schema, strict-adoption switches, gate-set representation and command integration remain `NEEDS_MAIN_REPO_VALIDATION`.
 
 ## Probe relationship
 
-PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400.
+PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400 or DPA-500 runtime completion.
 
 DPA-400 requires later exact-ref evidence for static renderer mapping, capability restriction, determinism, renderer versioning and lifecycle integration before `stable`.
+
+DPA-500 requires later exact-ref evidence for findings, severities, acceptance-state persistence, freshness checks, gate integration, recovery and staged strict adoption before `stable`.
 
 Probe fixtures may be prepared during the no-Mac period but must not be represented as executed.
 
 ## Next governed step
 
-1. keep the durable Lab gates green on the promoted branch head;
-2. begin DPA-500 drafting;
-3. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
-4. prepare renderer-map, determinism, immutable-input and purity fixtures for later DPA-400 Probe work;
-5. execute Probes only when a suitable main-repository environment is available.
+1. run the durable Lab gates on the DPA-500 draft head;
+2. perform an internal cross-artifact audit of DPA-100 through DPA-500;
+3. freeze an immutable DPA-500 primary-review baseline;
+4. obtain a primary architecture review against that exact ref;
+5. adjudicate findings before any promotion beyond `draft`;
+6. continue bounded PROBE-001/002 and renderer/freshness fixture preparation without claiming execution.
 
 ## Restrictions
 
@@ -89,4 +91,4 @@ Probe fixtures may be prepared during the no-Mac period but must not be represen
 - No review finding becomes normative without adjudication.
 - A promotion commit changes status surfaces only and MUST NOT change normative text.
 
-Phase B may continue. The active specification step is DPA-500 drafting with bounded Probe-fixture preparation.
+Phase B may continue. The active gate is DPA-500 internal consistency and primary-review readiness.
