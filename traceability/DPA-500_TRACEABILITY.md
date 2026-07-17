@@ -7,26 +7,26 @@ This matrix traces DPA-500 requirements without becoming a competing normative s
 
 | ID | Requirement | Invariants | Tests | Later work | Evidence / rollback |
 |---|---|---|---|---|---|
-| FG-001 | Freshness is multidimensional and time alone is not authority | DPA-INV-001, DPA-INV-004, DPA-INV-011 | no-time-only staleness; dimension drift cases | DP1 Probe; DP2 lifecycle integration | exact-ref comparison evidence; preserve prior accepted state |
+| FG-001 | Freshness is multidimensional and time alone is not authority | DPA-INV-001, DPA-INV-004, DPA-INV-011 | no-time-only staleness; dimension comparison cases | DP1 Probe; DP2 lifecycle integration | exact-ref comparison evidence; preserve prior accepted state |
 | FG-002 | Acceptance state is lifecycle state, not evidence | DPA-INV-002, DPA-INV-007, DPA-INV-013 | missing, malformed, scope-mismatched state | DP2 acceptance-state implementation | bounded state/evidence separation; no silent reconstruction |
-| FG-003 | Independent drift classes remain separately reportable | DPA-INV-004, DPA-INV-012 | contract/source/renderer/target/partition/gate-set drift | DP2 findings; DP5 strict gates | structured findings; regenerate from current ref |
-| FG-004 | Mandatory safety failures block mutation and acceptance | DPA-INV-003, DPA-INV-006, DPA-INV-009 | stale-plan, invalid boundary, nondeterminism, side effects | DP2 mutation path; DP5 enforcement | attempt abandoned; no accepted partial output |
-| FG-005 | Gate outcome and trust state remain distinct | DPA-INV-002, DPA-INV-010 | audit block without mutation; warn cannot accept | DP2 audit UX; DP5 policy | record both outcome and state |
+| FG-003 | DPA-100 drift classes remain top-level and independent subreasons remain separately reportable | DPA-INV-004, DPA-INV-012 | base/source/target/contract/renderer/partition/ownership drift and subreasons | DP2 findings; DP5 strict gates | structured findings; regenerate from current ref |
+| FG-004 | Mandatory safety failures produce gate failure and block mutation and acceptance | DPA-INV-003, DPA-INV-006, DPA-INV-009 | stale-plan, invalid boundary, nondeterminism, side effects | DP2 mutation path; DP5 enforcement | attempt abandoned; no accepted partial output |
+| FG-005 | Freshness classification, gate decision and consumer trust state remain distinct | DPA-INV-002, DPA-INV-010 | read-only failure without mutation; warning cannot accept | DP2 audit UX; DP5 policy | record classification, decision and state separately |
 | FG-006 | Staged enforcement is explicit, reversible and not time-triggered | DPA-INV-005, DPA-INV-014 | observe/warn/block-new/strict transitions | DP5 adoption | configuration and decision evidence; revert stage safely |
 | FG-007 | Renderer drift uses identifier/interface/semantic distinctions | DPA-INV-004, DPA-INV-008 | identifier, interface, semantic, evidence-only changes | DP1 renderer Probe; DP2 integration | semantic version controls freshness; implementation evidence remains evidence |
 | FG-008 | Region projections evaluate payload, preserved bytes and boundaries independently | DPA-INV-003, DPA-INV-015 | payload, preserved-region and partition drift | DP2 first projection | preserve manual/history bytes; regenerate only owned payload |
 | FG-009 | Interrupted writes never imply acceptance | DPA-INV-006, DPA-INV-013 | written-unverified recovery paths | DP2 recovery | retain attempt evidence; verify exact bytes or regenerate |
 | FG-010 | Evidence is bounded and non-authoritative | DPA-INV-002, DPA-INV-007 | evidence failure and unavailable checks | DP2 evidence integration | no fabricated success; preserve state distinction |
 | FG-011 | Existing main-repository gates remain production authority | DPA-INV-001, DPA-INV-016 | no parallel gate path | controlled import; DP2/DP5 | import only approved contracts; remove lab-only scaffolding after adoption |
-| FG-012 | Unknown mandatory inputs fail closed | DPA-INV-003, DPA-INV-009 | missing mandatory evaluation input | DP2 validation | explicit finding; no mutation |
+| FG-012 | Missing mandatory inputs cause indeterminate evaluation and fail-closed gate failure | DPA-INV-003, DPA-INV-009 | missing mandatory evaluation input | DP2 validation | explicit finding; no mutation |
 
 ## Probe obligations
 
-- Map abstract drift classes to the existing main-repository findings and severities.
-- Verify the existing gate-set representation, strict-adoption controls and command integration.
+- Map DPA-100 drift classes and DPA-500 finding subreasons to the existing main-repository findings and severities.
+- Verify the existing pass/warning/failure gate representation, gate-set identity, strict-adoption controls and command integration.
 - Verify acceptance-state schema, Workspace path and crash-safe persistence order.
 - Demonstrate that existing non-projection documents retain compatible behavior.
-- Demonstrate observe, warn, block-new and strict behavior without weakening mutation safety.
+- Demonstrate observe, warn, block-new and strict policy stages without weakening mutation safety.
 
 ## Review boundary
 
