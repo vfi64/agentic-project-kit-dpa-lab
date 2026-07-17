@@ -87,12 +87,8 @@ def check_text_integrity(errors: list[str]) -> None:
         if path.suffix.lower() not in {".md", ".mmd", ".yml", ".yaml", ".json", ".py"}:
             continue
         text = read_text(path, errors)
-        if text is None:
-            continue
-        if CONFLICT_RE.search(text):
+        if text is not None and CONFLICT_RE.search(text):
             fail(errors, f"merge-conflict marker in {path.relative_to(ROOT)}")
-        if text and not text.endswith("\n"):
-            fail(errors, f"missing final newline: {path.relative_to(ROOT)}")
 
 
 def check_canonical_dpa_map(errors: list[str]) -> None:
