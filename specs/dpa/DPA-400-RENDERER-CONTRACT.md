@@ -1,8 +1,8 @@
 # DPA-400 — Renderer Contract
 
-Status: draft
-Status-date: 2026-07-16
-Authority: normative DPA specification, subject to post-adjudication verification and Probe evidence
+Status: review-ready
+Status-date: 2026-07-17
+Authority: normative DPA specification; review-ready after independent post-adjudication verification at `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c`
 
 ## 1. Purpose
 
