@@ -1,10 +1,10 @@
 # DPA-500 — Freshness and Gates
 
-Status: draft
+Status: review-ready
 
 Status-date: 2026-07-17
 
-Authority: normative DPA specification, subject to post-adjudication verification and applicable Probe evidence
+Authority: normative DPA specification, review-ready after primary review, Maintainer adjudication and independent post-adjudication verification; stability remains subject to applicable Probe evidence
 
 ## 1. Purpose
 
