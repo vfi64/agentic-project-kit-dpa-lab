@@ -10,17 +10,17 @@ flowchart TD
     BASE[Base / ref context]
 
     EVAL[Lifecycle-owned freshness evaluation]
-    FIND[Structured independent findings]
-    TRUST[Trust-state assignment]
+    CLASS[Freshness classification: fresh / stale / invalid / indeterminate]
+    FIND[Structured independent findings and subreasons]
+    TRUST[Existing DPA-100 consumer trust state]
     GATE{Existing gate authority}
 
     PASS[pass]
-    WARN[warn]
-    BLOCK[block]
-    ERROR[error / fail closed]
+    WARNING[warning]
+    FAILURE[failure / fail closed]
     ACCEPT[Record acceptance state and become accepted]
     PRESERVE[Preserve bytes and prior state]
-    ABANDON[Abandon attempt]
+    ABANDON[Abandon attempt when lifecycle attempt cannot complete]
 
     REG --> EVAL
     SRC --> EVAL
@@ -32,22 +32,24 @@ flowchart TD
     GSET --> EVAL
     BASE --> EVAL
 
+    EVAL --> CLASS
     EVAL --> FIND
-    EVAL --> TRUST
+    CLASS --> GATE
     FIND --> GATE
     TRUST --> GATE
 
     GATE -->|all mandatory checks pass| PASS
-    GATE -->|only staged non-blocking findings| WARN
-    GATE -->|freshness or safety failure| BLOCK
-    GATE -->|evaluation unavailable or broken| ERROR
+    GATE -->|only staged non-blocking findings| WARNING
+    GATE -->|freshness, safety or evaluation failure| FAILURE
 
     PASS --> ACCEPT
-    WARN --> PRESERVE
-    BLOCK --> PRESERVE
-    BLOCK --> ABANDON
-    ERROR --> PRESERVE
-    ERROR --> ABANDON
+    WARNING --> PRESERVE
+    FAILURE --> PRESERVE
+    FAILURE --> ABANDON
 
-    NOTE[Renderer never assigns findings, trust state, gate outcome or acceptance]
-    NOTE -. authority boundary .-> EVAL
+    NOTE1[Freshness classification does not replace consumer trust state]
+    NOTE2[observe / warn / block-new / strict are policy stages, not gate outcomes]
+    NOTE3[Renderer never assigns findings, trust state, gate decision or acceptance]
+    NOTE1 -. classification boundary .-> CLASS
+    NOTE2 -. policy boundary .-> GATE
+    NOTE3 -. authority boundary .-> EVAL
