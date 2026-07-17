@@ -3,53 +3,76 @@ flowchart TD
     SRC[Declared source fingerprints]
     CFG[Configuration fingerprint]
     REN[Renderer identifier / interface / semantic version]
-    TGT[Current target and partition fingerprints]
-    SEM[Target semantics]
+    OWN[Ownership contract and provenance]
+    PAY[Lifecycle-owned payload fingerprint]
+    PART[Lifecycle-owned partition bytes and boundaries]
+    WHOLE[Complete-target fingerprint]
+    PRES[Preserved-region fingerprint]
     ACC[Acceptance state]
     GSET[Required gate-set identity]
-    BASE[Base / ref context]
+    BASE[Plan / operation / declared base context]
 
     EVAL[Lifecycle-owned freshness evaluation]
-    CLASS[Freshness classification: fresh / stale / invalid / indeterminate]
-    FIND[Structured independent findings and subreasons]
-    TRUST[Existing DPA-100 consumer trust state]
+    CLASS{Freshness classification}
+    FIND[Structured drift classes and finding subreasons]
     GATE{Existing gate authority}
+
+    FRESH[fresh]
+    STALE[stale]
+    INVALID[invalid]
+    INDET[indeterminate]
 
     PASS[pass]
     WARNING[warning]
-    FAILURE[failure / fail closed]
-    ACCEPT[Record acceptance state and become accepted]
-    PRESERVE[Preserve bytes and prior state]
-    ABANDON[Abandon attempt when lifecycle attempt cannot complete]
+    FAILURE[failure]
+
+    ACCEPT[Post-write acceptance]
+    REACC{Gate-set-only re-acceptance eligible?}
+    STATE[Update lifecycle-owned acceptance state only]
+    PRESERVE[Preserve target bytes and prior state]
+    ABANDON[Abandon active attempt]
 
     REG --> EVAL
     SRC --> EVAL
     CFG --> EVAL
     REN --> EVAL
-    TGT --> EVAL
-    SEM --> EVAL
+    OWN --> EVAL
+    PAY --> EVAL
+    PART --> EVAL
     ACC --> EVAL
     GSET --> EVAL
     BASE --> EVAL
 
+    WHOLE -. complete-target freshness or mutation guard .-> EVAL
+    PRES -. mutation / verification / recovery guard .-> EVAL
+
     EVAL --> CLASS
-    EVAL --> FIND
-    CLASS --> GATE
+    CLASS --> FRESH
+    CLASS --> STALE
+    CLASS --> INVALID
+    CLASS --> INDET
+    CLASS --> FIND
     FIND --> GATE
-    TRUST --> GATE
 
     GATE -->|all mandatory checks pass| PASS
     GATE -->|only staged non-blocking findings| WARNING
-    GATE -->|freshness, safety or evaluation failure| FAILURE
+    GATE -->|mandatory mismatch or unavailable evaluation| FAILURE
 
-    PASS --> ACCEPT
+    PASS -->|post-write acceptance-bearing operation| ACCEPT
+    PASS --> REACC
+    REACC -->|all dimensions except old gate-set identity are fresh; no render or target write| STATE
+    REACC -->|not eligible| PRESERVE
+
     WARNING --> PRESERVE
     FAILURE --> PRESERVE
     FAILURE --> ABANDON
 
-    NOTE1[Freshness classification does not replace consumer trust state]
-    NOTE2[observe / warn / block-new / strict are policy stages, not gate outcomes]
-    NOTE3[Renderer never assigns findings, trust state, gate decision or acceptance]
-    NOTE1 -. classification boundary .-> CLASS
-    NOTE2 -. policy boundary .-> GATE
+    NOTE1[Authorized declared non-lifecycle-owner region evolution is not projection drift]
+    NOTE2[Complete-target and preserved-region fingerprints remain plan / write / verify / recovery guards]
+    NOTE3[Renderer never assigns findings, classification, trust state, gate decision or acceptance]
+    NOTE4[Read-only pass does not update acceptance state]
+
+    NOTE1 -. layered acceptance .-> EVAL
+    NOTE2 -. guard boundary .-> EVAL
     NOTE3 -. authority boundary .-> EVAL
+    NOTE4 -. operation scope .-> PASS
