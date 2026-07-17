@@ -1,7 +1,7 @@
 # Status
 
 Status: active
-Status-date: 2026-07-16
+Status-date: 2026-07-17
 
 Superseded-by: n/a
 
@@ -13,7 +13,7 @@ Phase B — Core document-management integration is active on branch `spec/dpa-4
 
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
-DPA-200 and DPA-300 are `review-ready`. DPA-400 remains `draft` pending independent post-adjudication verification.
+DPA-200, DPA-300 and DPA-400 are `review-ready`. DPA-400 remains blocked from `stable` pending applicable exact-ref Probe evidence.
 
 ## DP1 Discovery
 
@@ -48,7 +48,7 @@ Claude's primary review returned `ACCEPT_WITH_CHANGES` with four majors:
 
 All four were accepted. DPA-ADR-019 and DPA-ADR-020 are committed. The DPA-300 equivalence verification returned `PASS_WITH_EXPLICIT_RATIFICATION`, and its complete difference set was dispositioned.
 
-The governed amendment batch now synchronizes:
+The governed amendment batch synchronized:
 
 - `specs/dpa/DPA-100-FOUNDATIONS.md`;
 - `specs/dpa/DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md`;
@@ -57,9 +57,11 @@ The governed amendment batch now synchronizes:
 - `diagrams/dpa-400-renderer-boundary.mmd`;
 - `DECISIONS.md`.
 
-DPA-400 now defines immutable content-addressed inputs, the four-part renderer identity/version model, bounded failure diagnostics, deterministic semantic bounds, non-semantic operational aborts and mandatory capability-boundary plus negative-test evidence.
+DPA-400 defines immutable content-addressed inputs, the four-part renderer identity/version model, bounded failure diagnostics, deterministic semantic bounds, non-semantic operational aborts and mandatory capability-boundary plus negative-test evidence.
 
-Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`.
+Independent post-adjudication verification at exact ref `6050d0664d9c1ac8bd1a2eb9d6409593046ede9c` returned `PASS` with zero blocking findings. The report is committed as `reviews/claude/CLAUDE_DPA_400_POST_ADJUDICATION_VERIFICATION.md`.
+
+DPA-400 is promoted to `review-ready`. Repository-specific mappings and enforcement mechanisms remain `NEEDS_MAIN_REPO_VALIDATION`; no production implementation, Probe success or main-repository conformance is claimed.
 
 ## Probe relationship
 
@@ -71,11 +73,11 @@ Probe fixtures may be prepared during the no-Mac period but must not be represen
 
 ## Next governed step
 
-1. freeze the governed DPA-400 amendment ref;
-2. perform independent post-adjudication verification against that exact ref;
-3. correct only verified residuals through a bounded amendment if necessary;
-4. promote DPA-400 no further than `review-ready` after PASS;
-5. begin DPA-500 drafting and PROBE-001/002 fixture preparation.
+1. keep the durable Lab gates green on the promoted branch head;
+2. begin DPA-500 drafting;
+3. prepare PROBE-001 and the DPA-300-owned subset of PROBE-002 as bounded fixtures and expected-result contracts;
+4. prepare renderer-map, determinism, immutable-input and purity fixtures for later DPA-400 Probe work;
+5. execute Probes only when a suitable main-repository environment is available.
 
 ## Restrictions
 
@@ -87,4 +89,4 @@ Probe fixtures may be prepared during the no-Mac period but must not be represen
 - No review finding becomes normative without adjudication.
 - A promotion commit changes status surfaces only and MUST NOT change normative text.
 
-Phase B may continue. The active gate is DPA-400 independent post-adjudication verification.
+Phase B may continue. The active specification step is DPA-500 drafting with bounded Probe-fixture preparation.
