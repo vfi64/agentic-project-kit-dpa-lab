@@ -16,9 +16,11 @@ No repository-specific statement is `VERIFIED` until validated against an exact 
 | DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | review-ready |
 | DPA-400 | `DPA-400-RENDERER-CONTRACT.md` | review-ready |
 | DPA-500 | `DPA-500-FRESHNESS-AND-GATES.md` | review-ready |
-| DPA-600 | `DPA-600-CONCURRENCY.md` | draft |
-| DPA-700 | `DPA-700-MIGRATION.md` | planned |
+| DPA-600 | `DPA-600-CONCURRENCY.md` | draft, frozen during Package P |
+| DPA-700 | `DPA-700-MIGRATION.md` | planned, not started |
 | DPA-800 | `DPA-800-DP1-DP5.md` | planned |
 | DPA-900 | `DPA-900-FUTURE.md` | planned |
 
 A DPA number MUST have exactly one canonical normative file. Amendments and historical pointers MUST identify their owner and MUST NOT remain competing normative homes.
+
+The normative number sequence does not determine the immediate execution order. `MASTERPLAN.md` and `MASTERPLAN_REMOTE_PREPARATION.md` place Remote Probe Preparation before material downstream DPA-600 through DPA-900 expansion.
