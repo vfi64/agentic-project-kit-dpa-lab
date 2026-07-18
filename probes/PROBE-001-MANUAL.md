@@ -6,23 +6,27 @@ Status-date: 2026-07-18
 
 Consumes: `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
 
-Governing architecture: DPA-300 and accepted ADRs, including ADR-017
+Fixture manifest: `probes/PROBE-001-FIXTURE-MANIFEST.md`
+
+Governing architecture: DPA-300 §§4–6 and DPA-ADR-017
 
 Execution-state: not run
 
 ## 1. Purpose
 
-PROBE-001 measures how the exact-ref main-repository registry parser and validator handle the proposed DPA projection-contract and partition-contract representations.
+PROBE-001 measures how the exact-ref main-repository documentation-registry parser and validator handle proposed DPA projection and partition metadata.
 
-It is designed to distinguish:
+It distinguishes:
 
-- syntax accepted by the current parser;
-- semantic validation performed by the current validator;
-- required DPA fields or constraints not represented by the current implementation;
-- implementation behavior that conflicts with or falsifies a DPA assumption;
-- defects in the Probe fixtures or expectations.
+- parser acceptance;
+- semantic-validator acceptance;
+- normalization behavior;
+- unsupported representation;
+- missing implementation;
+- implementation behavior that conflicts with a DPA requirement or assumption;
+- defective fixture or harness behavior.
 
-PROBE-001 does not test renderer execution, lifecycle mutation, acceptance state, recovery, freshness gates or production adoption.
+It does not test renderer execution, lifecycle mutation, acceptance state, recovery, freshness gates, workflow serialization, migration or adoption.
 
 ## 2. Evidence boundary
 
@@ -30,350 +34,207 @@ The historical Discovery ref
 
 `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-may inform fixture design only. It does not establish current parser or validator behavior.
+may inform preparation only. Execution claims require a current remote-main identity, local confirmation, an exact frozen Probe ref, immutable Lab manual and fixture refs, recorded commands and bounded outputs.
 
-All execution claims require:
+Until execution, all concrete parser, validator, schema, command and path mappings remain `NEEDS_MAIN_REPO_VALIDATION`.
 
-- current remote-main identification;
-- local confirmation;
-- exact Probe-ref freeze;
-- immutable fixture revision;
-- recorded commands and bounded outputs.
+## 3. Normative requirements under test
 
-Until execution, every concrete main-repository parser, schema and command mapping remains `NEEDS_MAIN_REPO_VALIDATION`.
+### 3.1 Existing-registry compatibility
 
-## 3. In scope
+- The existing documentation registry remains the sole declarative authority.
+- A registry entry without projection metadata remains manual.
+- Unknown or malformed projection metadata fails loud and never silently downgrades to manual behavior.
+- Contracts are data, not executable behavior.
 
-PROBE-001 covers:
+### 3.2 ProjectionContract
 
-- manual registry compatibility controls;
-- proposed `ProjectionContract` representation;
-- proposed `PartitionContract` representation;
-- schema and schema-version handling;
-- required-field validation;
-- unknown-field behavior;
-- target identity representation;
-- registered-region representation;
-- partition encoding declaration;
-- policy and renderer identifiers as data fields;
-- duplicate identity and conflicting-entry behavior where the current registry supports such validation;
-- bounded parser and validator diagnostics.
+A candidate must represent all DPA-300 §5.2 fields, including target identity, document form, renderer identity and versions, ordered sources and configuration, target semantics and version, lifecycle/freshness/evidence policies, fingerprint algorithm and domain version, and migration compatibility version.
 
-## 4. Out of scope
+For a region target it must additionally represent parent document identity, region identity, parent partition-contract identity and payload target semantics. Region entries must not independently configure partition boundaries, malformed-boundary behavior or write ownership.
 
-The Probe MUST NOT claim conclusions about:
+### 3.3 Parent-entry PartitionContract
 
-- renderer resolution or execution;
-- target writing;
-- lifecycle planning or locking;
-- acceptance-state persistence;
-- recovery;
-- findings or gate integration;
-- branch or pull-request serialization;
-- migration or rollback;
-- strict adoption.
+A multi-region document must declare exactly one partition contract on its parent registry entry. The contract must explain the complete ordered region set, every region owner class, projected-region selection, boundaries, separator ownership, normalization, encoding, line endings, adjacency, malformed cases, complete-byte ownership, fingerprinting and compatibility.
 
-A parser accepting a field does not prove that any runtime consumer implements its semantics.
+Projected-region entries reference this parent contract. They do not carry competing boundary or writer authority.
 
-## 5. Required execution preconditions
+### 3.4 Validation
+
+The Probe covers the DPA-300 §6 rejection classes that are representable at parser/validator scope, including unknown versions, ambiguous identities, dangling references, absent or overlapping regions, unowned bytes, forbidden executable content, unsupported renderer identifiers, incomplete target semantics and silent fallback.
+
+Parser acceptance never proves runtime semantic implementation.
+
+## 4. Execution preconditions
 
 Before execution:
 
-1. record current remote `origin/main` SHA;
-2. synchronize a local checkout to that exact ref;
-3. record worktree cleanliness and environment identity;
-4. identify the actual registry parser, validator and supported invocation path;
-5. record the current manual-registry format and schema/version behavior;
-6. freeze this manual and the fixture manifest at exact Lab refs;
-7. create an isolated fixture or test workspace that cannot alter production registry state;
-8. confirm cleanup and rollback actions;
-9. record any permissions or tool limitations.
-
-Failure to establish a safe isolated execution path makes mutating or import cases `BLOCKED`.
-
-## 6. Fixture families
-
-The exact serialized syntax remains provisional until current-ref parser inspection. The semantic fixture families are fixed.
-
-### F001-MANUAL
-
-A current-format manual registry entry used as a compatibility control.
-
-Purpose:
-
-- confirm the invocation and evidence path;
-- establish expected current-format acceptance;
-- detect Probe harness defects before DPA-specific cases.
-
-### F001-PROJECTION
-
-A proposed projection-contract entry containing at least:
-
-- schema identifier;
-- schema version;
-- stable contract identity;
-- source identity or source selector;
-- target identity;
-- renderer identifier;
-- target semantics;
-- lifecycle and policy identifiers where required by DPA-300;
-- partition reference or full-target declaration;
-- registered-region declaration where applicable.
-
-### F001-PARTITION
-
-A proposed partition-contract entry containing at least:
-
-- schema identifier;
-- schema version;
-- stable partition identity;
-- target identity;
-- registered-region or partition boundaries;
-- encoding declaration;
-- ownership or policy identity where required;
-- deterministic region identity.
-
-### F001-INVALID
-
-Negative variants derived from valid fixtures by one bounded change.
-
-## 7. Case matrix
-
-### P001-C001 — Manual registry compatibility control
-
-Expected:
-
-- current-format control parses and validates as documented by the exact-ref implementation;
-- no DPA-specific conclusion is drawn.
-
-Failure consequence:
-
-- Probe harness or invocation is defective or current behavior changed;
-- DPA-specific cases are `BLOCKED` until resolved.
-
-### P001-C002 — Minimal valid ProjectionContract candidate
-
-Expected-result class:
-
-- informational compatibility observation.
-
-Possible valid outcomes:
-
-- accepted by parser and validator;
-- parsed but rejected by semantic validator;
-- rejected as unknown schema or shape;
-- execution blocked because no safe generic fixture path exists.
-
-No outcome alone establishes architecture conformance.
-
-### P001-C003 — Minimal valid PartitionContract candidate
-
-Same outcome interpretation as P001-C002, with special attention to partition encoding, region identity and target binding.
-
-### P001-C004 — ProjectionContract missing required field
-
-Fixture mutation:
-
-- remove exactly one DPA-required field.
-
-Expected:
-
-- if the current validator claims the proposed schema, it MUST reject the fixture;
-- if the schema is unsupported, rejection reason MUST be recorded without treating it as field-level validation.
-
-### P001-C005 — PartitionContract missing required field
-
-Equivalent to P001-C004 for a partition-required field.
-
-### P001-C006 — Unknown schema identifier
-
-Expected:
-
-- fail loud;
-- no silent fallback to manual-entry semantics;
-- no partial registration.
-
-### P001-C007 — Unknown schema version
-
-Expected:
-
-- fail loud;
-- no silent downgrade or reinterpretation;
-- bounded diagnostic identifies unsupported version or equivalent reason.
-
-### P001-C008 — Unknown top-level field
-
-Expected:
-
-- exact behavior recorded;
-- classify strict rejection, explicit ignore, warning or silent acceptance;
-- DPA compatibility assessed only after the architecture's unknown-field rule is compared with observed behavior.
-
-### P001-C009 — Duplicate contract identity
-
-Expected:
-
-- duplicate or conflicting identity is rejected, or current implementation limitation is recorded;
-- no last-writer-wins assumption may be invented.
-
-### P001-C010 — Target identity absent or ambiguous
-
-Expected:
-
-- reject when the tested schema claims DPA contract support;
-- no target inferred from path, filename or ambient workspace state unless that behavior is explicitly normative.
-
-### P001-C011 — Registered-region declaration valid
-
-Expected:
-
-- parser preserves the declared region identity and boundaries if the representation is supported;
-- no runtime ownership or lifecycle conclusion is drawn.
-
-### P001-C012 — Registered-region declaration malformed
-
-Expected:
-
-- fail loud;
-- no silent conversion to full-target ownership;
-- no loss of target identity.
-
-### P001-C013 — Partition encoding declaration absent
-
-Expected:
-
-- reject when required by the claimed schema;
-- unsupported-schema rejection must not be misreported as successful field validation.
-
-### P001-C014 — Renderer identifier syntactically present
-
-Expected:
-
-- parser preserves the identifier as data if the schema is accepted;
-- renderer resolution and interface compatibility remain out of scope.
-
-### P001-C015 — Policy identifier unknown
-
-Expected:
-
-- record whether validation rejects, defers or ignores the identifier;
-- do not infer policy implementation from parser acceptance.
-
-### P001-C016 — Additional related path discovery
-
-Triggered when execution reveals another registry reader, parser, validator, loader or normalization path.
-
-Expected:
-
-- record exact symbol/path and relation to the case;
-- do not expand execution scope silently;
-- classify whether a new bounded case or a later Probe amendment is required.
-
-## 8. Expected observation categories
-
-For each case record separately:
-
-- parse result;
-- validation result;
-- normalized representation, if any;
-- diagnostics;
+1. record the current remote `origin/main` SHA;
+2. synchronize a clean local checkout to that exact ref;
+3. identify every relevant registry reader, parser, validator and normalization path;
+4. record current manual-entry shape and supported schema/version behavior;
+5. select a safe isolated fixture-loading path;
+6. freeze the Lab manual and fixture revisions;
+7. materialize fixtures only after semantic-to-serialized-field reconciliation;
+8. record cleanup and rollback actions;
+9. confirm that no production registry or protected planning path can be changed.
+
+If a safe isolated path cannot be established, all cases requiring loading are `BLOCKED`.
+
+## 5. Case matrix
+
+### Control
+
+| Case | Purpose | Required interpretation |
+|---|---|---|
+| P001-C001 | Current-format manual entry | Must pass before DPA cases support conclusions; failure blocks the harness |
+
+### Valid candidates
+
+| Case | Purpose | Required interpretation |
+|---|---|---|
+| P001-C002 | Minimal full-target ProjectionContract | Compatibility observation only |
+| P001-C003 | Parent entry with one complete PartitionContract | Tests parent location, exactly-one rule and complete contract shape |
+| P001-C004 | Region ProjectionContract referencing parent and partition | Tests reference and inheritance representation without duplicated boundary policy |
+
+### Required fields, schema and identity
+
+| Case | Purpose | Expected behavior when schema support is claimed |
+|---|---|---|
+| P001-C005 | Projection field missing | Reject before rendering or planning |
+| P001-C006 | Partition field missing | Reject before rendering or planning |
+| P001-C007 | Unknown schema | Fail loud; no manual fallback or partial registration |
+| P001-C008 | Unknown schema/compatibility version | Fail loud; no downgrade |
+| P001-C009 | Unknown top-level field | Record strict rejection, warning, explicit ignore or silent acceptance separately |
+| P001-C010 | Duplicate contract identity | Reject ambiguity; no invented last-writer-wins rule |
+| P001-C011 | Missing or ambiguous target identity | Reject; no inference from path or ambient state |
+
+### Parent and partition relationships
+
+| Case | Purpose | Expected behavior |
+|---|---|---|
+| P001-C012 | Dangling parent identity | Reject |
+| P001-C013 | Dangling partition-contract reference | Reject |
+| P001-C014 | Region absent from parent ordered list | Reject |
+| P001-C015 | More than one partition contract on parent | Reject |
+| P001-C016 | Duplicate region identity | Reject |
+| P001-C017 | Overlapping region/boundary declaration | Reject |
+| P001-C018 | Partition metadata leaves unexplained bytes | Reject |
+| P001-C019 | Ordering or adjacency contradiction | Reject |
+| P001-C020 | Encoding/normalization declaration missing | Reject when required by the claimed schema |
+| P001-C021 | Region independently declares boundary representation | Reject |
+| P001-C022 | Region declares configurable non-lifecycle writer | Reject |
+
+### Static and complete declarative form
+
+| Case | Purpose | Expected behavior |
+|---|---|---|
+| P001-C023 | Unknown renderer identifier | Fail loud if validation owns static identifier checking; otherwise record deferred validation without claiming support |
+| P001-C024 | Executable import path or dynamic expression | Reject |
+| P001-C025 | Ordered source list changed | Preserve order and expose semantic difference where normalized representation is available |
+| P001-C026 | Output-affecting configuration omitted | Reject or expose missing required declaration; never infer ambient configuration silently |
+| P001-C027 | Unknown policy identifier | Record reject/defer/ignore behavior without inferring policy implementation |
+
+### Discovery extension
+
+If any case reveals an additional registry reader, parser, validator, loader or normalization path:
+
+- record exact symbol and path;
+- do not expand scope silently;
+- classify whether the current case must be repeated through that path;
+- amend the inventory and rerun obligations before a Probe-level conclusion.
+
+## 6. Observation record
+
+For every case, record separately:
+
+- parser result;
+- validator result;
+- normalized representation or hash;
+- diagnostic class and bounded diagnostic;
 - return code or API result;
-- changed paths;
-- whether any partial registry state was created;
-- cleanup result.
+- changed-path manifest;
+- partial-state creation, if any;
+- cleanup result;
+- exact main-repository, manual and fixture refs.
 
-Parser acceptance and validator acceptance MUST be reported as separate observations when the implementation exposes both stages.
+The report must distinguish unsupported schema rejection from field-level semantic validation.
 
-## 9. Prohibited observations
+## 7. Always-significant failures
 
-The following are always significant:
+The following are prohibited:
 
-- silent fallback from unknown DPA schema to manual-entry semantics;
-- partial registry mutation after rejection;
-- target identity inferred contrary to fixture data;
-- malformed registered region treated as full-target ownership;
-- unknown schema version silently treated as current;
-- destructive normalization that loses required identity;
-- unbounded diagnostics containing unrelated repository content.
+- unknown DPA metadata silently treated as a manual entry;
+- partial registration after rejection;
+- identity inferred contrary to fixture data;
+- malformed region treated as full-target ownership;
+- unknown version silently treated as current;
+- destructive normalization that loses required identity or order;
+- executable or dynamic registry content accepted as behavior;
+- region metadata creating competing boundary or writer authority;
+- diagnostics leaking unrelated repository content.
 
-## 10. Evidence set
+## 8. Evidence set
 
-Execution MUST produce:
+Execution must produce:
 
-- execution manifest;
+- execution manifest and environment identity;
 - exact main-repository ref;
 - exact Lab manual and fixture refs;
-- parser and validator symbol/path inventory;
-- command or API invocation record;
-- per-case input hash;
-- per-case parse and validation results;
+- parser/validator/reader inventory;
+- command or API invocation records;
+- per-case input hashes;
+- parse, validation and normalized-output observations;
 - bounded diagnostics;
-- normalized-output hash and bounded representation where available;
-- changed-path manifest;
-- cleanup record;
+- changed-path and cleanup records;
 - interpretation report;
 - Maintainer adjudication record after review.
 
-## 11. Outcome aggregation
+Evidence records behavior; it does not become registry, lifecycle or acceptance authority.
 
-Mandatory control:
+## 9. Outcome aggregation
 
-- P001-C001 MUST be `PASS` before DPA-specific cases can support conclusions.
+- `NOT_RUN`: no local execution.
+- `BLOCKED`: exact ref, safe harness, parser/validator path or required tooling cannot be established.
+- `FAIL`: prohibited fallback, partial registration, identity/order loss, executable-content acceptance or a mandatory negative rejection failure occurs.
+- `PARTIAL`: bounded compatibility is measured, but the proposed representation is unsupported in part or parser and validator stages cannot be distinguished.
+- `PASS`: the control succeeds, every mandatory case executes, mandatory rejection behavior is observed and required evidence is complete.
 
-Probe-level outcome:
+A Probe-level `PASS` is parser/validator compatibility evidence only. It is not full DPA-300 runtime conformance.
 
-- `PASS` only if all mandatory negative cases behave as required and all required evidence is complete;
-- `FAIL` if a prohibited fallback, partial registration, identity loss or required negative rejection failure occurs;
-- `PARTIAL` if valid execution establishes only bounded compatibility because the proposed schema is not fully supported or parser and validator stages cannot be separated;
-- `BLOCKED` if the exact-ref implementation, safe invocation path, fixture isolation or required tooling cannot be established;
-- `NOT_RUN` before local execution.
+## 10. Cleanup and repeatability
 
-A `PARTIAL` result may still falsify or confirm individual assumptions, but it MUST NOT be summarized as full DPA-300 conformance.
+Each case runs against isolated fixture state. Cleanup must remove fixture registrations and temporary generated files, preserve only declared evidence, and verify that production registry and protected planning paths are unchanged.
 
-## 12. Cleanup and rollback
+Required repetitions:
 
-Each case MUST run against isolated fixture state.
-
-Cleanup MUST:
-
-- remove temporary fixture registrations and generated files;
-- preserve evidence artifacts only in the declared evidence location;
-- verify no production registry or protected planning path changed;
-- compare pre-state and post-cleanup hashes for governed paths.
-
-Any unexplained residual change blocks reuse of the worktree.
-
-## 13. Repeatability
-
-The manual requires:
-
-- one clean control run;
-- one complete DPA fixture run;
-- a second run after cleanup for deterministic parser/validator results where safe;
-- a new execution identity for every run;
+- one clean manual control;
+- one complete fixture-set run;
+- a second run after cleanup where safe;
 - explicit comparison of stable and variable fields.
 
-A changed main-repository ref, fixture revision or normative expectation requires impact analysis and ref freeze before rerun.
+Any main-repository ref, fixture revision or normative-expectation change requires impact analysis and a new exact execution identity.
 
-## 14. Adjudication questions
+## 11. Adjudication
 
-After execution, the Maintainer must decide for each discrepancy:
+For every discrepancy, the Maintainer must classify whether:
 
-- does the current parser already support the proposed representation;
-- is support missing but architecture unchanged;
-- does implementation behavior require a bounded DPA-300 amendment;
-- is the fixture or expected result defective;
-- was an additional registry path discovered;
-- must PROBE-001 be amended and rerun;
-- which exact evidence may constrain DP2 planning.
+1. current implementation supports the proposed representation;
+2. required support is missing;
+3. implementation conflicts with the DPA proposal;
+4. a DPA assumption is falsified or incomplete;
+5. the fixture or harness is defective;
+6. another registry path was discovered;
+7. evidence is insufficient.
 
-## 15. Review readiness
+The record must state whether architecture, implementation, fixture or evidence changes are required and whether PROBE-001 must be rerun.
 
-This manual is reviewable only when:
+## 12. Review readiness
 
-- the fixture manifest exists;
-- actual current-ref parser/validator invocation placeholders are clearly marked provisional;
-- every mandatory case has a fixture mapping;
-- DPA-300 and ADR anchors are synchronized;
-- no execution claim is present;
-- Lab gates pass.
+This package is reviewable only when:
+
+- every P001-C001 through P001-C027 case maps to the fixture manifest;
+- DPA-300 §§4–6 and ADR-017 anchors are synchronized;
+- provisional serialized mappings are clearly marked;
+- no execution or conformance claim is present;
+- the Lab gates pass.
