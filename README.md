@@ -68,9 +68,13 @@ No named model or vendor is mandatory.
 
 ## Current phase
 
-Phase A — Foundation is complete at its recorded stability ref. Phase B develops DPA-200 through DPA-500.
+Phase A — Foundation is complete. Phase B — Core document-management integration is review-complete through DPA-500.
 
-DPA-000 through at least DPA-500 must be stable before the lab is adopted with `agentic-project-kit`. Until then, no `.agentic/` state may be created or simulated here.
+DPA-200 through DPA-500 remain evidence-gated: applicable exact-ref Probe execution, adjudication and any required bounded amendments must precede stability and DP2 implementation.
+
+The canonical remaining-work sequence is defined by `MASTERPLAN.md`.
+
+Until governed adoption, no `.agentic/` state may be created or simulated here.
 
 ## Primary documents
 
@@ -80,6 +84,7 @@ DPA-000 through at least DPA-500 must be stable before the lab is adopted with `
 - `GOVERNANCE.md` — authority and prohibitions
 - `STATUS.md` — current lab state and next action
 - `ROADMAP.md` — DPA-000 through DPA-900 sequence
+- `MASTERPLAN.md` — canonical execution plan for revalidation, Probes, bounded amendments, DP2 and external habitability
 - `DECISIONS.md` — accepted and provisional architecture decisions
 - `ASSUMPTIONS.md` — facts requiring main-repository validation
 - `specs/dpa/` — normative DPA specification series
