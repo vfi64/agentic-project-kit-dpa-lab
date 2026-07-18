@@ -12,11 +12,13 @@ Phase A is closed on `main`.
 
 Phase B — Core document-management integration is review-complete through DPA-500 and merged through PR #3 at merge commit `1f3e5a64f4be5a974bf979f066d9434505a1d74c`.
 
+Phase C — Operational completion has begun on branch `spec/dpa-600-concurrency` with DPA-600 at `draft`. This branch remains a remote architecture-preparation branch and does not establish main-repository implementation or Probe evidence.
+
 The lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
 DPA-200, DPA-300, DPA-400 and DPA-500 are `review-ready`. DPA-400 and DPA-500 remain blocked from `stable` pending applicable exact-ref Probe evidence.
 
-`MASTERPLAN.md` is the canonical execution plan for the remaining revalidation, Probe, bounded-amendment, DP2 and external-habitability work.
+`MASTERPLAN.md` is the canonical execution plan for the remaining revalidation, Probe, bounded-amendment, DP2 and external-habitability work. `MASTERPLAN_REMOTE_PREPARATION.md` governs Package A preparation.
 
 ## DP1 Discovery
 
@@ -64,6 +66,22 @@ DPA-500 is `review-ready`. This status does not establish production implementat
 
 The two remaining editorials V5-e01 and V5-e02 are parked in `MASTERPLAN.md` for the next otherwise-required bounded amendment.
 
+## DPA-600 active draft
+
+The first bounded DPA-600 slice defines:
+
+- renderer, lifecycle, workflow and repository-integration concurrency domains;
+- local Workspace-lock ownership and same-process reentrancy limits;
+- independent base, source, target, contract, renderer, partition, ownership, gate-set and acceptance-state guards;
+- branch and pull-request revalidation and serialization semantics;
+- stale-plan rejection and regeneration from an exact current ref;
+- acceptance-state and interrupted-recovery interaction;
+- fail-loud, evidence and rollback obligations.
+
+The draft introduces no new runtime authority and selects no concrete main-repository workflow or locking implementation. All concrete mappings remain `NEEDS_MAIN_REPO_VALIDATION`.
+
+DPA-600 is not `review-ready`. Package A review preparation requires completion of DPA-600, an internal DPA-000 through DPA-500 audit, DPA-700, synchronized Package A artifacts and an immutable review ref.
+
 ## Probe relationship
 
 PROBE-001 remains governed by DPA-300 and ADR-017. It does not depend on DPA-400 or DPA-500 runtime completion.
@@ -72,21 +90,22 @@ DPA-400 requires exact-ref evidence for static renderer mapping, capability rest
 
 DPA-500 requires exact-ref evidence for findings, severities, conditional base persistence, re-acceptance, ownership provenance, layered freshness, gate integration, recovery and staged strict adoption before `stable`.
 
+DPA-600 concrete lock, guard and workflow mappings require exact-ref validation and later Probe evidence. The architecture draft does not establish current implementation capability.
+
 Probe fixtures may be prepared during the no-Mac period but must not be represented as executed.
 
 ## Active work order
 
-Follow `MASTERPLAN.md`:
+Follow `MASTERPLAN.md` and `MASTERPLAN_REMOTE_PREPARATION.md`:
 
-1. determine the current remote main-repository ref and build the historical-finding revalidation matrix;
-2. prepare PROBE-001, PROBE-002, the DPA-400 renderer Probe package and the CSC/namespace checklist;
-3. specify pure portability slices remotely without implementing them;
-4. locally confirm the revalidation and freeze an exact Probe ref;
-5. execute and adjudicate the Probes;
-6. revalidate and, where required, amend DPA-300 through DPA-500;
-7. independently verify normative amendments to review-ready specifications;
-8. release DP2 implementation only after Probe-driven architecture revalidation;
-9. produce external-repository habitability evidence.
+1. complete the bounded DPA-600 concurrency and guard-ownership draft;
+2. synchronize DPA-600 traceability, diagram and project-control surfaces;
+3. run the read-only Lab gates and internal DPA-000 through DPA-500 consistency audit;
+4. resolve any architecture contradiction or missing Maintainer decision;
+5. begin DPA-700 only after DPA-600 is coherent;
+6. prepare closed Package A artifacts and an exact immutable review ref;
+7. request bounded independent verification without asking the reviewer to redesign the architecture;
+8. preserve the separate exact-ref main-repository revalidation and Probe work order under `MASTERPLAN.md`.
 
 ## Restrictions
 
@@ -98,5 +117,6 @@ Follow `MASTERPLAN.md`:
 - No review finding becomes normative without adjudication.
 - No quick fix to handoff writers, lifecycle Apply, acceptance state, re-acceptance, layered acceptance or projection gates before PROBE-002 and subsequent architecture revalidation.
 - A promotion commit changes status surfaces only and MUST NOT change normative text.
+- DPA-600 MUST NOT treat a local lock, acceptance state or evidence as cross-ref serialization authority.
 
-Phase B through DPA-500 is review-complete. The active gate is exact-ref main-repository revalidation and Probe preparation under `MASTERPLAN.md`.
+Phase B through DPA-500 remains review-complete. Phase C remote architecture preparation is active through the bounded DPA-600 draft; exact-ref main-repository revalidation and Probe execution remain separate governed work.
