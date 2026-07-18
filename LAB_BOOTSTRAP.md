@@ -1,7 +1,7 @@
 # DPA Lab Bootstrap
 
 Status: active
-Status-date: 2026-07-15
+Status-date: 2026-07-18
 Superseded-by: n/a
 
 ## Purpose
@@ -21,13 +21,14 @@ Before proposing, editing, committing, reviewing or consolidating any work, read
 5. `GOVERNANCE.md`
 6. `STATUS.md`
 7. `ROADMAP.md`
-8. `DECISIONS.md`
-9. `ASSUMPTIONS.md`
-10. `specs/dpa/README.md`
-11. every DPA specification whose document status is `active`, `draft`, `review-ready` or required by the assigned task
-12. relevant primary reviews, technical verification audits and consolidated adjudications under `reviews/`
-13. `integration/MAIN_REPO_VALIDATION_CHECKLIST.md`
-14. `integration/IMPORT_PLAN.md`
+8. `MASTERPLAN.md`
+9. `DECISIONS.md`
+10. `ASSUMPTIONS.md`
+11. `specs/dpa/README.md`
+12. every DPA specification whose document status is `active`, `draft`, `review-ready` or required by the assigned task
+13. relevant primary reviews, technical verification audits and consolidated adjudications under `reviews/`
+14. `integration/MAIN_REPO_VALIDATION_CHECKLIST.md`
+15. `integration/IMPORT_PLAN.md`
 
 Do not begin work until this read order is complete.
 
@@ -40,10 +41,11 @@ When sources conflict, use this order:
 3. `LAB_EXECUTION_CONTRACT.md` for how the lab must be operated.
 4. Accepted decisions in `DECISIONS.md`.
 5. Normative DPA specifications under `specs/dpa/`.
-6. Consolidated adjudications and reviews.
-7. Primary architecture reviews and secondary technical verification audits.
-8. Assumptions and proposals.
-9. Chat memory.
+6. `MASTERPLAN.md` for the canonical remaining-work sequence, subject to the higher authorities above.
+7. Consolidated adjudications and reviews.
+8. Primary architecture reviews and secondary technical verification audits.
+9. Assumptions and proposals.
+10. Chat memory.
 
 Chat memory is never an authoritative source.
 
@@ -103,18 +105,19 @@ The real `vfi64/agentic-project-kit` remains authoritative for:
 
 ## Current phase
 
-The lab is in the pre-adoption architecture phase.
+The lab is in the pre-adoption architecture and exact-ref validation phase.
 
 Current work order:
 
-1. stabilize DPA-000 through DPA-500,
-2. maintain review inputs separately from normative text,
-3. build traceability and decision records,
-4. prepare DPA-600 through DPA-900,
-5. validate all main-repository assumptions before implementation,
-6. adopt this lab with the kit only after the architecture baseline is stable.
+1. use `MASTERPLAN.md` as the canonical execution sequence;
+2. revalidate historical main-repository findings against a current exact ref;
+3. prepare and execute PROBE-001, PROBE-002 and the DPA-400 renderer Probe package;
+4. adjudicate Probe evidence and perform bounded DPA-300 through DPA-500 amendments where required;
+5. independently verify normative amendments to review-ready specifications;
+6. release and implement DP2 only after Probe-driven revalidation;
+7. validate external-repository habitability before controlled adoption.
 
-Until that adoption point, do not create or simulate `.agentic/` state in this lab.
+Until governed adoption, do not create or simulate `.agentic/` state in this lab.
 
 ## Review roles
 
