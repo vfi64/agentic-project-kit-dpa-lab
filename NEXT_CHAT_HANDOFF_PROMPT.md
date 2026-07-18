@@ -30,8 +30,10 @@ Read fully and in this order:
 20. relevant accepted ADRs
 21. relevant traceability and diagrams
 22. `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
-23. review and integration contracts relevant to the task
-24. this handoff prompt
+23. `probes/PROBE-001-MANUAL.md`
+24. `probes/PROBE-001-FIXTURE-MANIFEST.md`
+25. review and integration contracts relevant to the task
+26. this handoff prompt
 
 Do not begin substantive work before completing the bootstrap.
 
@@ -58,17 +60,22 @@ Do not begin substantive work before completing the bootstrap.
 
 The active package is **Package P — Remote Probe Preparation**.
 
-Work in this order:
+Completed within Package P:
 
 1. shared Probe execution and evidence contract;
-2. PROBE-001 manual and fixtures;
-3. PROBE-002 manual and fixtures;
-4. DPA-400 renderer Probe manual and fixtures;
-5. current-ref revalidation, exact Probe-ref freeze and adjudication procedures;
-6. CSC and namespace-profile checklist;
-7. Probe-independent portability slice specifications.
+2. initial PROBE-001 manual;
+3. initial PROBE-001 fixture manifest.
 
-Only after this package is complete may bounded DPA-600 continuation be reconsidered within the evidence-independent surface.
+Continue in this order:
+
+1. internally audit and refine the PROBE-001 package against DPA-300 and ADR-017;
+2. prepare PROBE-002 manual and fixtures;
+3. prepare DPA-400 renderer Probe manual and fixtures;
+4. prepare current-ref revalidation, exact Probe-ref freeze and adjudication procedures;
+5. complete CSC and namespace-profile checklist;
+6. specify Probe-independent portability slices.
+
+Only after Package P is complete may bounded DPA-600 continuation be reconsidered within the evidence-independent surface.
 
 ## DPA-600 freeze
 
@@ -105,6 +112,6 @@ Governed batches whose assurance depends on commit sequence MUST NOT be squash-m
 
 Continue Package P from the current branch state.
 
-First inspect `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md` for consistency with DPA-300 through DPA-500. Then prepare `probes/PROBE-001-MANUAL.md` and its fixture/case manifest. Synchronize status and planning surfaces only where required. Run the read-only Lab gates after each coherent slice.
+First complete an internal synchronization audit of `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`, `probes/PROBE-001-MANUAL.md` and `probes/PROBE-001-FIXTURE-MANIFEST.md` against DPA-300 and ADR-017. Correct only evidence-backed defects. Then begin `probes/PROBE-002-MANUAL.md` and its fixture/case manifest. Synchronize status and planning surfaces only where required. Run the read-only Lab gates after each coherent slice.
 
 Do not claim Probe execution, implementation, adoption or main-repository conformance.
