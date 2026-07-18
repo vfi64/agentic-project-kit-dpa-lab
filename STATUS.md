@@ -40,16 +40,7 @@ The DPA-500 landing on `main` used a squash merge. The governed branch commit se
 
 ## DPA-600 frozen draft
 
-Branch `spec/dpa-600-concurrency` and Draft PR #5 contain a bounded initial DPA-600 draft covering:
-
-- concurrency and guard domains;
-- lifecycle-owned local Workspace locking;
-- same-process reentrancy boundaries;
-- independent drift guards;
-- branch and pull-request revalidation;
-- stale-plan rejection and regeneration;
-- acceptance-state and recovery interaction;
-- fail-loud, evidence and rollback obligations.
+Branch `spec/dpa-600-concurrency` and Draft PR #5 contain a bounded initial DPA-600 draft covering concurrency domains, lifecycle-owned local Workspace locking, same-process reentrancy boundaries, independent drift guards, cross-ref revalidation, stale-plan rejection, acceptance-state interaction and fail-loud evidence obligations.
 
 The draft introduces no new runtime authority and selects no concrete main-repository workflow or locking implementation. Concrete mappings remain `NEEDS_MAIN_REPO_VALIDATION`.
 
@@ -61,18 +52,31 @@ DPA-600 is frozen while Package P is active:
 - only sequencing, status, evidence-boundary and defect-correction edits are allowed;
 - DPA-700 is `planned` and MUST NOT begin.
 
-## Active work order — Package P
+## Package P progress
 
-The binding work order is:
+Completed at the remote semantic-preparation level:
 
-1. complete the shared Probe execution and evidence contract;
-2. prepare the PROBE-001 manual and fixtures;
-3. prepare the PROBE-002 manual and fixtures;
-4. prepare the DPA-400 renderer Probe manual and fixtures;
-5. prepare current-ref revalidation, exact Probe-ref freeze and adjudication procedures;
-6. complete the CSC and namespace-profile checklist;
-7. specify Probe-independent portability slices;
-8. only then reconsider bounded DPA-600 continuation within the evidence-independent surface.
+1. shared Probe execution and evidence contract;
+2. PROBE-001 manual, fixture manifest and internal contract audit — `PASS_AFTER_CORRECTION`;
+3. PROBE-002 manual, fixture manifest and internal contract audit — `PASS_AFTER_CORRECTION`;
+4. DPA-400 renderer Probe manual, fixture manifest and internal contract audit — `PASS_AFTER_CORRECTION`;
+5. exact-ref freeze procedure;
+6. bounded evidence-capture procedure;
+7. Maintainer adjudication procedure;
+8. expanded canonical CSC, namespace-profile and external-habitability checklist.
+
+None of these artifacts records Probe execution, frozen current main-repository refs, materialized executable fixtures, adoption or main-repository conformance.
+
+## Active work order — remaining Package P
+
+The next binding work is:
+
+1. specify Probe-independent portability slices;
+2. prove for each slice that registry schema, lifecycle semantics, writer semantics, acceptance state and gate authority are unchanged;
+3. synchronize project-control and handoff surfaces;
+4. prepare a closed Package P review set and immutable Lab review ref;
+5. request bounded independent verification;
+6. keep DPA-600 frozen and DPA-700 unstarted until the package is dispositioned.
 
 Probe preparation MUST remain distinct from Probe execution.
 
@@ -80,9 +84,9 @@ Probe preparation MUST remain distinct from Probe execution.
 
 PROBE-001 tests registry parser and validator compatibility against DPA-300 and ADR-017.
 
-PROBE-002 tests lifecycle planning, Workspace resolution, locks, reentrancy, stale-plan handling, Write–Verify–Record–Release ordering, acceptance state, recovery, conditional base persistence, gate-set re-acceptance and layered acceptance.
+PROBE-002 tests lifecycle planning, Workspace resolution, locks, reentrancy, stale-plan handling, Write–Verify–Record–Release ordering, acceptance state, recovery, conditional base persistence, gate-set re-acceptance, layered acceptance, findings and staged enforcement.
 
-The DPA-400 renderer Probe package tests renderer resolution, interface and version behavior, immutable inputs, determinism, output scope and prohibited capabilities.
+The DPA-400 renderer Probe package tests closed static resolution, interface and version behavior, immutable inputs, source-as-data and secret boundaries, determinism, output scope, lifecycle-only invocation, prohibited capabilities, resource behavior and failure semantics.
 
 DPA-600 concrete lock, guard, workflow and integration mappings require exact-ref validation and applicable Probe evidence. The current draft does not establish implementation capability.
 
