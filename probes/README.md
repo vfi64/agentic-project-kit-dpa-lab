@@ -11,6 +11,7 @@ The files in this directory prepare exact-ref main-repository Probes. They do no
 - Normative DPA specifications and accepted ADRs define the behavior to test.
 - `PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md` defines the shared case, evidence, outcome, cleanup and adjudication structure.
 - Probe-specific manuals define bounded test scope and aggregation rules.
+- `EXACT_REF_FREEZE_PROCEDURE.md`, `EVIDENCE_CAPTURE_PROCEDURE.md` and `PROBE_ADJUDICATION_PROCEDURE.md` govern later execution identity, evidence and disposition.
 - Exact-ref execution evidence will outrank preparation assumptions.
 
 ## Current package
@@ -26,14 +27,18 @@ The files in this directory prepare exact-ref main-repository Probes. They do no
 | `PROBE-002-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
 | `DPA-400-RENDERER-PROBE-MANUAL.md` | draft | not run |
 | `DPA-400-RENDERER-FIXTURE-MANIFEST.md` | draft | not materialized or run |
+| `DPA-400-RENDERER-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
+| `EXACT_REF_FREEZE_PROCEDURE.md` | active | procedure prepared; no ref frozen |
+| `EVIDENCE_CAPTURE_PROCEDURE.md` | active | procedure prepared; no execution evidence |
+| `PROBE_ADJUDICATION_PROCEDURE.md` | active | procedure prepared; no adjudication performed |
 
 ## Current sequence
 
-1. Keep the shared execution/evidence contract synchronized.
-2. Preserve corrected PROBE-001 and PROBE-002 semantic packages; executable serialization remains blocked on exact-ref inspection and local confirmation.
-3. Internally audit the DPA-400 renderer Probe package against DPA-400 and accepted ADRs.
-4. Prepare exact-ref freeze, evidence capture and adjudication procedures.
-5. Prepare the CSC and namespace-profile checklist and Probe-independent portability slices.
+1. Keep the shared execution/evidence contract and all three corrected Probe packages synchronized.
+2. Preserve all executable serialization and concrete mappings as blocked pending exact-ref remote inventory and local confirmation.
+3. Prepare the CSC and namespace-profile checklist.
+4. Prepare Probe-independent portability slice specifications with explicit proof that they do not alter Probe subjects.
+5. Synchronize project-control surfaces and prepare the closed Package P review set.
 
 ## Rules
 
