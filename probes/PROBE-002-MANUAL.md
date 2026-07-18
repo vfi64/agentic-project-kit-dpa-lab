@@ -14,7 +14,7 @@ Execution-state: not run
 
 ## 1. Purpose
 
-PROBE-002 measures the exact-ref main-repository lifecycle, planning, locking, writing, verification, acceptance, recovery and re-acceptance capabilities relevant to the DPA.
+PROBE-002 measures the exact-ref main-repository lifecycle, planning, locking, writing, verification, acceptance, recovery, freshness, gate and re-acceptance capabilities relevant to the DPA.
 
 It distinguishes:
 
@@ -48,7 +48,7 @@ Before execution:
 
 1. identify current remote `origin/main` and confirm the same exact local ref;
 2. record clean worktree and environment identity;
-3. inventory lifecycle entry points, target writers, lock paths, acceptance-state readers/writers, recovery paths, findings and evidence emitters;
+3. inventory lifecycle entry points, target writers, lock paths, acceptance-state readers/writers, recovery paths, findings, gates and evidence emitters;
 4. select an isolated disposable target and fixture workspace;
 5. freeze exact main-repository, Lab manual and fixture refs;
 6. record pre-state hashes for target, registry, acceptance state, lock/state paths and protected planning paths;
@@ -86,64 +86,79 @@ A current implementation need not already expose these names. The Probe records 
 - P002-C004: ambiguous ownership fails before mutation.
 - P002-C005: undeclared source or configuration fails before planning where support is claimed.
 
-### P002-B — Immutable planning
+### P002-B — Immutable planning and drift
 
 - P002-C006: dry-run plan creation does not mutate target or acceptance state.
-- P002-C007: plan has deterministic identity and binds target, base, contract, renderer, sources, configuration and expected output.
+- P002-C007: plan has deterministic identity and binds target, base, contract, renderer, sources, configuration, partition, ownership, acceptance-state context and expected output.
 - P002-C008: execute action without exact matching plan is rejected.
 - P002-C009: target drift after Plan and before Lock rejects the plan.
-- P002-C010: source or contract drift after Plan rejects the plan.
-- P002-C011: renderer, partition, ownership or acceptance-state drift after Plan rejects the plan.
-- P002-C012: time-only change does not by itself create a hard stale-plan failure.
+- P002-C010: source drift after Plan rejects the plan.
+- P002-C011: contract drift after Plan rejects the plan.
+- P002-C012: output-affecting configuration drift maps deterministically to contract drift and rejects the stale plan.
+- P002-C013: renderer identifier, interface-version or semantic-version drift rejects the stale plan.
+- P002-C014: partition, ownership or acceptance-state drift after Plan rejects the plan.
+- P002-C015: implementation-evidence-only renderer change does not automatically become semantic drift.
+- P002-C016: time-only change does not by itself create a hard stale-plan failure or activate strict enforcement.
 
 ### P002-C — Locking and under-lock revalidation
 
-- P002-C013: current Workspace mutation lock excludes a competing mutation where applicable.
-- P002-C014: same-process reentrancy behavior is observed and bounded.
-- P002-C015: under-lock revalidation repeats every mutation-relevant comparison without a second render.
-- P002-C016: failed lock acquisition leaves target and acceptance state unchanged.
-- P002-C017: release occurs exactly once for the acquired instance and stale lock recovery is explicit.
+- P002-C017: current Workspace mutation lock excludes a competing mutation where applicable.
+- P002-C018: same-process reentrancy behavior is observed and bounded.
+- P002-C019: under-lock revalidation repeats every mutation-relevant comparison without a second render.
+- P002-C020: failed lock acquisition leaves target and acceptance state unchanged.
+- P002-C021: release occurs exactly once for the acquired instance and stale-lock recovery is explicit.
 
 ### P002-D — Write and Verify
 
-- P002-C018: write reconstructs and atomically replaces the complete target through lifecycle ownership.
-- P002-C019: region write preserves non-owned bytes and partition bytes.
-- P002-C020: post-Write Verify checks payload, preserved region, partition and complete-target fingerprints.
-- P002-C021: failure before Write leaves target unchanged.
-- P002-C022: failure after Write leaves bytes non-accepted and creates explicit recovery obligation.
-- P002-C023: out-of-band lifecycle-byte mutation is detected rather than normalized silently.
+- P002-C022: write reconstructs and atomically replaces the complete target through lifecycle ownership.
+- P002-C023: region write preserves non-owned bytes and partition bytes.
+- P002-C024: post-Write Verify checks payload, preserved region, partition, ownership, target semantics and complete-target fingerprints.
+- P002-C025: failure before Write leaves target unchanged.
+- P002-C026: failure after Write leaves bytes non-accepted and creates explicit recovery obligation.
+- P002-C027: out-of-band lifecycle-byte mutation is detected rather than normalized silently.
 
-### P002-E — Acceptance state
+### P002-E — Acceptance state and freshness inputs
 
-- P002-C024: accepted state is written only after successful Verify and required gates.
-- P002-C025: acceptance record binds target, relevant fingerprints, gate set and exact context.
-- P002-C026: conditional accepted-base persistence is recorded only when required by the governed target form.
-- P002-C027: base-independent post-acceptance evaluation does not invent a missing base dependency.
-- P002-C028: failed acceptance update preserves the prior accepted record and marks current bytes non-accepted.
+- P002-C028: accepted state is written only after successful Verify and required gate `pass`.
+- P002-C029: acceptance record binds exactly one target and all applicable contract, renderer, source, configuration, payload, complete-target, partition, preserved-region, ownership, target-semantics and gate-set identities.
+- P002-C030: conditional accepted-base persistence occurs only for contract-declared base dependence.
+- P002-C031: base-independent post-acceptance evaluation does not invent a missing base dependency.
+- P002-C032: failed acceptance update preserves the prior accepted record or leaves an explicit recoverable non-accepted state.
+- P002-C033: missing acceptance state yields `indeterminate` or `invalid` plus gate `failure`, never `fresh`.
+- P002-C034: malformed, unknown-version or internally inconsistent acceptance state fails closed and is not repaired from target bytes or evidence.
+- P002-C035: target-scope mismatch in acceptance state fails closed.
+- P002-C036: missing mandatory evaluation input or machinery yields explicit `indeterminate` or `invalid` classification and gate `failure`.
 
 ### P002-F — Re-acceptance and layered acceptance
 
-- P002-C029: gate-set-only re-acceptance of unchanged already-accepted bytes does not invoke renderer or mutate target.
-- P002-C030: re-acceptance is rejected when target, source, contract, renderer, partition or ownership context changed.
-- P002-C031: registered-region projection uses layered acceptance for payload, preserved region, partition and complete target.
-- P002-C032: authorized non-lifecycle-owner evolution of preserved bytes is distinguished from lifecycle-owned drift.
-- P002-C033: ambiguous owner provenance prevents acceptance.
+- P002-C037: gate-set-only re-acceptance of unchanged already-accepted bytes does not invoke renderer or mutate target.
+- P002-C038: re-acceptance is rejected when target, source, configuration, contract, renderer, partition, ownership, target semantics, required base or acceptance-state context changed.
+- P002-C039: gate `warning` or `failure` during re-acceptance leaves target bytes and prior acceptance record unchanged.
+- P002-C040: successful re-acceptance updates only lifecycle-owned acceptance state and bounded evidence.
+- P002-C041: registered-region projection uses layered acceptance while keeping payload, preserved-region, partition, ownership and complete-target guards distinct.
+- P002-C042: authorized non-lifecycle-owner evolution of preserved bytes is not projection target drift and does not require regeneration or re-acceptance.
+- P002-C043: ambiguous owner provenance prevents acceptance and fails closed.
 
 ### P002-G — Interruption and recovery
 
-- P002-C034: interruption before Write leaves target unchanged and supports bounded retry.
-- P002-C035: interruption after Write but before Verify creates recoverable non-accepted state.
-- P002-C036: interruption after Verify but before Record does not imply acceptance without the authoritative record.
-- P002-C037: interruption during Record or Release is detected and dispositioned before a new refresh.
-- P002-C038: unresolved recovery blocks new mutation and integration conclusions.
-- P002-C039: recovery completion is followed by full revalidation before continuation.
+- P002-C044: interruption before Write leaves target unchanged and supports bounded retry.
+- P002-C045: interruption after Write but before Verify creates recoverable `written-unverified` state.
+- P002-C046: interruption after Verify but before Record does not imply acceptance without the authoritative record.
+- P002-C047: interruption during Record or Release is detected and dispositioned before a new refresh.
+- P002-C048: unresolved recovery blocks new mutation and integration conclusions.
+- P002-C049: recovery may complete only when exact written bytes and all required identities match the governed plan and current contract, followed by full revalidation.
+- P002-C050: recovery does not reconstruct acceptance state from target bytes alone.
 
-### P002-H — Findings, evidence and negative paths
+### P002-H — Findings, evidence, gates and staged enforcement
 
-- P002-C040: every rejection has bounded finding/evidence without unrelated repository leakage.
-- P002-C041: evidence does not authorize later mutation or substitute for acceptance state.
-- P002-C042: unknown or unavailable mandatory state fails loud.
-- P002-C043: additional writer, reader, lock, state or recovery path is recorded without silent scope expansion.
+- P002-C051: every independent rejection dimension remains separately visible in structured bounded findings.
+- P002-C052: evidence does not authorize later mutation or substitute for acceptance state.
+- P002-C053: evidence recording failure after Write or re-acceptance is an explicit lifecycle failure and does not fabricate success.
+- P002-C054: read-only audit produces findings and gate decision without target or acceptance-state mutation.
+- P002-C055: `pass`, `warning` and `failure` gate decisions remain distinct from freshness classification, drift class, consumer trust state and enforcement stage.
+- P002-C056: observe, warn, block-new and strict enforcement stages preserve mandatory mutation and acceptance safety.
+- P002-C057: unknown findings affecting mutation safety, contract interpretation, target identity, ownership or acceptance fail closed.
+- P002-C058: additional writer, reader, lock, state, gate, evidence or recovery path is recorded without silent scope expansion.
 
 ## 6. Observation model
 
@@ -156,6 +171,10 @@ For each case record:
 - lock acquisition, owner, scope and release disposition;
 - target mutation result;
 - verification result;
+- freshness classification;
+- drift class and finding subreason;
+- gate decision and enforcement stage;
+- prior and resulting consumer trust state;
 - acceptance-state delta;
 - recovery-state delta;
 - findings and bounded evidence;
@@ -168,7 +187,7 @@ Observation, interpretation and Maintainer adjudication remain separate records.
 
 - `NOT_RUN`: no local execution.
 - `BLOCKED`: safe isolation, exact ref, required entry point, interruption harness or evidence path cannot be established.
-- `FAIL`: unauthorized write, stale-plan execution, missing under-lock comparison, false acceptance, silent recovery completion, target loss, unexplained state mutation or prohibited evidence authority occurs.
+- `FAIL`: unauthorized write, stale-plan execution, missing under-lock comparison, false acceptance, silent recovery completion, target loss, unexplained state mutation, prohibited evidence authority, collapsed independent failure dimensions or weakened mandatory safety occurs.
 - `PARTIAL`: only a bounded subset can be measured or current implementation lacks required mechanisms without contradicting measured safety behavior.
 - `PASS`: every mandatory case executes with complete evidence and observed behavior satisfies the tested DPA requirements.
 
@@ -196,7 +215,7 @@ Every discrepancy must be assigned exactly one primary class:
 3. implementation exists but differs;
 4. DPA assumption is falsified or incomplete;
 5. fixture or harness is defective;
-6. another writer/reader/lock/state/recovery path was discovered;
+6. another writer/reader/lock/state/gate/evidence/recovery path was discovered;
 7. evidence is insufficient or blocked.
 
 The record must identify whether architecture, implementation, fixture, evidence or rerun obligations change.
@@ -205,9 +224,10 @@ The record must identify whether architecture, implementation, fixture, evidence
 
 This manual is reviewable only when:
 
-- every P002-C001 through P002-C043 case maps to a fixture;
+- every P002-C001 through P002-C058 case maps to a fixture;
 - DPA-300, DPA-500, ADR-016 and ADR-021 anchors are synchronized;
 - interruption cases are explicitly bounded and safe;
+- freshness classification, drift class, trust state, gate decision and enforcement stage remain distinct;
 - concrete main-repository mappings remain provisional;
 - no implementation or execution claim is present;
 - Lab gates pass.
