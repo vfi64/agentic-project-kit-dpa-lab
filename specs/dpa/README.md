@@ -16,7 +16,7 @@ No repository-specific statement is `VERIFIED` until validated against an exact 
 | DPA-300 | `DPA-300-REGISTRY-LIFECYCLE-INTEGRATION.md` | review-ready |
 | DPA-400 | `DPA-400-RENDERER-CONTRACT.md` | review-ready |
 | DPA-500 | `DPA-500-FRESHNESS-AND-GATES.md` | review-ready |
-| DPA-600 | `DPA-600-CONCURRENCY.md` | planned |
+| DPA-600 | `DPA-600-CONCURRENCY.md` | draft |
 | DPA-700 | `DPA-700-MIGRATION.md` | planned |
 | DPA-800 | `DPA-800-DP1-DP5.md` | planned |
 | DPA-900 | `DPA-900-FUTURE.md` | planned |
