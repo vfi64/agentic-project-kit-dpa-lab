@@ -23,16 +23,17 @@ The files in this directory prepare exact-ref main-repository Probes. They do no
 | `PROBE-001-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
 | `PROBE-002-MANUAL.md` | draft | not run |
 | `PROBE-002-FIXTURE-MANIFEST.md` | draft | not materialized or run |
-| `DPA-400-RENDERER-PROBE-MANUAL.md` | planned | not run |
-| `DPA-400-RENDERER-FIXTURE-MANIFEST.md` | planned | not materialized or run |
+| `PROBE-002-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
+| `DPA-400-RENDERER-PROBE-MANUAL.md` | draft | not run |
+| `DPA-400-RENDERER-FIXTURE-MANIFEST.md` | draft | not materialized or run |
 
 ## Current sequence
 
 1. Keep the shared execution/evidence contract synchronized.
-2. Preserve the corrected PROBE-001 semantic package; executable serialization remains blocked on exact-ref parser inspection.
-3. Audit PROBE-002 against DPA-300, DPA-500, ADR-016 and ADR-021.
-4. Prepare the DPA-400 renderer Probe package.
-5. Prepare exact-ref freeze, evidence capture and adjudication procedures.
+2. Preserve corrected PROBE-001 and PROBE-002 semantic packages; executable serialization remains blocked on exact-ref inspection and local confirmation.
+3. Internally audit the DPA-400 renderer Probe package against DPA-400 and accepted ADRs.
+4. Prepare exact-ref freeze, evidence capture and adjudication procedures.
+5. Prepare the CSC and namespace-profile checklist and Probe-independent portability slices.
 
 ## Rules
 
