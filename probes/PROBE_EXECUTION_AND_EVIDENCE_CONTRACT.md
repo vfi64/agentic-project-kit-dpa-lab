@@ -285,10 +285,12 @@ Review readiness of a Probe package is not Probe success.
 
 ## 16. Immediate consumers
 
-The next artifacts MUST consume this contract without redefining its outcome vocabulary or evidence layers:
+The following artifacts MUST consume this contract without redefining its outcome vocabulary, evidence layers or authority boundary:
 
 - `probes/PROBE-001-MANUAL.md`;
 - `probes/PROBE-002-MANUAL.md`;
 - `probes/DPA-400-RENDERER-PROBE-MANUAL.md`;
 - their fixture manifests and case matrices;
-- the exact-ref freeze and adjudication procedure.
+- `probes/EXACT_REF_FREEZE_PROCEDURE.md`;
+- `probes/EVIDENCE_CAPTURE_PROCEDURE.md`;
+- `probes/PROBE_ADJUDICATION_PROCEDURE.md`.
