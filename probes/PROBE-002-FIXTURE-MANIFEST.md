@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Manual: `probes/PROBE-002-MANUAL.md`
 
@@ -81,6 +81,7 @@ Execution-state: not run
 | Fixture ID | Purpose | Cases |
 |---|---|---|
 | F002-REACCEPT-GATESET-PASS | Unchanged accepted bytes; new gate set passes | P002-C037, P002-C040 |
+| F002-REACCEPT-GATESET-TRIGGER | Change only gate-set identity on otherwise unchanged accepted bytes and observe required re-acceptance without rendering or target mutation | P002-C059 |
 | F002-REACCEPT-CONTEXT-DRIFT | One non-gate semantic dimension changed | P002-C038 |
 | F002-REACCEPT-WARNING | New gate set returns warning | P002-C039 |
 | F002-REACCEPT-FAILURE | New gate set returns failure | P002-C039 |
@@ -115,6 +116,7 @@ Execution-state: not run
 | F002-STAGE-WARN | Warn policy | P002-C056 |
 | F002-STAGE-BLOCK-NEW | Block-new policy | P002-C056 |
 | F002-STAGE-STRICT | Strict policy | P002-C056 |
+| F002-STAGE-BLOCK-NEW-VS-LEGACY | New projection or acceptance attempt under block-new/strict fails closed when mandatory safety is unavailable while prior accepted legacy content remains readable only under the declared compatibility stage | P002-C060 |
 | F002-UNKNOWN-SAFETY-FINDING | Unknown finding affects safety or authority | P002-C057 |
 | F002-ADDITIONAL-PATH | Newly discovered writer/reader/gate/evidence path | P002-C058 |
 
@@ -130,7 +132,9 @@ Executable fixtures MUST NOT be created until current lifecycle, writer, lock, a
 
 Before review:
 
-- every P002-C001 through P002-C058 case maps to at least one fixture;
+- exactly 60 declared cases exist, P002-C001 through P002-C060;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - every mutating fixture has restoration and cleanup obligations;
 - every interruption fixture has one exact boundary and expected trust state;
 - target, source, configuration, contract, renderer, partition, ownership, gate-set and acceptance-state conditions remain distinct;
