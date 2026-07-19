@@ -2,7 +2,7 @@
 
 Status: active
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 ## 1. Purpose
 
@@ -14,13 +14,13 @@ This plan does not authorize implementation.
 
 ## 2. Current evidence boundary
 
-The current remote `vfi64/agentic-project-kit` `main` head observed during this preparation is:
+The last recorded main-repository Discovery baseline is:
 
-`6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
+`vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-This equals the recorded Discovery baseline. That equality does not replace local confirmation before mutation.
+It MUST NOT be represented as the current remote head without a fresh read. At the start of every remote or local portability phase, the current `origin/main` SHA MUST be read again, recorded and locally confirmed before mutation. It may differ from the Discovery baseline.
 
-Remote connector code search did not provide a complete path-literal inventory during this session. Therefore no concrete file or symbol is classified here as a current verified defect. Candidate entries remain `verification-blocked` until exact source inspection succeeds remotely or locally.
+Remote connector code search did not provide a complete path-literal inventory during preparation. Therefore no concrete file or symbol is classified here as a current verified defect. Candidate entries remain `verification-blocked` until exact source inspection succeeds remotely or locally.
 
 ## 3. Eligibility rules
 
@@ -65,83 +65,41 @@ These surfaces remain frozen.
 
 ## 5. Candidate families
 
-The following families MAY yield eligible slices after exact-ref source inspection:
-
 ### PRT-A — Documentation-registry path resolution
 
-Potential shape:
+Potential shape: replace a direct registry-root literal with the existing Workspace registry resolver while preserving parser, schema, validator and contents.
 
-- replace a direct registry root literal with the existing Workspace registry resolver;
-- preserve parser, schema, validator and registry contents unchanged.
-
-Required proof:
-
-- same resolved path under legacy profile;
-- declared alternate path under namespace profile;
-- missing or unknown profile fails loud;
-- no parser or lifecycle behavior changes.
+Required proof: identical legacy resolution, declared namespace resolution, loud failure for missing/unknown profile, and no parser or lifecycle change.
 
 ### PRT-B — Report and audit output paths
 
-Potential shape:
+Potential shape: route report destinations through an existing Workspace output resolver while preserving report content, findings and command behavior.
 
-- route report destination through an existing Workspace output resolver;
-- preserve report content, finding semantics and command behavior.
-
-Required proof:
-
-- identical content and exit code under legacy profile;
-- correct namespace destination;
-- no protected-path escape;
-- no lifecycle or evidence-authority change.
+Required proof: identical legacy content/exit code, correct namespace destination, no protected-path escape and no lifecycle/evidence-authority change.
 
 ### PRT-C — Transfer and handoff transport paths
 
-Potential shape:
+Potential shape: replace a transport-location literal only where the existing transfer authority already defines the path, without changing writer routing, handoff contents or state transitions.
 
-- replace a transport-location literal only where the existing transfer authority already defines the path;
-- do not change writer routing, handoff contents or state transitions.
+Required proof: same protocol and ownership, no writer/lifecycle change, no stale-state fallback and no PROBE-002 impact.
 
-Required proof:
-
-- same transfer protocol and ownership;
-- no writer or lifecycle change;
-- no stale-state fallback;
-- no impact on PROBE-002 subjects.
-
-Because transfer and handoff paths are close to frozen writer surfaces, every PRT-C candidate defaults to ineligible until proven otherwise.
+Every PRT-C candidate defaults to ineligible until proven otherwise.
 
 ### PRT-D — Temporary and cache paths
 
-Potential shape:
+Potential shape: replace kit-internal temporary-root assumptions with the existing Workspace temporary resolver.
 
-- replace kit-internal temporary-root assumptions with the existing Workspace temporary resolver.
-
-Required proof:
-
-- temporary data remains non-authoritative;
-- cleanup semantics remain identical;
-- cache loss does not change semantic results;
-- no evidence, state or acceptance path moves.
+Required proof: temporary data remains non-authoritative, cleanup remains identical, cache loss does not change semantics and no evidence/state/acceptance path moves.
 
 ### PRT-E — GUI project and workspace selection
 
-Potential shape:
+Potential shape: route project-root selection through the same existing Workspace authority used by CLI paths.
 
-- route project-root selection through the same existing Workspace authority used by CLI paths.
-
-Required proof:
-
-- no second GUI registry or project-state model;
-- exact repository identity remains visible;
-- protected commands retain existing plans and gates;
-- unsupported external repositories fail loud.
+Required proof: no second GUI registry or state model, exact repository identity remains visible, protected commands retain plans/gates and unsupported repositories fail loud.
 
 GUI behavior requires local or suitable interactive validation and is not established remotely.
 
 ## 6. Slice record
-
-Every candidate MUST use this record before implementation:
 
 ```text
 slice_id:
@@ -166,16 +124,7 @@ limitations:
 maintainer_decision:
 ```
 
-Allowed candidate progress states are:
-
-- `pending`;
-- `verification-blocked`;
-- `eligible`;
-- `ineligible`;
-- `implemented` only after later main-repository evidence;
-- `superseded`.
-
-These are planning progress states, not implementation or conformance classifications.
+Allowed progress states are `pending`, `verification-blocked`, `eligible`, `ineligible`, `implemented` only after later main-repository evidence, and `superseded`. These are planning states, not conformance classifications.
 
 ## 7. Required tests for every eligible slice
 
@@ -188,18 +137,13 @@ At minimum:
 - no-silent-fallback assertion;
 - unaffected registry/lifecycle/writer/acceptance/gate behavior assertion;
 - changed-path and cleanup evidence;
-- full relevant gate suite required by the main repository.
+- full relevant main-repository gate suite.
 
 ## 8. Probe-impact rule
 
 A portability merge requires Probe impact analysis.
 
-If the changed code is observed by a Probe, supplies a fixture path, changes an invocation path or changes evidence capture, the affected Probe MUST receive:
-
-- a new exact validation ref;
-- updated materialized fixture metadata;
-- rerun of affected cases;
-- preserved prior evidence.
+If changed code is observed by a Probe, supplies a fixture path, changes an invocation path or changes evidence capture, the affected Probe MUST receive a new exact validation ref, updated fixture metadata, rerun of affected cases and preservation of prior evidence.
 
 A claim that a slice is Probe-independent MUST be proven, not assumed.
 
@@ -207,10 +151,11 @@ A claim that a slice is Probe-independent MUST be proven, not assumed.
 
 At the Mac phase:
 
-1. confirm local HEAD equals the recorded remote SHA;
-2. run a complete literal and Workspace-bypass inventory;
-3. populate candidate records with exact files and symbols;
-4. classify each candidate `eligible` or `ineligible`;
-5. implement only eligible slices in separate bounded PRs;
-6. execute focused and namespace negative tests;
-7. record Probe impact and refreeze obligations.
+1. freshly read current remote `origin/main`;
+2. confirm local HEAD equals that exact SHA;
+3. run a complete literal and Workspace-bypass inventory;
+4. populate candidate records with exact files and symbols;
+5. classify each candidate `eligible` or `ineligible`;
+6. implement only eligible slices in separate bounded PRs;
+7. execute focused and namespace negative tests;
+8. record Probe impact and refreeze obligations.
