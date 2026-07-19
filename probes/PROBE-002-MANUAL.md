@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Consumes: `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
 
@@ -58,7 +58,7 @@ Before execution:
 
 ## 4. Lifecycle sequence under test
 
-Where supported, observations must be mapped to the ordered DPA-300 lifecycle:
+DPA-300 §7 is the normative source for the ordered lifecycle sequence below. Where supported, observations must be mapped to:
 
 1. Recover
 2. Resolve
@@ -138,6 +138,7 @@ A current implementation need not already expose these names. The Probe records 
 - P002-C041: registered-region projection uses layered acceptance while keeping payload, preserved-region, partition, ownership and complete-target guards distinct.
 - P002-C042: authorized non-lifecycle-owner evolution of preserved bytes is not projection target drift and does not require regeneration or re-acceptance.
 - P002-C043: ambiguous owner provenance prevents acceptance and fails closed.
+- P002-C059: a gate-set identity change on otherwise unchanged accepted bytes is the trigger that makes gate-set re-acceptance required; the path does not render or mutate target bytes and remains subject to every non-gate context guard.
 
 ### P002-G — Interruption and recovery
 
@@ -159,6 +160,7 @@ A current implementation need not already expose these names. The Probe records 
 - P002-C056: observe, warn, block-new and strict enforcement stages preserve mandatory mutation and acceptance safety.
 - P002-C057: unknown findings affecting mutation safety, contract interpretation, target identity, ownership or acceptance fail closed.
 - P002-C058: additional writer, reader, lock, state, gate, evidence or recovery path is recorded without silent scope expansion.
+- P002-C060: in `block-new` and `strict`, a new projection or new acceptance attempt fails closed when mandatory safety cannot be established, while previously accepted legacy content may remain readable under the declared compatibility stage; compatibility never authorizes the new mutation or acceptance.
 
 ## 6. Observation model
 
@@ -224,7 +226,9 @@ The record must identify whether architecture, implementation, fixture, evidence
 
 This manual is reviewable only when:
 
-- every P002-C001 through P002-C058 case maps to a fixture;
+- exactly 60 declared cases exist, P002-C001 through P002-C060;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - DPA-300, DPA-500, ADR-016 and ADR-021 anchors are synchronized;
 - interruption cases are explicitly bounded and safe;
 - freshness classification, drift class, trust state, gate decision and enforcement stage remain distinct;
