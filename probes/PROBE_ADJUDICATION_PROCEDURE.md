@@ -2,7 +2,7 @@
 
 Status: active
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 ## 1. Purpose
 
@@ -116,18 +116,7 @@ A rerun MUST use a new execution identity and, when applicable, a new freeze ide
 
 ## 9. Probe-level conclusion
 
-A Probe-level conclusion MUST summarize:
-
-- case counts by outcome;
-- every discrepancy class;
-- unresolved blockers;
-- architecture amendments required;
-- implementation work permitted or blocked;
-- fixture and evidence amendments;
-- rerun and refreeze obligations;
-- exact refs covered;
-- limitations;
-- Maintainer decision.
+A Probe-level conclusion MUST summarize case counts by outcome, discrepancy classes, unresolved blockers, required amendments, implementation permissions or blocks, fixture/evidence changes, rerun/refreeze obligations, exact refs, limitations and Maintainer decision.
 
 `PASS` does not by itself make a DPA specification `stable`, authorize DP2 or prove the whole main repository conforms.
 
@@ -143,6 +132,8 @@ After PROBE-001, PROBE-002 and renderer Probe conclusions are available:
 4. ensure parser compatibility, lifecycle capability, renderer boundaries and gate semantics form one coherent implementation plan;
 5. preserve each Probe's independent outcome rather than collapsing all evidence into one verdict;
 6. issue an explicit DP2-baseline release decision or keep DP2 blocked.
+
+When Probe refs diverge, combined conclusions are bounded to the intersection of unchanged governed identities. Divergent refs invalidate or narrow cross-Probe conclusions unless the justification required by `EXACT_REF_FREEZE_PROCEDURE.md` §5 is recorded, impact-analyzed and explicitly accepted by the Maintainer.
 
 ## 11. Minimum adjudication record template
 
