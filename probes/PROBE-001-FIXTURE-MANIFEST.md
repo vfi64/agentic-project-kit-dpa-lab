@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Manual: `probes/PROBE-001-MANUAL.md`
 
@@ -22,7 +22,7 @@ Execution-state: not run
 
 Fixture-set-id: `PROBE-001-FIXTURES`
 
-Fixture-set-revision: `draft-2026-07-18-r2`
+Fixture-set-revision: `draft-2026-07-19-r3`
 
 | Fixture ID | Parent | Purpose | Governing requirement | Cases |
 |---|---|---|---|---|
@@ -47,10 +47,10 @@ Fixture-set-revision: `draft-2026-07-18-r2`
 | F001-PARTITION-OVERLAP | F001-PARENT-PARTITION-MIN | Overlapping region or boundary declaration | DPA-300 §6; ADR-017 | P001-C017 |
 | F001-PARTITION-UNOWNED-BYTES | F001-PARENT-PARTITION-MIN | Complete-byte ownership does not explain target | DPA-300 §§5.3,6; ADR-017 | P001-C018 |
 | F001-PARTITION-ORDER-CONFLICT | F001-PARENT-PARTITION-MIN | Ordering or adjacency contradiction | DPA-300 §5.3; ADR-017 | P001-C019 |
-| F001-PARTITION-ENCODING-ABSENT | F001-PARENT-PARTITION-MIN | Encoding/normalization declaration removed | DPA-300 §5.3 | P001-C020 |
+| F001-PARTITION-ENCODING-ABSENT | F001-PARENT-PARTITION-MIN | Encoding/normalization declaration removed with no inferred default | DPA-300 §5.3 | P001-C020 |
 | F001-REGION-INDEPENDENT-BOUNDARY | F001-REGION-PROJECTION-MIN | Region entry duplicates boundary representation | DPA-300 §§5.2,6; ADR-017 | P001-C021 |
 | F001-REGION-CONFIGURABLE-WRITER | F001-REGION-PROJECTION-MIN | Region entry declares non-lifecycle write owner | DPA-300 §5.2; ADR-017 | P001-C022 |
-| F001-RENDERER-ID-UNKNOWN | F001-PROJECTION-FULL-MIN | Unknown static renderer identifier | DPA-300 §§5.4,6 | P001-C023 |
+| F001-RENDERER-ID-UNKNOWN | F001-PROJECTION-FULL-MIN | Unknown static renderer identifier; ultimate fail-loud stage remains to be inventoried | DPA-300 §§5.4,6 | P001-C023 |
 | F001-EXECUTABLE-IMPORT | F001-PROJECTION-FULL-MIN | Executable import path or dynamic expression | DPA-300 §§4.1,5.4,6 | P001-C024 |
 | F001-SOURCE-ORDER-CHANGED | F001-PROJECTION-FULL-MIN | Same sources in different declared order | DPA-300 §§5.2,5.5 | P001-C025 |
 | F001-CONFIG-UNDECLARED | F001-PROJECTION-FULL-MIN | Output-affecting configuration omitted | DPA-300 §§5.2,5.5,6 | P001-C026 |
@@ -60,70 +60,21 @@ Fixture-set-revision: `draft-2026-07-18-r2`
 
 ### 3.1 ProjectionContract — full target
 
-The candidate MUST represent:
-
-- contract schema version;
-- stable contract identity;
-- one target identity;
-- primary document form;
-- renderer identifier, renderer interface version and renderer semantic version;
-- ordered canonical-source identities;
-- ordered contract-declared configuration;
-- target semantics and target-semantics version;
-- lifecycle, freshness and evidence policy identifiers;
-- fingerprint algorithm and input-domain version;
-- migration compatibility version;
-- explicit full-target mode.
+The candidate MUST represent contract schema version, stable contract identity, one target identity, primary document form, renderer identifier/interface/semantic versions, ordered canonical-source identities, ordered contract-declared configuration, target semantics/version, lifecycle/freshness/evidence policies, fingerprint algorithm/domain version, migration compatibility version and explicit full-target mode.
 
 ### 3.2 ProjectionContract — region target
 
-In addition to applicable projection fields, the candidate MUST represent only the region-specific relationship required by DPA-300 and ADR-017:
-
-- parent document identity;
-- region identity;
-- parent partition-contract identity;
-- projected payload target semantics.
-
-It MUST NOT independently declare:
-
-- boundary ownership;
-- boundary representation;
-- ordering or malformed-boundary behavior;
-- a configurable write owner.
+In addition to applicable projection fields, the candidate MUST represent only parent document identity, region identity, parent partition-contract identity and projected payload target semantics. It MUST NOT independently declare boundary ownership or representation, ordering or malformed-boundary behavior, or a configurable write owner.
 
 ### 3.3 Parent-entry PartitionContract
 
-The parent registered-document entry MUST carry exactly one candidate contract representing:
-
-- partition-contract identity and schema version;
-- parent document identity;
-- ordered complete region identities;
-- owner class for every payload region;
-- which regions are projected;
-- boundary representation per adjacent pair or one document-wide rule;
-- boundary-marker, separator and delimiter ownership;
-- encoding, normalization and line-ending behavior;
-- ordering and adjacency constraints;
-- missing, duplicate, overlapping, reordered and malformed-boundary behavior;
-- complete-byte ownership explaining every target byte;
-- partition fingerprint algorithm and input-domain version;
-- compatibility version.
+The parent registered-document entry MUST carry exactly one candidate contract representing partition identity/schema, parent identity, ordered complete region identities, owner classes, projected-region selection, boundaries, separator ownership, encoding/normalization/line endings, adjacency/malformed behavior, complete-byte ownership, fingerprinting and compatibility.
 
 The exact field names, nesting and allowed values remain `NEEDS_MAIN_REPO_VALIDATION` until current-ref parser inspection.
 
 ## 4. Required fixture metadata
 
-Every materialized fixture MUST carry or be accompanied by:
-
-- fixture ID and revision;
-- parent fixture ID where applicable;
-- declared mutation;
-- governing case ID and normative anchors;
-- intended expected-result class;
-- serialization format;
-- content hash;
-- creation ref;
-- last normative synchronization ref.
+Every materialized fixture MUST carry or be accompanied by fixture ID/revision, parent fixture where applicable, declared mutation, governing case and anchors, expected-result class, serialization format, content hash, creation ref and last normative synchronization ref.
 
 ## 5. Mutation catalogue
 
@@ -149,14 +100,7 @@ Every materialized fixture MUST carry or be accompanied by:
 
 ## 6. Execution materialization gate
 
-Executable fixture files MUST NOT be created until:
-
-1. the current main-repository parser, validator and all relevant registry reader paths are identified;
-2. the actual registry serialization and safe isolated loading mechanism are recorded;
-3. the semantic fields above are mapped without weakening DPA-300 or ADR-017;
-4. manual compatibility control succeeds in the selected harness;
-5. exact fixture filenames and locations are selected;
-6. this manifest is updated with concrete paths and hashes.
+Executable fixture files MUST NOT be created until the current parser/validator/reader paths, actual serialization and safe loading mechanism are identified; semantic fields are mapped without weakening DPA-300 or ADR-017; the manual control succeeds; exact paths are selected; and concrete hashes are recorded.
 
 Materialization is preparation, not execution.
 
@@ -164,7 +108,9 @@ Materialization is preparation, not execution.
 
 Before review, verify:
 
-- every P001-C001 through P001-C027 case maps to a fixture;
+- exactly 27 declared cases exist, P001-C001 through P001-C027;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - each negative fixture names its parent, one mutation and exact normative anchor;
 - the parent-entry location and exactly-one rule are tested;
 - full ordered region coverage, ownership, boundaries, separators, encoding and complete-byte explanation are tested;
