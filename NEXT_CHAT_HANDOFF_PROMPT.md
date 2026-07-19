@@ -2,7 +2,7 @@
 
 We are developing the Document Projection Architecture in the private architecture Lab `vfi64/agentic-project-kit-dpa-lab`.
 
-Work only from the current remote repository and documented contracts. Do not work from chat memory.
+Work only from the current remote repositories and documented contracts. Do not work from chat memory.
 
 ## Mandatory bootstrap
 
@@ -33,20 +33,23 @@ Read fully and in this order:
 23. `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
 24. `probes/PROBE-001-MANUAL.md`
 25. `probes/PROBE-001-FIXTURE-MANIFEST.md`
-26. `probes/PROBE-001-INTERNAL-CONTRACT-AUDIT.md`
-27. `probes/PROBE-002-MANUAL.md`
-28. `probes/PROBE-002-FIXTURE-MANIFEST.md`
-29. `probes/PROBE-002-INTERNAL-CONTRACT-AUDIT.md`
-30. `probes/DPA-400-RENDERER-PROBE-MANUAL.md`
-31. `probes/DPA-400-RENDERER-FIXTURE-MANIFEST.md`
-32. `probes/DPA-400-RENDERER-INTERNAL-CONTRACT-AUDIT.md`
-33. `probes/EXACT_REF_FREEZE_PROCEDURE.md`
-34. `probes/EVIDENCE_CAPTURE_PROCEDURE.md`
-35. `probes/PROBE_ADJUDICATION_PROCEDURE.md`
-36. `integration/MAIN_REPO_VALIDATION_CHECKLIST.md`
-37. `integration/PORTABILITY_SLICE_PLAN.md`
-38. `reviews/PACKAGE_P_INTERNAL_CONSISTENCY_AUDIT.md`
-39. this handoff prompt
+26. `probes/PROBE-002-MANUAL.md`
+27. `probes/PROBE-002-FIXTURE-MANIFEST.md`
+28. `probes/DPA-400-RENDERER-PROBE-MANUAL.md`
+29. `probes/DPA-400-RENDERER-FIXTURE-MANIFEST.md`
+30. `probes/EXACT_REF_FREEZE_PROCEDURE.md`
+31. `probes/EVIDENCE_CAPTURE_PROCEDURE.md`
+32. `probes/PROBE_ADJUDICATION_PROCEDURE.md`
+33. `reviews/claude/CLAUDE_PACKAGE_P_REVIEW.md`
+34. `reviews/adjudication/PACKAGE_P_REVIEW_ADJUDICATION.md`
+35. `reviews/claude/CLAUDE_PACKAGE_P_PPR_M03_REREVIEW.md`
+36. `reviews/adjudication/PACKAGE_P_FINAL_CLOSURE.md`
+37. `evidence/repo-facts/MAIN_REPO_CURRENT_REF_20260719.md`
+38. `integration/MAIN_REPO_REMOTE_SURFACE_INVENTORY_20260719.md`
+39. `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`
+40. `integration/MAIN_REPO_VALIDATION_CHECKLIST.md`
+41. `integration/PORTABILITY_SLICE_PLAN.md`
+42. this handoff prompt
 
 Do not begin substantive work before completing the bootstrap.
 
@@ -55,8 +58,9 @@ Do not begin substantive work before completing the bootstrap.
 - Current exact-ref main-repository evidence outranks Lab proposals.
 - Normative DPA contracts and accepted ADRs outrank planning documents.
 - `MASTERPLAN.md` is the canonical execution plan.
-- `MASTERPLAN_REMOTE_PREPARATION.md` defines the corrected remote sequence and cannot override the Masterplan.
-- The currently observed remote main-repository head is `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`; local equality and cleanliness remain unconfirmed until Mac execution.
+- The current remote main-repository ref was freshly read on 2026-07-19 as `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`.
+- That equality with the historical Discovery baseline does not remove the requirement for a fresh read immediately before local work.
+- Local equality, cleanliness, environment identity and executable behavior remain unconfirmed.
 - No repository-specific claim is `VERIFIED` without current exact-ref inspection and required local confirmation.
 
 ## Current Lab state
@@ -71,45 +75,77 @@ Do not begin substantive work before completing the bootstrap.
 
 ## Package P state
 
-Package P — Remote Probe Preparation is internally prepared and awaiting bounded independent verification.
+Package P — Remote Probe Preparation is finally closed.
 
-Prepared artifacts:
+Completed:
 
-1. shared Probe execution and evidence contract;
-2. PROBE-001 manual and fixture manifest;
-3. PROBE-001 internal audit: `PASS_AFTER_CORRECTION`;
-4. PROBE-002 manual and fixture manifest;
-5. PROBE-002 internal audit: `PASS_AFTER_CORRECTION`;
-6. DPA-400 renderer Probe manual and fixture manifest;
-7. renderer internal audit: `PASS_AFTER_CORRECTION`;
-8. exact-ref freeze procedure;
-9. evidence-capture procedure;
-10. Maintainer adjudication procedure;
-11. canonical CSC, namespace-profile and external-habitability checklist;
-12. Probe-independent portability slice plan;
-13. closed Package-P internal consistency audit.
+- primary independent verdict `ACCEPT_WITH_CHANGES`;
+- 0 blockers, 3 majors, 4 minors and 3 editorials adjudicated and corrected;
+- limited PPR-M03 rereview completed;
+- its sole editorial numbering finding corrected;
+- final Maintainer closure recorded;
+- no further Package-P independent rereview required.
 
-No executable fixtures have been materialized. No Probe has run. No implementation or main-repository conformance is claimed.
+No executable fixture has been materialized. No Probe has run. No implementation or main-repository conformance is claimed.
+
+## Active work package
+
+The active work is **Package M — Local Fixture Materialization Planning and Exact-Ref Reality Contact**.
+
+Remote planning already completed:
+
+1. fresh current-main record;
+2. exact-ref remote source inventory;
+3. governed local fixture-materialization plan;
+4. status and roadmap synchronization.
+
+Remote inspection confirms concrete current surfaces for Workspace/path resolution, documentation-registry loading and validation, lifecycle reporting, Workspace mutation locking, operational evidence tooling and CLI routing.
+
+Remote inspection does not yet establish a complete DPA renderer, ProjectionContract/PartitionContract serialization, DPA lifecycle mutation sequence, authoritative acceptance state, re-acceptance, layered acceptance, recovery or staged enforcement. Those must remain absent, partial or blocked until local exact-ref evidence exists. Do not invent them.
 
 ## Current immediate task
 
-1. read the immutable Package-P review ref recorded in `reviews/PACKAGE_P_REVIEW_REQUEST.md`;
-2. perform bounded independent verification of Package P against the listed normative contracts;
-3. classify findings as blocker, major, minor or editorial;
-4. do not edit the immutable review ref;
-5. record whether Package P is `ACCEPT`, `ACCEPT_WITH_CHANGES` or `REJECT`;
-6. after Maintainer adjudication, correct only accepted findings on the working branch;
-7. do not continue DPA-600 until Package-P review and adjudication are complete.
+On the Mac and in the real `vfi64/agentic-project-kit` checkout:
+
+1. reread `origin/main` and record the exact SHA;
+2. record local HEAD and require equality;
+3. record `git status --short` and require the permitted clean baseline;
+4. record Python, virtual environment, package version and Workspace profile/manifest identity;
+5. create a disposable fixture root and isolated evidence root;
+6. prove path containment, sentinel cleanup and unchanged protected-path hashes;
+7. execute only the read-only inventory stages in `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`;
+8. produce Workspace, registry, reader, writer, lifecycle, lock, renderer, state/acceptance, gate/freshness, recovery and evidence inventories;
+9. classify every Probe case by materialization class;
+10. stop before fixture bytes if any entry gate, isolation proof or inventory boundary fails;
+11. do not execute any Probe;
+12. do not mutate frozen DPA-critical production paths.
+
+## Required distinction
+
+The following are different states and MUST NOT be collapsed:
+
+- semantic fixture prepared;
+- concrete fixture materialized;
+- fixture set frozen;
+- Probe case executed;
+- evidence captured;
+- result interpreted;
+- Maintainer adjudication completed;
+- architecture revalidated;
+- implementation authorized.
+
+The current state is planning complete remotely, local baseline and inventories pending.
 
 ## DPA-600 and main-repository mutation freeze
 
-Until Package-P review and Maintainer adjudication release the next step:
+Until applicable Probe execution, adjudication and architecture revalidation:
 
 - do not materially expand or promote DPA-600;
 - do not begin DPA-700;
 - do not select concrete lock, workflow, branch-protection, merge-queue, recovery or rollback mechanisms;
 - do not implement quick fixes to handoff writers, Doc Lifecycle Apply, writer semantics, immutable-plan execution, acceptance state, recovery, re-acceptance, layered acceptance, freshness or gate integration;
-- do not represent portability candidates as verified without exact source inspection.
+- do not represent portability candidates as verified without exact source inspection;
+- do not materialize fake implementation state to make a Probe executable.
 
 ## Merge discipline
 
