@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Manual: `probes/DPA-400-RENDERER-PROBE-MANUAL.md`
 
@@ -41,7 +41,7 @@ Execution-state: not run
 | F400-AMBIENT-PATH-READ | Renderer attempts reread, traversal, glob or discovery | R400-C016 |
 | F400-UNDECLARED-FALLBACK | Prior target, evidence, history, env or time fallback | R400-C017 |
 | F400-SOURCE-AS-CODE | Declared source text attempts to trigger executable interpretation | R400-C018 |
-| F400-SECRET-ENV-EXPOSURE | Secrets, credentials or unrelated environment values present outside closed context | R400-C019 |
+| F400-SECRET-ENV-EXPOSURE | Secrets, credentials or unrelated environment values exposed absent an accepted bounded-need contract | R400-C019 |
 
 ## 4. Output fixtures
 
@@ -114,10 +114,12 @@ Executable fixtures must not be created until the exact-ref static mapping, life
 
 Before review:
 
-- every R400-C001 through R400-C055 case maps to a fixture;
+- exactly 55 declared cases exist, R400-C001 through R400-C055;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - all successful output fixtures return one payload only;
 - prohibited-capability fixtures prove absence of target and state mutation;
-- source text remains data and secrets remain outside the invocation context;
+- source text remains data and secrets remain outside the invocation context absent an accepted bounded-need contract;
 - commands route rendering through lifecycle and cannot bypass plan capture;
 - implementation evidence and semantic version remain distinct;
 - operational abort and semantic failure remain distinct;
