@@ -2,7 +2,7 @@
 
 Status: active
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 ## Specification sequence
 
@@ -25,25 +25,38 @@ The normative DPA-number sequence is unchanged. It does not determine the immedi
 
 ## Immediate execution order
 
-The active sequence is Probe-first:
+The active sequence remains Probe-first, but remote preparation is now complete:
 
-1. shared Probe execution and evidence contract;
-2. PROBE-001 manual and fixtures;
-3. PROBE-002 manual and fixtures;
-4. DPA-400 renderer Probe manual and fixtures;
-5. current-ref revalidation and exact Probe-ref freeze procedures;
-6. CSC and namespace-profile checklist;
-7. Probe-independent portability slice specifications;
-8. bounded DPA-600 and DPA-700 drafting only within the remaining evidence-independent surface;
-9. controlled import, DPA-800 and DPA-900 work after their upstream dependencies permit it.
+1. Package P shared Probe contract, three Probe packages, freeze/evidence/adjudication procedures, CSC checklist and portability planning — complete and finally closed;
+2. fresh current-main remote read and exact-ref remote surface inventory — complete for the 2026-07-19 observation;
+3. local ref/environment/isolation baseline — next;
+4. complete local reader/writer/lifecycle/lock/renderer/state/gate/recovery/evidence inventories — next;
+5. semantic-to-concrete fixture reconciliation and bounded materialization — after inventory gates;
+6. exact Probe-ref and fixture freeze — after materialization exits;
+7. PROBE-001, PROBE-002 and renderer Probe execution — only after freeze;
+8. evidence capture and Maintainer adjudication;
+9. DPA-300 through DPA-500 revalidation and bounded amendments where required;
+10. evidence-bounded continuation of DPA-600;
+11. DPA-700 through DPA-900, controlled import and implementation after upstream release decisions.
 
-DPA-600 through DPA-900 MAY receive bounded exploratory drafts before Probe execution only when they remain `draft`, make no repository-specific `VERIFIED` claim, retain `NEEDS_MAIN_REPO_VALIDATION` for concrete mappings and do not displace Probe preparation.
+DPA-600 through DPA-900 MUST NOT displace the active reality-contact sequence. DPA-600 remains frozen and DPA-700 remains unstarted.
 
 ## Current package
 
-**Package P — Remote Probe Preparation** is active.
+**Package P — Remote Probe Preparation** is finally closed.
 
-Branch `spec/dpa-600-concurrency` and Draft PR #5 preserve the bounded initial DPA-600 draft. That draft is frozen while Package P is active. DPA-700 MUST NOT begin.
+The active work package is now:
+
+**Package M — Local Fixture Materialization Planning and Exact-Ref Reality Contact**
+
+Governing artifacts:
+
+- `evidence/repo-facts/MAIN_REPO_CURRENT_REF_20260719.md`;
+- `integration/MAIN_REPO_REMOTE_SURFACE_INVENTORY_20260719.md`;
+- `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`;
+- existing Package-P Probe contracts and procedures.
+
+Package M is planning and inventory first. It authorizes no Probe execution and no main-repository implementation change.
 
 ## Evidence-first DP1 sequencing
 
@@ -59,25 +72,29 @@ Completed:
 - DPA-500 normative contract, traceability, diagram, review, ADR-021 amendment, verification and promotion;
 - merge of the DPA-500 slice through PR #3 at `1f3e5a64f4be5a974bf979f066d9434505a1d74c`;
 - durable read-only Lab gates for the reviewed architecture slices;
-- bounded initial DPA-600 draft, traceability and diagram in Draft PR #5.
+- bounded initial DPA-600 draft, traceability and diagram in Draft PR #5;
+- complete Package-P preparation, independent review, correction, limited rereview and final closure;
+- fresh 2026-07-19 remote read of main-repository `main` at `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`;
+- bounded exact-ref remote surface inventory;
+- governed local fixture-materialization plan.
 
 Pending under `MASTERPLAN.md`:
 
-1. current remote-main revalidation of historical findings;
-2. shared Probe contract;
-3. complete preparation of PROBE-001, PROBE-002 and DPA-400 renderer Probes;
-4. complete CSC/namespace-profile checklist;
-5. remote specification of Probe-independent portability slices;
-6. local confirmation and exact Probe-ref freeze;
-7. Probe execution and evidence adjudication;
-8. bounded DPA-300 through DPA-500 revalidation and amendments where required;
-9. independent verification of normative amendments to review-ready specifications;
-10. evidence-bounded continuation of DPA-600 through DPA-900;
-11. DP2 implementation through existing registry, lifecycle, Workspace, findings, gate and evidence authorities;
-12. external-repository habitability validation;
-13. sustainable-governance and review-economics closeout.
+1. local equality, cleanliness, environment and isolation baseline;
+2. complete local exact-ref surface inventories;
+3. concrete fixture materialization with immutable revisions and hashes;
+4. exact Probe-ref freeze;
+5. Probe execution and evidence adjudication;
+6. bounded DPA-300 through DPA-500 revalidation and amendments where required;
+7. independent verification of normative amendments to review-ready specifications;
+8. evidence-bounded continuation of DPA-600 through DPA-900;
+9. DP2 implementation through existing registry, lifecycle, Workspace, findings, gate and evidence authorities;
+10. external-repository habitability validation;
+11. sustainable-governance and review-economics closeout.
 
-Early Discovery, fixture preparation and exploratory drafting do not constitute adoption, implementation, migration or Probe success.
+Remote inspection currently confirms concrete Workspace, registry, lifecycle-reporting, lock, evidence and CLI surfaces. It does not yet confirm a complete DPA renderer, acceptance state, re-acceptance, recovery or staged-enforcement implementation. Missing surfaces must be recorded as absent or blocked, not invented.
+
+Early Discovery, remote source inspection, fixture preparation and exploratory drafting do not constitute adoption, implementation, migration or Probe success.
 
 ## Probe and specification relationship
 
