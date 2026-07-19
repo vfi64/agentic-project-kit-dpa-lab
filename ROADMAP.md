@@ -21,25 +21,30 @@ Status-date: 2026-07-19
 
 The normative DPA-number sequence is unchanged. It does not determine the immediate execution order.
 
-`MASTERPLAN.md` owns the canonical execution sequence. `MASTERPLAN_REMOTE_PREPARATION.md` defines the corrected remote order and cannot override the Masterplan.
+`MASTERPLAN.md` owns the canonical execution sequence. `MASTERPLAN_REMOTE_PREPARATION.md` defines the corrected remote order and cannot override the Masterplan. `integration/DOCUMENT_MUTATION_AUTHORITY_AND_COMMAND_INTEGRATION_PLAN.md` is a binding Package-M planning addendum and cannot by itself amend normative DPA contracts.
 
 ## Immediate execution order
 
-The active sequence remains Probe-first, but remote preparation is now complete:
+The active sequence remains Probe-first, with an added command-authority preparation track required to exclude the motivating handoff and status drift failure class:
 
 1. Package P shared Probe contract, three Probe packages, freeze/evidence/adjudication procedures, CSC checklist and portability planning — complete and finally closed;
 2. fresh current-main remote read and exact-ref remote surface inventory — complete for the 2026-07-19 observation;
-3. local ref/environment/isolation baseline — next;
-4. complete local reader/writer/lifecycle/lock/renderer/state/gate/recovery/evidence inventories — next;
-5. semantic-to-concrete fixture reconciliation and bounded materialization — after inventory gates;
-6. exact Probe-ref and fixture freeze — after materialization exits;
-7. PROBE-001, PROBE-002 and renderer Probe execution — only after freeze;
-8. evidence capture and Maintainer adjudication;
-9. DPA-300 through DPA-500 revalidation and bounded amendments where required;
-10. evidence-bounded continuation of DPA-600;
-11. DPA-700 through DPA-900, controlled import and implementation after upstream release decisions.
+3. remote command-to-document discovery, mutation-class inventory, semantic-fact overlap matrix and generated-artifact ownership map — active and safe on iPhone;
+4. proposed ADR-022 and bounded DPA-200/300/400/500 amendment package — prepare and independently review, but do not yet make normative;
+5. provisional mapping of command-authority coverage into PROBE-001, PROBE-002 and renderer Probe cases;
+6. local ref/environment/isolation baseline — after Mac access;
+7. complete local reader/writer/command/lifecycle/lock/renderer/state/gate/recovery/evidence inventories;
+8. disposable-repository observation of approved document-producing commands, including declared-versus-actual output scope;
+9. semantic-to-concrete fixture reconciliation and bounded materialization — after inventory gates;
+10. exact Probe-ref and fixture freeze — after materialization exits;
+11. PROBE-001, PROBE-002 and renderer Probe execution — only after freeze;
+12. evidence capture and Maintainer adjudication;
+13. adjudication of ADR-022 and synchronized bounded DPA amendments where supported;
+14. DPA-300 through DPA-500 revalidation and independent verification of normative amendments;
+15. evidence-bounded continuation of DPA-600;
+16. DPA-700 through DPA-900, controlled import and implementation after upstream release decisions.
 
-DPA-600 through DPA-900 MUST NOT displace the active reality-contact sequence. DPA-600 remains frozen and DPA-700 remains unstarted.
+DPA-600 through DPA-900 MUST NOT displace the active reality-contact and command-authority sequence. DPA-600 remains frozen and DPA-700 remains unstarted.
 
 ## Current package
 
@@ -47,16 +52,20 @@ DPA-600 through DPA-900 MUST NOT displace the active reality-contact sequence. D
 
 The active work package is now:
 
-**Package M — Local Fixture Materialization Planning and Exact-Ref Reality Contact**
+**Package M — Exact-Ref Materialization Preparation and Document Mutation Authority Integration**
 
 Governing artifacts:
 
 - `evidence/repo-facts/MAIN_REPO_CURRENT_REF_20260719.md`;
 - `integration/MAIN_REPO_REMOTE_SURFACE_INVENTORY_20260719.md`;
 - `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`;
+- `integration/DOCUMENT_MUTATION_AUTHORITY_AND_COMMAND_INTEGRATION_PLAN.md`;
+- `decisions/DPA-ADR-022-DOCUMENT-MUTATION-AUTHORITY.md`;
 - existing Package-P Probe contracts and procedures.
 
 Package M is planning and inventory first. It authorizes no Probe execution and no main-repository implementation change.
+
+ADR-022 remains a `DEFERRED PROPOSAL`. Its mutation classes and amendment requirements are planning hypotheses until exact-ref inventory, independent review and Maintainer adjudication are complete.
 
 ## Evidence-first DP1 sequencing
 
@@ -76,25 +85,34 @@ Completed:
 - complete Package-P preparation, independent review, correction, limited rereview and final closure;
 - fresh 2026-07-19 remote read of main-repository `main` at `6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`;
 - bounded exact-ref remote surface inventory;
-- governed local fixture-materialization plan.
+- governed local fixture-materialization plan;
+- binding document-mutation-authority and command-integration planning addendum;
+- non-normative ADR-022 proposal.
 
-Pending under `MASTERPLAN.md`:
+Pending under `MASTERPLAN.md` and the Package-M planning addendum:
 
-1. local equality, cleanliness, environment and isolation baseline;
-2. complete local exact-ref surface inventories;
-3. concrete fixture materialization with immutable revisions and hashes;
-4. exact Probe-ref freeze;
-5. Probe execution and evidence adjudication;
-6. bounded DPA-300 through DPA-500 revalidation and amendments where required;
-7. independent verification of normative amendments to review-ready specifications;
-8. evidence-bounded continuation of DPA-600 through DPA-900;
-9. DP2 implementation through existing registry, lifecycle, Workspace, findings, gate and evidence authorities;
-10. external-repository habitability validation;
-11. sustainable-governance and review-economics closeout.
+1. complete remote command and internal-mutator inventory;
+2. semantic-fact overlap and generated-artifact ownership matrices;
+3. provisional command mutation classification and Probe coverage map;
+4. bounded proposed DPA-200/300/400/500 clauses, traceability and diagrams;
+5. independent review and Maintainer adjudication of the proposal package;
+6. local equality, cleanliness, environment and isolation baseline;
+7. complete local exact-ref surface inventories;
+8. disposable-repository command observations and output-scope verification;
+9. concrete fixture materialization with immutable revisions and hashes;
+10. exact Probe-ref freeze;
+11. Probe execution and evidence adjudication;
+12. bounded DPA-300 through DPA-500 revalidation and amendments where required;
+13. independent verification of normative amendments to review-ready specifications;
+14. evidence-bounded continuation of DPA-600 through DPA-900;
+15. DP2 implementation through existing registry, lifecycle, Workspace, findings, gate and evidence authorities;
+16. migration or deprecation of non-conforming direct document writers;
+17. external-repository habitability validation;
+18. sustainable-governance and review-economics closeout.
 
-Remote inspection currently confirms concrete Workspace, registry, lifecycle-reporting, lock, evidence and CLI surfaces. It does not yet confirm a complete DPA renderer, acceptance state, re-acceptance, recovery or staged-enforcement implementation. Missing surfaces must be recorded as absent or blocked, not invented.
+Remote inspection currently confirms concrete Workspace, registry, lifecycle-reporting, lock, evidence and CLI surfaces. It does not yet confirm a complete DPA renderer, acceptance state, re-acceptance, recovery, staged-enforcement or command-to-document mutation-authority implementation. Missing surfaces must be recorded as absent or blocked, not invented.
 
-Early Discovery, remote source inspection, fixture preparation and exploratory drafting do not constitute adoption, implementation, migration or Probe success.
+Early Discovery, remote source inspection, command classification, fixture preparation and exploratory drafting do not constitute adoption, implementation, migration or Probe success.
 
 ## Probe and specification relationship
 
@@ -103,6 +121,8 @@ PROBE-001 tests the real registry parser and validator against the DPA-300/ADR-0
 PROBE-002 tests lifecycle, immutable planning, Workspace, locks, Write, Verify, acceptance-state, recovery, conditional base persistence, gate-set re-acceptance and layered acceptance against an exact main-repository ref.
 
 The DPA-400 renderer Probe package tests renderer mapping, interface compatibility, version behavior, deterministic execution, immutable inputs, output scope and prohibited capabilities.
+
+The Package-M command-integration track must additionally map command mutation authority, canonical inputs, generated-artifact ownership, duplicate semantic writers, composed-command order, declared-versus-actual changed paths and post-write verification into the appropriate Probe and evidence contracts. Any case amendment must be explicit, synchronized and reviewed.
 
 DPA-400 and DPA-500 remain `review-ready`. Repository-dependent claims MUST remain `NEEDS_MAIN_REPO_VALIDATION`, and neither specification may become `stable` before relevant Probe evidence is available and adjudicated.
 
