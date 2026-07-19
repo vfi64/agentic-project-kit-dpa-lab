@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Consumes: `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
 
@@ -121,7 +121,7 @@ If a safe isolated path cannot be established, all cases requiring loading are `
 | P001-C017 | Overlapping region/boundary declaration | Reject |
 | P001-C018 | Partition metadata leaves unexplained bytes | Reject |
 | P001-C019 | Ordering or adjacency contradiction | Reject |
-| P001-C020 | Encoding/normalization declaration missing | Reject when required by the claimed schema |
+| P001-C020 | Encoding/normalization declaration missing | Reject: DPA-300 §5.3 requires encoding, normalization and line-ending behavior; no default may be inferred |
 | P001-C021 | Region independently declares boundary representation | Reject |
 | P001-C022 | Region declares configurable non-lifecycle writer | Reject |
 
@@ -129,7 +129,7 @@ If a safe isolated path cannot be established, all cases requiring loading are `
 
 | Case | Purpose | Expected behavior |
 |---|---|---|
-| P001-C023 | Unknown renderer identifier | Fail loud if validation owns static identifier checking; otherwise record deferred validation without claiming support |
+| P001-C023 | Unknown renderer identifier | MUST fail loud in resolution, validation or planning. The owning stage remains `NEEDS_MAIN_REPO_VALIDATION`; if the registry path does not prove the ultimate rejection, record `PARTIAL`, never `PASS` or support |
 | P001-C024 | Executable import path or dynamic expression | Reject |
 | P001-C025 | Ordered source list changed | Preserve order and expose semantic difference where normalized representation is available |
 | P001-C026 | Output-affecting configuration omitted | Reject or expose missing required declaration; never infer ambient configuration silently |
@@ -233,7 +233,9 @@ The record must state whether architecture, implementation, fixture or evidence 
 
 This package is reviewable only when:
 
-- every P001-C001 through P001-C027 case maps to the fixture manifest;
+- exactly 27 declared cases exist, P001-C001 through P001-C027;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - DPA-300 §§4–6 and ADR-017 anchors are synchronized;
 - provisional serialized mappings are clearly marked;
 - no execution or conformance claim is present;
