@@ -6,9 +6,11 @@ Status-date: 2026-07-19
 
 Review repository: `vfi64/agentic-project-kit-dpa-lab`
 
-Exact corrected review ref: `375d3d2aab65531229fd0432cd4bc35bda2c448d`
+Exact corrected review ref: `c12eb19acb07325958e06800f5591aa3bf5f03c7`
 
-Immutable review branch: `review/package-p-ppr-m03-20260719`
+Immutable review branch: `review/package-p-ppr-m03-20260719-r2`
+
+Superseded preliminary corrected ref: `375d3d2aab65531229fd0432cd4bc35bda2c448d`
 
 Original review ref: `18d0fd08b27d97aef1b06b5a75079527290ca8e4`
 
