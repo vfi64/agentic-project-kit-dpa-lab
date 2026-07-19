@@ -14,19 +14,29 @@ Phase B — Core document-management integration is review-complete through DPA-
 
 Phase C remote preparation has completed **Package P — Remote Probe Preparation**. The independent primary review, Maintainer adjudication, all bounded corrections, limited PPR-M03 rereview and final editorial correction are complete. Package P is finally closed at the Lab preparation level.
 
+The next active phase is **local fixture-materialization planning and exact-ref reality contact**. The current remote main-repository ref has been freshly read and a bounded exact-ref remote surface inventory plus a governed local materialization plan are committed. Local equality, local cleanliness, complete inventories and executable materialization remain unverified.
+
 The Lab remains non-authoritative for main-repository runtime state, contains no production kit code and has not been adopted with the kit.
 
 DPA-200, DPA-300, DPA-400 and DPA-500 are `review-ready`. DPA-400 and DPA-500 remain blocked from `stable` pending applicable exact-ref Probe evidence and adjudication.
 
-## DP1 Discovery evidence
+## Current main-repository evidence
 
-The recorded Discovery baseline is:
+Fresh remote read on 2026-07-19:
 
 `vfi64/agentic-project-kit@6a9da7d363ae3f97f347b79a2679f6f848d8cdf3`
 
-DISC-001 through DISC-010 and DISC-003b are committed for the inspected scope. Global writer-set completeness is not claimed.
+Commit subject:
 
-The Discovery SHA is historical evidence only. Current remote `origin/main` MUST be freshly read and locally confirmed before Probe materialization, execution or main-repository mutation.
+`Refresh handoff state after PR1863 (#1864)`
+
+The freshly read ref equals the historical DP1 Discovery baseline, but is recorded as a new remote observation in:
+
+`evidence/repo-facts/MAIN_REPO_CURRENT_REF_20260719.md`
+
+DISC-001 through DISC-010 and DISC-003b remain historical evidence for the inspected scope. Global writer-set completeness is not claimed.
+
+Local HEAD equality, worktree cleanliness, environment identity and actual command behavior remain to be confirmed on the Mac. If remote `main` moves before local confirmation, a new current-ref record is required.
 
 ## DPA-300 through DPA-500
 
@@ -74,21 +84,56 @@ Final closure:
 - Probes executed: no;
 - implementation, adoption or main-repository conformance claimed: no.
 
+## Remote surface inventory and materialization plan
+
+Committed planning artifacts:
+
+1. `evidence/repo-facts/MAIN_REPO_CURRENT_REF_20260719.md`;
+2. `integration/MAIN_REPO_REMOTE_SURFACE_INVENTORY_20260719.md`;
+3. `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`.
+
+Remote evidence currently establishes concrete existing surfaces for:
+
+- Workspace and path resolution;
+- documentation-registry loading and validation entry points;
+- documentation lifecycle reporting and findings;
+- Workspace mutation locking and its audit;
+- operational evidence tooling;
+- top-level CLI routing.
+
+Remote evidence does not yet establish a complete DPA-compatible:
+
+- static renderer map and callable boundary;
+- ProjectionContract or PartitionContract serialization;
+- Render–Plan–Preflight–Lock–Revalidate–Write–Verify–Record–Release implementation;
+- authoritative acceptance state;
+- gate-set re-acceptance;
+- layered acceptance;
+- target-write recovery state machine;
+- DPA staged-enforcement mechanism.
+
+Those surfaces remain `VERIFICATION_BLOCKED` or `REMOTE_PARTIAL`. Their absence must be recorded honestly during local inventory; no fixture may invent them and then attribute them to the implementation.
+
 ## Active work order
 
-The next binding work is:
+The next binding work is now local and read-only first:
 
-1. freshly read current main-repository `origin/main`;
-2. locally confirm exact ref equality and clean/safely isolated worktree state;
-3. inventory concrete parser, lifecycle, writer, renderer, lock, state, gate and evidence paths;
-4. plan and then materialize executable fixtures with immutable revisions and hashes;
-5. freeze exact main-repository and Lab Probe refs;
-6. execute PROBE-001, PROBE-002 and the renderer Probe only after all safety preconditions pass;
-7. capture and adjudicate evidence;
-8. revalidate DPA-300 through DPA-500;
-9. only then reconsider evidence-bounded DPA-600 continuation.
+1. reread current remote `origin/main` immediately before local work;
+2. record local HEAD, remote HEAD, equality and worktree cleanliness;
+3. record Python, virtual-environment, package and Workspace-profile identity;
+4. create a disposable fixture root and isolated evidence root;
+5. test containment, sentinel cleanup and protected-path hash checks;
+6. build the complete local Workspace, registry, reader, writer, lifecycle, lock, renderer, state, gate, recovery and evidence inventories defined by `integration/LOCAL_FIXTURE_MATERIALIZATION_PLAN.md`;
+7. classify every Probe case as executable, observation-only, implementation-absent, unsafe, ambiguous, harness-required or inventory-blocked;
+8. materialize only bounded fixtures whose current implementation surfaces and isolation are proven;
+9. preserve immutable fixture revisions and hashes;
+10. run exact-ref freeze only after all materialization exit conditions pass;
+11. execute PROBE-001, PROBE-002 and the renderer Probe only after freeze and all safety preconditions;
+12. capture and adjudicate evidence;
+13. revalidate DPA-300 through DPA-500;
+14. only then reconsider evidence-bounded DPA-600 continuation.
 
-Local executable-fixture materialization planning is now permitted after fresh current-main confirmation. Probe execution remains blocked until exact freeze, isolation, observation, cleanup and safety preconditions are established.
+Local fixture-materialization planning is permitted. Executable materialization is conditional on the local entry gates. Probe execution remains blocked.
 
 ## Probe relationship
 
@@ -103,8 +148,9 @@ DPA-600 concrete mappings require exact-ref validation and applicable Probe evid
 ## Restrictions
 
 - No production code in the Lab.
-- No `.agentic/` initialization or simulated adoption.
-- No production-form selection from Discovery evidence.
+- No `.agentic/` initialization or simulated adoption in the Lab.
+- No production-form selection from historical Discovery evidence.
+- No executable fixture materialization before local ref, environment, containment and cleanup gates pass.
 - No Probe execution without its reviewed contract, immutable freeze and suitable environment.
 - No DPA-400 or DPA-500 stability before applicable Probe evidence.
 - No quick fix to handoff writers, lifecycle Apply, writer semantics, acceptance state, recovery completion, re-acceptance, layered acceptance or projection gates before PROBE-002 execution, adjudication and subsequent architecture revalidation.
