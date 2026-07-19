@@ -1,30 +1,37 @@
 # Package P Independent Review Adjudication
 
-Status: active
+Status: complete
 
 Status-date: 2026-07-19
 
-Reviewed evidence: `reviews/claude/CLAUDE_PACKAGE_P_REVIEW.md`
+Reviewed evidence:
 
-Reviewed immutable ref: `18d0fd08b27d97aef1b06b5a75079527290ca8e4`
+- `reviews/claude/CLAUDE_PACKAGE_P_REVIEW.md`
+- `reviews/claude/CLAUDE_PACKAGE_P_PPR_M03_REREVIEW.md`
 
-Independent verdict: `ACCEPT_WITH_CHANGES`
+Original reviewed immutable ref: `18d0fd08b27d97aef1b06b5a75079527290ca8e4`
 
-Maintainer decision: accept all findings and apply only the bounded corrections recorded below.
+Limited rereview ref: `c12eb19acb07325958e06800f5591aa3bf5f03c7`
+
+Independent primary verdict: `ACCEPT_WITH_CHANGES`
+
+Limited rereview verdict: `ACCEPT_WITH_CHANGES` with one editorial record correction
+
+Maintainer decision: accept all primary-review findings and the limited-rereview editorial finding; apply only the bounded corrections recorded below.
 
 ## 1. Authority and scope
 
-This adjudication accepts independent review findings as evidentiary input. It does not treat the review as normative architecture, Probe execution, implementation conformance or mutation authority.
+This adjudication accepts independent review findings as evidentiary input. It does not treat either review as normative architecture, Probe execution, implementation conformance or mutation authority.
 
-No normative DPA specification, accepted ADR, traceability artifact or diagram changes are authorized by this adjudication. No main-repository mutation is authorized. DPA-600 remains frozen and DPA-700 remains unstarted.
+No normative DPA specification, accepted ADR, traceability artifact or diagram change is authorized by this adjudication. No main-repository mutation is authorized. DPA-600 remains frozen and DPA-700 remains unstarted.
 
-## 2. Finding dispositions
+## 2. Primary-review finding dispositions
 
 | Finding | Decision | Primary class | Disposition | Rereview |
 |---|---|---|---|---|
 | PPR-M01 | accepted | fixture-or-harness-defect | make P001-C020 rejection unconditional and prohibit inferred defaults | no |
 | PPR-M02 | accepted | fixture-or-harness-defect | separate unknown check location from mandatory fail-loud outcome; absent complete stage proof is `PARTIAL`, never `PASS` | no |
-| PPR-M03 | accepted | architecture-package coverage defect | add two explicit PROBE-002 cases and fixtures for staged fail-closed new projections and gate-set-change-triggered re-acceptance | limited independent rereview required |
+| PPR-M03 | accepted | architecture-package coverage defect | add two explicit PROBE-002 cases and fixtures for staged fail-closed new projections and gate-set-change-triggered re-acceptance | limited independent rereview completed |
 | PPR-m01 | accepted | planning precision defect | relabel `6a9da7d…` as last recorded Discovery baseline and require fresh remote read | no |
 | PPR-m02 | accepted | completeness-check defect | require bidirectional case/fixture mapping and explicit case totals in all three Probe packages | no |
 | PPR-m03 | accepted | normative-anchor precision defect | qualify renderer secret isolation by the accepted-future bounded-need exception | no |
@@ -42,7 +49,7 @@ The accepted correction set may change only:
 - freeze/adjudication cross-references;
 - portability-plan wording;
 - review-navigation artifacts;
-- project-control and handoff surfaces required to record the new review state.
+- project-control and handoff surfaces required to record the review state.
 
 It MUST NOT:
 
@@ -56,38 +63,49 @@ It MUST NOT:
 
 ## 4. PPR-M03 accepted semantics
 
-Two explicit cases are required:
+Two explicit cases are required and are now present:
 
-1. `P002-C059` — in `block-new` and `strict`, a new projection or new acceptance attempt fails closed when mandatory safety cannot be established, while previously accepted legacy content may remain readable according to the declared compatibility stage; compatibility MUST NOT authorize the new mutation or acceptance.
-2. `P002-C060` — a gate-set identity change on otherwise unchanged accepted bytes is the trigger that makes gate-set re-acceptance required; the re-acceptance path does not render or mutate target bytes and remains subject to all non-gate context guards.
+1. `P002-C059` — a gate-set identity change on otherwise unchanged accepted bytes is the trigger that makes gate-set re-acceptance required; the re-acceptance path does not render or mutate target bytes and remains subject to all non-gate context guards.
+2. `P002-C060` — in `block-new` and `strict`, a new projection or new acceptance attempt fails closed when mandatory safety cannot be established, while previously accepted legacy content may remain readable according to the declared compatibility stage; compatibility MUST NOT authorize the new mutation or acceptance.
 
 Matching fixtures:
 
-- `F002-STAGE-BLOCK-NEW-VS-LEGACY`;
-- `F002-REACCEPT-GATESET-TRIGGER`.
+- `F002-REACCEPT-GATESET-TRIGGER` for P002-C059;
+- `F002-STAGE-BLOCK-NEW-VS-LEGACY` for P002-C060.
 
 These additions expand preparation test surface only. They do not assert that the main repository implements either behavior.
 
-## 5. Refreeze and rereview
+## 5. Limited rereview disposition
 
-After all accepted corrections and a successful Lab gate:
+The limited independent rereview confirmed that PPR-M03 is substantively resolved and that all ten requested checks pass.
 
-1. preserve a new immutable Lab review ref;
-2. retain the original review ref and review evidence unchanged as historical evidence;
-3. request independent rereview limited to PPR-M03 and synchronization consequences of the two added cases;
-4. do not ask the limited reviewer to reopen accepted mechanical findings unless a direct contradiction is discovered.
+It found one editorial synchronization defect:
 
-## 6. Materialization-planning decision
+| Finding | Decision | Class | Disposition | Further rereview |
+|---|---|---|---|---|
+| PPR-M03-RR-e01 | accepted and corrected | editorial | correct the transposed C059/C060 labels in this adjudication record | no |
 
-Local executable-fixture materialization planning may begin only after:
+The correction above is the complete disposition. It changes no Probe artifact, fixture, normative contract or mechanism.
 
-- all accepted corrections are present at the new immutable ref;
-- the limited PPR-M03 rereview is dispositioned;
-- the Maintainer records final Package P closure;
-- the current main-repository remote ref is freshly read and locally confirmed.
+## 6. Refreeze and review history
+
+The following immutable refs remain preserved as historical evidence:
+
+- original Package-P review ref: `18d0fd08b27d97aef1b06b5a75079527290ca8e4`;
+- corrected limited-rereview ref: `c12eb19acb07325958e06800f5591aa3bf5f03c7`.
+
+The final closure ref MUST include this corrected adjudication and the limited-rereview report. No further independent rereview is required for PPR-M03-RR-e01.
+
+## 7. Materialization-planning decision
+
+After final Package-P closure and a fresh read plus local confirmation of the current main-repository ref, local executable-fixture materialization planning MAY begin.
+
+This permits planning only. Materialized executable fixtures still require exact current mappings, immutable revisions and hashes, safe isolation, observation hooks and verified cleanup.
 
 Probe execution remains prohibited until all freeze, identity, isolation, observation, cleanup and safety preconditions are satisfied.
 
-## 7. Maintainer conclusion
+## 8. Maintainer conclusion
 
-All independent findings are accepted. The review contains no blocker and requires no architecture amendment. Package P remains in correction and limited-rereview state. DPA-600 remains frozen; DPA-700 remains unstarted.
+All primary-review and limited-rereview findings are accepted and corrected. There is no blocker and no required architecture amendment. PPR-M03 is fully resolved. Package P is ready for final Maintainer closure on a new green immutable ref.
+
+DPA-600 remains frozen. DPA-700 remains unstarted.
