@@ -2,7 +2,7 @@
 
 Status: draft
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 Consumes: `probes/PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md`
 
@@ -57,7 +57,7 @@ Concrete implementation paths remain `NEEDS_MAIN_REPO_VALIDATION`.
 - R400-C016: ambient repository path reread, traversal, globbing or discovery is prohibited.
 - R400-C017: prior target bytes, evidence, historical prose, environment defaults and current time are not substituted as undeclared semantic inputs.
 - R400-C018: declared source text is treated as data and cannot become executable instructions.
-- R400-C019: secrets, credentials and unrelated environment variables are not exposed to the renderer.
+- R400-C019: absent an accepted future bounded-need contract that preserves determinism and authority boundaries, secrets, credentials and unrelated environment variables are not exposed to the renderer.
 
 ### R400-C — Output and target scope
 
@@ -142,7 +142,9 @@ Every case runs in an isolated disposable context. Post-state hashes must prove 
 
 This manual is reviewable only when:
 
-- every R400-C001 through R400-C055 case maps to a fixture;
+- exactly 55 declared cases exist, R400-C001 through R400-C055;
+- every declared case maps to at least one fixture;
+- every fixture maps to at least one declared case;
 - static resolution, immutable inputs, determinism, purity, output scope, lifecycle-only invocation, version distinctions, resource behavior, security boundaries and failure behavior are covered;
 - concrete main-repository mappings remain provisional;
 - no execution or implementation-conformance claim is present;
