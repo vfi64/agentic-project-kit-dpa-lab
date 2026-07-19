@@ -2,7 +2,7 @@
 
 Status: active
 
-Status-date: 2026-07-18
+Status-date: 2026-07-19
 
 The files in this directory prepare exact-ref main-repository Probes. They do not record executed Probe evidence.
 
@@ -18,7 +18,7 @@ The files in this directory prepare exact-ref main-repository Probes. They do no
 
 | Artifact | Status | Execution state |
 |---|---|---|
-| `PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md` | draft | not applicable |
+| `PROBE_EXECUTION_AND_EVIDENCE_CONTRACT.md` | draft | shared contract remains draft until first governed execution validates the prepared schema; not applicable as an execution outcome |
 | `PROBE-001-MANUAL.md` | draft | not run |
 | `PROBE-001-FIXTURE-MANIFEST.md` | draft | not materialized or run |
 | `PROBE-001-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
@@ -28,17 +28,16 @@ The files in this directory prepare exact-ref main-repository Probes. They do no
 | `DPA-400-RENDERER-PROBE-MANUAL.md` | draft | not run |
 | `DPA-400-RENDERER-FIXTURE-MANIFEST.md` | draft | not materialized or run |
 | `DPA-400-RENDERER-INTERNAL-CONTRACT-AUDIT.md` | active | audit complete after correction |
-| `EXACT_REF_FREEZE_PROCEDURE.md` | active | procedure prepared; no ref frozen |
+| `EXACT_REF_FREEZE_PROCEDURE.md` | active | procedure prepared; no main-repository Probe ref frozen |
 | `EVIDENCE_CAPTURE_PROCEDURE.md` | active | procedure prepared; no execution evidence |
-| `PROBE_ADJUDICATION_PROCEDURE.md` | active | procedure prepared; no adjudication performed |
+| `PROBE_ADJUDICATION_PROCEDURE.md` | active | procedure prepared; Package P review adjudication recorded separately |
 
 ## Current sequence
 
 1. Keep the shared execution/evidence contract and all three corrected Probe packages synchronized.
 2. Preserve all executable serialization and concrete mappings as blocked pending exact-ref remote inventory and local confirmation.
-3. Prepare the CSC and namespace-profile checklist.
-4. Prepare Probe-independent portability slice specifications with explicit proof that they do not alter Probe subjects.
-5. Synchronize project-control surfaces and prepare the closed Package P review set.
+3. Complete independent-review correction and limited PPR-M03 rereview.
+4. Only after final Package P closure begin local fixture-materialization planning.
 
 ## Rules
 
