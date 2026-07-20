@@ -1,0 +1,135 @@
+{
+  "schema": "external-review-source-manifest.v1",
+  "classification": "NON_AUTHORITATIVE_REVIEW_SNAPSHOT",
+  "created_at": "2026-07-20T16:00:00+02:00",
+  "transport_repository": "vfi64/agentic-project-kit-dpa-lab",
+  "transport_branch": "review/system-foundation-package",
+  "authority_statement": "This package is a transport and review projection only. It grants the DPA Lab no authority over AGF, ROS or the Agentic Project Kit. Each source entry is attributed to its declared source repository, pull request and exact head ref.",
+  "trust_boundary": "DPA PR #7 can be independently compared with its live readable PR. AGF PR #2 and ROS PR #2 source attribution cannot be independently authenticated by a reviewer lacking private-repository access; their byte integrity and manifest consistency remain verifiable.",
+  "hash_contract": {
+    "content_sha256": "SHA-256 over the exact UTF-8 file bytes stored in the package; no BOM; LF line endings; no trailing newline; no Unicode normalization or whitespace transformation",
+    "git_blob_sha1": "SHA-1 over bytes: ASCII 'blob ' + decimal byte length + NUL + exact UTF-8 file bytes",
+    "copy_rule": "Package files are intended to be byte-identical copies of the source files at the declared PR heads."
+  },
+  "source_pull_requests": [
+    {
+      "repository": "vfi64/agentic-governance-framework",
+      "pull_request": 2,
+      "base_ref": "main",
+      "base_sha": "55cf1aa7374ca02bce2877b2f16839985d0f7564",
+      "head_branch": "system/foundation-baseline",
+      "head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "declared_changed_file_count": 5
+    },
+    {
+      "repository": "vfi64/agentic-project-kit-dpa-lab",
+      "pull_request": 7,
+      "base_ref": "main",
+      "base_sha": "8ac3b1b7a97915220232a9d8c2164e03a9c10619",
+      "head_branch": "integration/agf-system-foundation",
+      "head_sha": "80a6e72926cc0b8b72eb2978bff8a1d91c3821d0",
+      "declared_changed_file_count": 1
+    },
+    {
+      "repository": "vfi64/repository-operating-system",
+      "pull_request": 2,
+      "base_ref": "main",
+      "base_sha": "5ac0600502238a6ccf808c7cfbcbd2d3cb2fca1f",
+      "head_branch": "architecture/system-foundation",
+      "head_sha": "9eee8139d23c3e03f3c7f2ee2fbf711f6e7ed896",
+      "declared_changed_file_count": 3
+    }
+  ],
+  "files": [
+    {
+      "package_path": "agf-pr-2/architecture/AGENTIC_SYSTEM_ARCHITECTURE.md",
+      "source_repository": "vfi64/agentic-governance-framework",
+      "source_pull_request": 2,
+      "source_head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "source_path": "architecture/AGENTIC_SYSTEM_ARCHITECTURE.md",
+      "content_sha256": "cf6da3e62a17d82383a119853e733d4c149031b1ef9429fe77029d06df71aee2",
+      "git_blob_sha1": "79e5b10ca564545daecda4a40b3e17c1d269ae25"
+    },
+    {
+      "package_path": "agf-pr-2/architecture/AUTHORITY_AND_INTERCHANGE_MODEL.md",
+      "source_repository": "vfi64/agentic-governance-framework",
+      "source_pull_request": 2,
+      "source_head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "source_path": "architecture/AUTHORITY_AND_INTERCHANGE_MODEL.md",
+      "content_sha256": "56e36e930b724c9daef399d80f2e8271d7dbcc382198371f711e96fd8353f7a3",
+      "git_blob_sha1": "1a35a204efd8e20ddee2be5fdff5c8ac32391e7b"
+    },
+    {
+      "package_path": "agf-pr-2/coordination/KIT_ADOPTION_HOLD.md",
+      "source_repository": "vfi64/agentic-governance-framework",
+      "source_pull_request": 2,
+      "source_head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "source_path": "coordination/KIT_ADOPTION_HOLD.md",
+      "content_sha256": "b8da9a2dce2ef8f5435cd758cc40253c63a26eda79ed34ec81fc9dcb7473ffe2",
+      "git_blob_sha1": "f27422955899efc5637e547d81f5860bdb9f5c15"
+    },
+    {
+      "package_path": "agf-pr-2/decisions/ADR-001-LAYERED-FEDERATED-SYSTEM.md",
+      "source_repository": "vfi64/agentic-governance-framework",
+      "source_pull_request": 2,
+      "source_head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "source_path": "decisions/ADR-001-LAYERED-FEDERATED-SYSTEM.md",
+      "content_sha256": "d496b0a3cc3dadc780159aae63f31598d778a8b0c6c5e9eff2f713caef9ffe99",
+      "git_blob_sha1": "afd54678573622a7fd72dc488ffedd51a78ff2ce"
+    },
+    {
+      "package_path": "agf-pr-2/planning/SYSTEM_FOUNDATION_MASTERPLAN.md",
+      "source_repository": "vfi64/agentic-governance-framework",
+      "source_pull_request": 2,
+      "source_head_sha": "93f34672cbd153839efad9303d2e9bbf2938406a",
+      "source_path": "planning/SYSTEM_FOUNDATION_MASTERPLAN.md",
+      "content_sha256": "c1b093dce231b76e7fee3f194fda53a26a562262c90d1659d5efed8a238c3d60",
+      "git_blob_sha1": "3e75cd97edbc60e4b9b77106ed730000688e3f8e"
+    },
+    {
+      "package_path": "dpa-pr-7/integration/AGF_SYSTEM_ADOPTION_PLAN.md",
+      "source_repository": "vfi64/agentic-project-kit-dpa-lab",
+      "source_pull_request": 7,
+      "source_head_sha": "80a6e72926cc0b8b72eb2978bff8a1d91c3821d0",
+      "source_path": "integration/AGF_SYSTEM_ADOPTION_PLAN.md",
+      "content_sha256": "c85a2e86d2377d5c807307a1b462c16674c7f9ff1ebdf3bc88937732ac9b3891",
+      "git_blob_sha1": "36e5f1f83203ac93f0e85f59a6517d72a68d3a0f"
+    },
+    {
+      "package_path": "ros-pr-2/ARCHITECTURE.md",
+      "source_repository": "vfi64/repository-operating-system",
+      "source_pull_request": 2,
+      "source_head_sha": "9eee8139d23c3e03f3c7f2ee2fbf711f6e7ed896",
+      "source_path": "ARCHITECTURE.md",
+      "content_sha256": "61f77b1bceae4b5d332cf593c299f5aef7062effe142f8bb506e7ed0b4b3ead4",
+      "git_blob_sha1": "5f2bd6f024ab5a8f1133b0a67b22c5a083c43031"
+    },
+    {
+      "package_path": "ros-pr-2/OPERATING_MODEL.md",
+      "source_repository": "vfi64/repository-operating-system",
+      "source_pull_request": 2,
+      "source_head_sha": "9eee8139d23c3e03f3c7f2ee2fbf711f6e7ed896",
+      "source_path": "OPERATING_MODEL.md",
+      "content_sha256": "e939ec43975deb36f80a92fed96891d653220b7e1b0f46619d85844952ed7d05",
+      "git_blob_sha1": "42d934928e8b5617f7c23c235215be4f1d5cfffb"
+    },
+    {
+      "package_path": "ros-pr-2/ROADMAP.md",
+      "source_repository": "vfi64/repository-operating-system",
+      "source_pull_request": 2,
+      "source_head_sha": "9eee8139d23c3e03f3c7f2ee2fbf711f6e7ed896",
+      "source_path": "ROADMAP.md",
+      "content_sha256": "6ed74969d6bef3bed984a2187a7c8c3f065bed43081e8ede3744bcdc947594ea",
+      "git_blob_sha1": "8729206fbf2bf52f259565d4b1665a7828a25094"
+    }
+  ],
+  "kit_non_change": {
+    "repository": "vfi64/agentic-project-kit",
+    "package_path": "kit/NON_CHANGE_EVIDENCE.md",
+    "initiative_pull_request": null,
+    "changed_file_count": 0,
+    "temporary_branch": "planning/agf-dpa-ros-adoption-hold",
+    "temporary_branch_has_initiative_commits": false,
+    "classification": "DECLARED_NON_CHANGE_BOUNDARY"
+  }
+}
