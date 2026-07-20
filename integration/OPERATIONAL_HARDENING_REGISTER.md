@@ -7,15 +7,19 @@ This register tracks operational improvements discovered during Lab work that ar
 
 Every entry requires explicit Maintainer disposition during controlled import. The Lab is never imported wholesale, but selective import MUST NOT silently discard registered obligations.
 
-## OHR-001 — Repository access diagnosis and recovery
+## OHR-001 — Repository capability diagnosis and recovery
 
 - Source: `integration/REPOSITORY_ACCESS_DIAGNOSIS_AND_RECOVERY_PROTOCOL.md`
-- Trigger: false assertion of lost repository access on 2026-07-20 despite intact connector access, repository reachability, read/write permissions and successful file reads.
+- Trigger RC-READ-001: false assertion of lost read access despite intact connector access, repository reachability, ref resolution and successful file reads.
+- Trigger RC-PUBLISH-001: exact-ref read, checkout and review succeeded, while authenticated push and remote-workflow triggering were unavailable because no usable write credential was present.
 - Classification: operational-governance and tooling hardening candidate
 - DPA authority: none
 - Main-repository implementation: not started
 - Required Kit outcome: approved implementation/work-planning slice, equivalent-contract mapping, or explicit rejection with rationale
-- Required regression case: an omitted or failed file read MUST NOT be classified as permission loss before repository, ref, path and chunked-read diagnostics are complete
+- Required regression coverage:
+  - an omitted or failed file read MUST NOT be classified as read-permission loss before repository, ref, path and chunked-read diagnostics are complete;
+  - a confirmed missing write credential MUST terminate as a write/publish capability blocker and MUST NOT be converted into an endless or irrelevant read-diagnosis loop;
+  - local review completion MUST NOT be represented as successful remote push, publication or CI triggering.
 - Current disposition: `PENDING_CONTROLLED_IMPORT`
 
 ## Register rule
