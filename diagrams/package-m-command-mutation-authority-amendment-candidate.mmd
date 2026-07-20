@@ -1,0 +1,49 @@
+flowchart LR
+    CLI[CLI command mode]
+    ALIAS[Compatibility alias]
+    HELPER[Inherited subordinate helper]
+    CMC[Command mutation contract\nexisting reviewed authority extension]
+    AUTH[Existing authority family\nregistry / lifecycle / state / workflow / evidence / migration / retention]
+    GEN[Generator orchestration]
+    LIFE[Existing document lifecycle]
+    R1[Renderer: target A]
+    R2[Renderer: target B]
+    T1[Target A write + target-scoped acceptance]
+    T2[Target B write + target-scoped acceptance]
+    SEC[Declared secondary effects]
+    PATH[Plan-bound changed-path verifier]
+    AGG[Derived aggregate attempt result\nnon-authoritative]
+    REC[Bounded orchestration recovery identity\nreferences per-target outcomes]
+    RESULT[Command result]
+
+    CLI --> CMC
+    ALIAS --> CMC
+    HELPER -. inherits without broadening .-> CMC
+    CMC --> AUTH
+    CMC --> GEN
+    GEN --> LIFE
+    LIFE --> R1
+    LIFE --> R2
+    R1 --> LIFE
+    R2 --> LIFE
+    LIFE --> T1
+    LIFE --> T2
+    GEN --> SEC
+    T1 --> AGG
+    T2 --> AGG
+    SEC --> AGG
+    T1 --> PATH
+    T2 --> PATH
+    SEC --> PATH
+    PATH --> RESULT
+    AGG --> RESULT
+    AGG -. partial or failed .-> REC
+    REC -. references; does not replace .-> T1
+    REC -. references; does not replace .-> T2
+
+    note1[No DPA command registry]
+    note2[No aggregate acceptance state or trust state]
+    note3[No second lifecycle or writer service]
+    CMC --- note1
+    AGG --- note2
+    LIFE --- note3
