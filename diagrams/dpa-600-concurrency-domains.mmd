@@ -1,0 +1,62 @@
+flowchart TB
+    subgraph RENDERER[Renderer computation domain]
+        SRC[Lifecycle-resolved immutable sources]
+        CFG[Contract-declared configuration]
+        REN[Static renderer]
+        PAYLOAD[Immutable payload]
+        SRC --> REN
+        CFG --> REN
+        REN --> PAYLOAD
+    end
+
+    subgraph LIFECYCLE[Lifecycle mutation domain]
+        RECOVER[Recover]
+        PLAN[Immutable mutation plan]
+        PREFLIGHT[Preflight guards]
+        LOCK[Existing Workspace mutation lock]
+        REVALIDATE[Under-lock revalidation]
+        WRITE[Lifecycle atomic Write]
+        VERIFY[Post-Write Verify]
+        STATE[Acceptance and recovery state]
+        RECOVER --> PLAN
+        PAYLOAD --> PLAN
+        PLAN --> PREFLIGHT
+        PREFLIGHT --> LOCK
+        LOCK --> REVALIDATE
+        REVALIDATE --> WRITE
+        WRITE --> VERIFY
+        VERIFY --> STATE
+    end
+
+    subgraph WORKFLOW[Workflow integration domain]
+        REF[Exact integration validation ref]
+        BRANCH[Branch coordination]
+        PR[Pull-request serialization]
+        INTEGRATION[Integration-time guard revalidation]
+        REJECT[Reject stale or unverifiable result]
+        REGENERATE[Request lifecycle regeneration]
+        REF --> BRANCH
+        REF --> PR
+        BRANCH --> INTEGRATION
+        PR --> INTEGRATION
+        INTEGRATION -->|guard mismatch| REJECT
+        REJECT --> REGENERATE
+    end
+
+    subgraph PROTECTED[Repository integration domain]
+        TARGET[Protected target ref]
+    end
+
+    STATE -->|candidate plan, state and bounded evidence| INTEGRATION
+    INTEGRATION -->|all guards current and reproducible| TARGET
+    REGENERATE -->|new exact ref and current authoritative inputs| RECOVER
+
+    EVIDENCE[Bounded evidence]
+    LIFECYCLE --> EVIDENCE
+    WORKFLOW --> EVIDENCE
+
+    EVIDENCE -. no lock, lease, acceptance or runtime authority .-> TARGET
+    STATE -. not cross-ref serialization .-> WORKFLOW
+    LOCK -. local only; not cross-branch or cross-PR .-> WORKFLOW
+    WORKFLOW -. must not write target or acceptance state .-> WRITE
+    REN -. no lock, workflow, state or write authority .-> LOCK
