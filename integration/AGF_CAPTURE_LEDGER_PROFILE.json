@@ -1,0 +1,22 @@
+{
+  "schema_version": "agf.capture-profile.v1",
+  "status": "bootstrap-adopted",
+  "status_date": "2026-07-20",
+  "repository": "vfi64/agentic-project-kit-dpa-lab",
+  "framework_repository": "vfi64/agentic-governance-framework",
+  "framework_ref": "1b642470b1af82685a18b1459f9e131ff62f4510",
+  "event_schema_path": "schemas/capture-event.schema.json",
+  "local_event_stream": "governance/capture-events.jsonl",
+  "authority": {
+    "framework": "Defines the reusable capture format and method only.",
+    "local_repository": "Owns all DPA-Lab capture content, triage, promotion and authority decisions."
+  },
+  "queue_policy": {
+    "priority_order": ["critical", "high", "normal", "low"],
+    "within_priority": "oldest-unresolved-first",
+    "tie_breaker": "capture_id-lexical"
+  },
+  "required_capture_boundary": "Before chat handoff or context abandonment, persist material unpromoted DPA governance ideas, rule candidates, risks, questions and important project facts.",
+  "normative_effect": "none-until-promoted-through-existing-dpa-governance",
+  "projection_policy": "Human-readable capture views are derived and non-authoritative."
+}
