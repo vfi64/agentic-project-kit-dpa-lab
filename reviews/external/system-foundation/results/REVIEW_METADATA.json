@@ -1,0 +1,22 @@
+{
+  "classification": "NON_AUTHORITATIVE_EXTERNAL_REVIEW",
+  "review_document": "CLAUDE_FALSIFYING_ARCHITECTURE_REVIEW.md",
+  "reviewer_model": "Claude Opus 4.8 (Anthropic)",
+  "review_date": "2026-07-21",
+  "reviewed_package_commit": "ea84c80e4531d3a3e5ba3f3e2ed51ab2969ebc97",
+  "reviewed_pr_heads": {
+    "agf_pr_2": "93f34672cbd153839efad9303d2e9bbf2938406a",
+    "dpa_pr_7": "80a6e72926cc0b8b72eb2978bff8a1d91c3821d0",
+    "ros_pr_2": "9eee8139d23c3e03f3c7f2ee2fbf711f6e7ed896"
+  },
+  "verdict": "MAJOR_REVISION",
+  "pre_review_gates": "PASS",
+  "authority": "This file grants the DPA Lab no authority over AGF, ROS or the Kit. Findings are attributed to their source repository and exact ref.",
+  "verification_boundaries": {
+    "independently_verified": ["dpa_pr_7_bytes", "kit_repository_facts_in_F1"],
+    "source_attributed_only": ["agf_pr_2_content", "ros_pr_2_content"],
+    "maintainer_confirmed_not_reverified": ["kit_pr_1867_identity_and_state", "kit_pr_1865_identity_and_state", "pr_1867_predates_hold"]
+  },
+  "maintainer_adjudication": "PENDING",
+  "does_not": ["open a merge", "perform maintainer adjudication", "modify the frozen package commit or its sources/hashes"]
+}
